@@ -46,8 +46,8 @@ if ($content -match 'window\.EMBEDDED_DATA\s*=\s*(\{[\s\S]*\});?\s*$') {
             git checkout -b main 2>$null
         }
 
-        # Stage files (only index.html, ufc-db.js, and the publish script)
-        git add index.html ufc-db.js publish-to-github.ps1
+        # Stage files (index.html, ufc-db.js, .gitignore, and the publish script)
+        git add index.html ufc-db.js .gitignore publish-to-github.ps1
 
         # Commit changes
         Write-Host "Creating git commit..."
