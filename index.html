@@ -71,10 +71,10 @@
       border-radius: 16px;
       padding: 24px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
     }
 
@@ -87,12 +87,17 @@
       width: 4px;
       background-color: var(--ufc-red);
       box-shadow: 0 0 15px var(--ufc-red);
+      border-top-left-radius: 16px;
+      border-bottom-left-radius: 16px;
     }
 
     .header-title {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 16px;
+      text-align: center;
+      margin: 0 auto;
     }
 
     .ufc-badge {
@@ -116,9 +121,130 @@
       font-size: 14px;
     }
 
-    .header-actions {
+    /* Absolute positioned controls on the right */
+    .header-controls {
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
       display: flex;
+      align-items: center;
       gap: 12px;
+      z-index: 100;
+    }
+
+    /* Settings Dropdown Container */
+    .settings-menu-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Settings dropdown menu styling */
+    .settings-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      background-color: #17171e;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      min-width: 220px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      overflow: hidden;
+      padding: 6px 0;
+      animation: fadeInDropdown 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .settings-dropdown.show {
+      display: block;
+    }
+
+    @keyframes fadeInDropdown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Dropdown items */
+    .settings-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 16px;
+      background: none;
+      border: none;
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .settings-item:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+    }
+
+    .settings-item svg {
+      opacity: 0.7;
+      transition: opacity 0.15s ease;
+    }
+
+    .settings-item:hover svg {
+      opacity: 1;
+    }
+
+    /* Specific styles for special buttons in dropdown */
+    .settings-item-danger {
+      color: var(--loss-color);
+    }
+    .settings-item-danger:hover {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: #ff5c5c;
+    }
+    .settings-item-danger svg {
+      color: var(--loss-color);
+    }
+
+    .settings-divider {
+      height: 1px;
+      background-color: var(--card-border);
+      margin: 6px 0;
+    }
+
+    /* Responsive header changes */
+    @media (max-width: 1024px) {
+      header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+        padding-bottom: 24px;
+        justify-content: center;
+      }
+      .header-title {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .header-controls {
+        position: static;
+        transform: none;
+        width: 100%;
+        justify-content: center;
+        margin-top: 8px;
+      }
     }
 
     /* Button Styles */
@@ -242,9 +368,30 @@
       gap: 24px;
     }
 
+    .workspace-grid.overall-layout {
+      grid-template-columns: 1fr;
+    }
+    .workspace-grid.overall-layout .right-column-wrapper {
+      position: static;
+    }
+    .workspace-grid.overall-layout .right-column-content {
+      position: static;
+      height: auto;
+    }
+
     @media (max-width: 1024px) {
       .workspace-grid {
         grid-template-columns: 1fr;
+      }
+      .right-column-wrapper {
+        position: static;
+      }
+      .right-column-content {
+        position: static;
+        height: auto;
+      }
+      .fight-card-list {
+        max-height: 520px;
       }
     }
 
@@ -315,6 +462,26 @@
       box-shadow: 0 0 0 2px rgba(255, 0, 51, 0.15);
     }
 
+    /* Reset styles for checkboxes to avoid inheriting generic text input padding/transition rules */
+    input[type="checkbox"] {
+      width: 16px !important;
+      height: 16px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      background-color: transparent !important;
+      border: 1px solid var(--input-border) !important;
+      border-radius: 4px !important;
+      box-shadow: none !important;
+      transition: none !important;
+      cursor: pointer;
+      accent-color: var(--ufc-red);
+    }
+    input[type="checkbox"]:focus {
+      box-shadow: none !important;
+      outline: 2px solid var(--ufc-red);
+      outline-offset: 2px;
+    }
+
     .bookmaker-toggle {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -379,12 +546,34 @@
 
     /* Fight Card Listing */
     .fight-card-list {
-      max-height: 520px;
+      flex: 1;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 10px;
       padding-right: 4px;
+      min-height: 0;
+    }
+
+    #fight-card-panel, #bet-type-analysis-panel {
+      flex: 1;
+      min-height: 0;
+    }
+
+    .right-column-wrapper {
+      position: relative;
+    }
+
+    .right-column-content {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-height: 0;
     }
 
     /* Custom scrollbar */
@@ -464,7 +653,8 @@
       margin-left: 16px;
       border-left: 1px solid var(--card-border);
       padding-left: 16px;
-      min-width: 90px;
+      width: 150px;
+      flex-shrink: 0;
     }
 
     .weight-class {
@@ -865,33 +1055,43 @@
           <p id="header-event-details">UFC Fight Night | 2026-06-14 | Sportsbook Bet Tracker</p>
         </div>
       </div>
-      <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+      <div class="header-controls">
         <span id="save-status-indicator" style="font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 8px; display: flex; align-items: center; gap: 6px; background-color: rgba(16, 185, 129, 0.1); color: var(--win-color); border: 1px solid rgba(16, 185, 129, 0.2); transition: 0.3s; --darkreader-inline-bgcolor: var(--darkreader-background-10b9811a, rgba(13, 148, 103, 0.1)); --darkreader-inline-color: var(--darkreader-text--win-color, var(--darkreader-text-000000, #e8e6e3)); --darkreader-inline-border-top: var(--darkreader-border-10b98133, rgba(15, 179, 125, 0.2)); --darkreader-inline-border-right: var(--darkreader-border-10b98133, rgba(15, 179, 125, 0.2)); --darkreader-inline-border-bottom: var(--darkreader-border-10b98133, rgba(15, 179, 125, 0.2)); --darkreader-inline-border-left: var(--darkreader-border-10b98133, rgba(15, 179, 125, 0.2));" data-darkreader-inline-bgcolor="" data-darkreader-inline-color="" data-darkreader-inline-border-top="" data-darkreader-inline-border-right="" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left="">
           <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--win-color); display: inline-block; box-shadow: 0 0 8px var(--win-glow);"></span>
           <span>Saved to HTML</span>
         </span>
-        <div class="header-actions">
-          <button class="btn btn-primary" id="btn-save-db" onclick="saveDatabaseToFile()" style="display: flex; align-items: center; gap: 8px;">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
-            Save to ufc-db.js
+        <div class="settings-menu-container">
+          <button class="btn" id="btn-settings-toggle" onclick="toggleSettingsMenu(event)" style="display: flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Settings
           </button>
-          <button class="btn btn-outline-dk" id="btn-import-db" onclick="triggerImport()" style="display: flex; align-items: center; gap: 8px; border-color: rgba(20, 214, 0, 0.2); background-color: rgba(20, 214, 0, 0.05);">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-            Import Data
-          </button>
-          <input type="file" id="db-file-input" style="display: none;" accept=".js,.json" onchange="importDatabaseFromFile(event)">
-          <button class="btn" id="btn-save-file" onclick="saveTrackerToFile()" style="display: flex; align-items: center; gap: 8px;">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="--darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke=""><path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
-            Save HTML File
-          </button>
-          <button class="btn" id="btn-export-obsidian">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="--darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke=""><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-            Export to Obsidian
-          </button>
-          <button class="btn" id="btn-reset">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="--darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke=""><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-            Clear All
-          </button>
+          <div class="settings-dropdown" id="settings-dropdown">
+            <button class="settings-item" id="btn-save-db" onclick="saveDatabaseToFile()">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+              Save to ufc-db.js
+            </button>
+            <button class="settings-item" id="btn-import-db" onclick="triggerImport()">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+              Import Data
+            </button>
+            <input type="file" id="db-file-input" style="display: none;" accept=".js,.json" onchange="importDatabaseFromFile(event)">
+            <button class="settings-item" id="btn-save-file" onclick="saveTrackerToFile()">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+              Save HTML File
+            </button>
+            <button class="settings-item" id="btn-export-obsidian">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+              Export to Obsidian
+            </button>
+            <div class="settings-divider"></div>
+            <button class="settings-item settings-item-danger" id="btn-reset">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              Clear All
+            </button>
+          </div>
         </div>
       </div>
     </header>
@@ -941,7 +1141,7 @@
       <div style="display: flex; flex-direction: column; gap: 24px;">
         
         <!-- Add Bet Slip Panel -->
-        <div class="panel">
+        <div class="panel" id="add-bet-slip-panel">
           <div class="panel-header">
             <h3 class="panel-title">
               <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="--darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke=""><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -1024,6 +1224,25 @@
                       <!-- Populated dynamically -->
                     </select>
                   </div>
+                  <div id="point-spread-container" style="display: none; width: 100%; gap: 8px;">
+                    <select id="point-spread-fighter-select" style="flex: 1;" onchange="handlePointSpreadChange()">
+                      <!-- Populated dynamically -->
+                    </select>
+                    <select id="point-spread-value-select" style="flex: 1;" onchange="handlePointSpreadChange()">
+                      <option value="-0.5">-0.5</option>
+                      <option value="+0.5">+0.5</option>
+                      <option value="-1.5" selected>-1.5</option>
+                      <option value="+1.5">+1.5</option>
+                      <option value="-2.5">-2.5</option>
+                      <option value="+2.5">+2.5</option>
+                      <option value="-3.5">-3.5</option>
+                      <option value="+3.5">+3.5</option>
+                      <option value="-4.5">-4.5</option>
+                      <option value="+4.5">+4.5</option>
+                      <option value="-5.5">-5.5</option>
+                      <option value="+5.5">+5.5</option>
+                    </select>
+                  </div>
                   <div id="other-container" style="display: none; width: 100%; flex-direction: column; gap: 8px;">
                     <select id="other-special-select" style="width: 100%;" onchange="handleOtherSpecialChange()">
                       <option value="custom">-- Custom Special Bet --</option>
@@ -1088,6 +1307,7 @@
                     <option value="Method of Victory">Method of Victory</option>
                     <option value="Round Prop">Round Prop</option>
                     <option value="Over/Under">Over/Under</option>
+                    <option value="Point Spread">Point Spread</option>
                     <option value="Fight to Start Round">Fight to Start Round</option>
                     <option value="Fighter Props">Fighter Props</option>
                     <option value="Fighter Parlay">Fighter Parlay</option>
@@ -1139,6 +1359,15 @@
                     <span class="value" id="payout-preview-val">$0.00</span>
                   </div>
                 </div>
+              </div>
+
+              <!-- Live Stream Bet Checkbox -->
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 12px; padding: 4px 0;">
+                <input type="checkbox" id="is-live-stream" style="width: 16px; height: 16px; cursor: pointer; accent-color: var(--ufc-red);">
+                <label for="is-live-stream" style="font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                  Live Stream Wager
+                </label>
               </div>
 
               <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 20px;">
@@ -1211,6 +1440,25 @@
                       <!-- Populated dynamically -->
                     </select>
                   </div>
+                  <div id="parlay-point-spread-container" style="display: none; width: 100%; gap: 8px;">
+                    <select id="parlay-point-spread-fighter-select" style="flex: 1;" onchange="handleParlayPointSpreadChange()">
+                      <!-- Populated dynamically -->
+                    </select>
+                    <select id="parlay-point-spread-value-select" style="flex: 1;" onchange="handleParlayPointSpreadChange()">
+                      <option value="-0.5">-0.5</option>
+                      <option value="+0.5">+0.5</option>
+                      <option value="-1.5" selected>-1.5</option>
+                      <option value="+1.5">+1.5</option>
+                      <option value="-2.5">-2.5</option>
+                      <option value="+2.5">+2.5</option>
+                      <option value="-3.5">-3.5</option>
+                      <option value="+3.5">+3.5</option>
+                      <option value="-4.5">-4.5</option>
+                      <option value="+4.5">+4.5</option>
+                      <option value="-5.5">-5.5</option>
+                      <option value="+5.5">+5.5</option>
+                    </select>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label for="parlay-bet-type">Bet Type</label>
@@ -1218,6 +1466,7 @@
                     <option value="Moneyline" selected="">Moneyline</option>
                     <option value="Method of Victory">Method of Victory</option>
                     <option value="Over/Under">Over/Under</option>
+                    <option value="Point Spread">Point Spread</option>
                     <option value="Fight to Start Round">Fight to Start Round</option>
                   </select>
                 </div>
@@ -1287,9 +1536,18 @@
               <div class="form-group" style="justify-content: flex-end;">
                 <div class="payout-preview">
                   <span class="label">Est. Payout</span>
-                  <span class="value" id="parlay-payout-preview-val">$0.00</span>
+                      <span class="value" id="parlay-payout-preview-val">$0.00</span>
                 </div>
               </div>
+            </div>
+
+            <!-- Live Stream Bet Checkbox -->
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 12px; padding: 4px 0;">
+              <input type="checkbox" id="parlay-is-live-stream" style="width: 16px; height: 16px; cursor: pointer; accent-color: var(--ufc-red);">
+              <label for="parlay-is-live-stream" style="font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                Live Stream Wager
+              </label>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
@@ -1342,36 +1600,98 @@
 
       </div>
 
-      <!-- Right Column: Interactive Fight Card -->
-      <div class="panel">
-        <div class="panel-header">
-          <h3 class="panel-title">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="--darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke=""><path stroke-linecap="round" stroke-linejoin="round" d="M16 4v12l-4-2-4 2V4M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            UFC Fight Card
-          </h3>
-          <div style="display: flex; gap: 8px; align-items: center;">
-            <button class="btn btn-outline-dk" id="btn-edit-card" onclick="openFightCardModal()" style="font-size: 11px; padding: 4px 8px; height: auto; display: inline-block;">Edit Card</button>
-            <span style="font-size: 11px; color: var(--text-muted); font-weight: 600; --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">Click fighter to load bet</span>
+      <!-- Right Column: Interactive Fight Card & Historical Stats -->
+      <div class="right-column-wrapper">
+        <div class="right-column-content">
+        
+        <!-- Interactive Fight Card Panel -->
+        <div class="panel" id="fight-card-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="--darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke=""><path stroke-linecap="round" stroke-linejoin="round" d="M16 4v12l-4-2-4 2V4M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+              UFC Fight Card
+            </h3>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button class="btn btn-outline-dk" id="btn-edit-card" onclick="openFightCardModal()" style="font-size: 11px; padding: 4px 8px; height: auto; display: inline-block;">Edit Card</button>
+              <span style="font-size: 11px; color: var(--text-muted); font-weight: 600; --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">Click fighter to load bet</span>
+            </div>
+          </div>
+
+          <div id="fight-card-placeholder" style="display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 16px; color: var(--text-muted); flex: 1; --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">
+            <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin-bottom: 12px; --darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke=""><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+            <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px; color: var(--text-main); --darkreader-inline-color: var(--darkreader-text--text-main, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">No Event Selected</div>
+            <p style="font-size: 12px; max-width: 240px; margin: 0;">Select a specific event at the top of the page to view and edit its fight card line-up.</p>
+          </div>
+
+          <div class="fight-card-list" id="fight-card-container" style="display: flex;"></div>
+        </div>
+
+        <!-- Bet Type Analysis Panel -->
+        <div class="panel" id="bet-type-analysis-panel" style="display: none;">
+          <div class="panel-header" style="justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <h3 class="panel-title">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="--darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke=""><path stroke-linecap="round" stroke-linejoin="round" d="M11 3.055A9.003 9.003 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+              Bet Type Performance
+            </h3>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <select id="analysis-book-filter" onchange="renderBetTypeAnalysis()" style="padding: 4px 8px; font-size: 11px; background-color: var(--input-bg); border-color: var(--input-border); border-radius: 6px; color: var(--text-main); font-weight: 600;">
+                <option value="all">All Books</option>
+                <option value="DK">DraftKings</option>
+                <option value="FD">FanDuel</option>
+              </select>
+              <select id="analysis-status-filter" onchange="renderBetTypeAnalysis()" style="padding: 4px 8px; font-size: 11px; background-color: var(--input-bg); border-color: var(--input-border); border-radius: 6px; color: var(--text-main); font-weight: 600;">
+                <option value="all">All Bets</option>
+                <option value="settled">Settled Only</option>
+                <option value="pending">Pending Only</option>
+              </select>
+              <select id="analysis-live-filter" onchange="renderBetTypeAnalysis()" style="padding: 4px 8px; font-size: 11px; background-color: var(--input-bg); border-color: var(--input-border); border-radius: 6px; color: var(--text-main); font-weight: 600;">
+                <option value="all">All Stream Types</option>
+                <option value="live">Live Stream Only</option>
+                <option value="prematch">Pre-Match Only</option>
+              </select>
+            </div>
+          </div>
+          
+          <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px; font-weight: 500;">
+            Click a row to filter wagers. Click column headers to sort. Highlighted when active.
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;" id="analysis-table">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--card-border); color: var(--text-muted); font-weight: 600; font-size: 12px;">
+                  <th class="sortable" onclick="handleAnalysisSort('category')" style="padding: 8px 4px;">Bet Type<span class="sort-indicator" id="sort-indicator-analysis-category" style="color: rgb(75, 85, 99);"> ↕</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('total')" style="padding: 8px 4px; text-align: center;">Bets<span class="sort-indicator" id="sort-indicator-analysis-total" style="color: rgb(75, 85, 99);"> ↕</span></th>
+                  <th style="padding: 8px 4px; text-align: center; color: var(--text-muted);">Record (W-L-V)</th>
+                  <th class="sortable" onclick="handleAnalysisSort('winRate')" style="padding: 8px 4px; text-align: center;">Win %<span class="sort-indicator" id="sort-indicator-analysis-winRate" style="color: rgb(75, 85, 99);"> ↕</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('profit')" style="padding: 8px 4px; text-align: right;">Net P/L<span class="sort-indicator" id="sort-indicator-analysis-profit" style="color: rgb(75, 85, 99);"> ↕</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('roi')" style="padding: 8px 4px; text-align: right;">ROI<span class="sort-indicator" id="sort-indicator-analysis-roi" style="color: rgb(75, 85, 99);"> ↕</span></th>
+                </tr>
+              </thead>
+              <tbody id="analysis-table-body">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <div id="fight-card-placeholder" style="display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 16px; color: var(--text-muted); --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">
-          <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin-bottom: 12px; --darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke=""><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-          <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px; color: var(--text-main); --darkreader-inline-color: var(--darkreader-text--text-main, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">No Event Selected</div>
-          <p style="font-size: 12px; max-width: 240px; margin: 0;">Select a specific event at the top of the page to view and edit its fight card line-up.</p>
-        </div>
-
-        <div class="fight-card-list" id="fight-card-container" style="display: flex;"></div>
       </div>
+    </div>
 
-      <!-- Active Bets Panel -->
+    <!-- Active Bets Panel -->
       <div class="panel bets-panel">
         <div class="panel-header">
           <h3 class="panel-title">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="--darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke=""><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
             Active Bets Tracker
           </h3>
-          <span style="font-size: 12px; color: var(--text-muted); --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" id="active-bets-count" data-darkreader-inline-color="">0 wagers logged</span>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="btn btn-outline-dk" onclick="validateBetsWithESPN()" style="font-size: 11px; padding: 4px 8px; height: auto; display: flex; align-items: center; gap: 4px;">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              Validate with ESPN
+            </button>
+            <span style="font-size: 12px; color: var(--text-muted);" id="active-bets-count">0 wagers logged</span>
+          </div>
         </div>
 
         <!-- Filter Bar -->
@@ -1389,9 +1709,31 @@
                 <option value="FD">FanDuel</option>
               </select>
             </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label for="filter-bet-type-select" style="font-size: 12px; font-weight: 600; color: var(--text-muted); white-space: nowrap; --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">Type:</label>
+              <select id="filter-bet-type-select" onchange="applyFilters()" style="padding: 6px 12px; font-size: 13px; background-color: var(--input-bg); border-color: var(--input-border); border-radius: 6px; color: var(--text-main); min-width: 120px; --darkreader-inline-border: var(--darkreader-border--input-border); --darkreader-inline-bgcolor: var(--darkreader-bg--input-bg, var(--darkreader-background-ffffff, #181a1b)); --darkreader-inline-color: var(--darkreader-text--text-main, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-border="" data-darkreader-inline-bgcolor="" data-darkreader-inline-color="">
+                <option value="all">All Types</option>
+                <option value="Moneyline">Moneyline</option>
+                <option value="Point Spread">Point Spread</option>
+                <option value="KO/TKO">KO/TKO</option>
+                <option value="Submission">Submission</option>
+                <option value="Decision">Decision</option>
+                <option value="Over/Under">Over/Under</option>
+                <option value="Round Prop">Round Prop</option>
+                <option value="Fight to Start Round">Fight to Start Round</option>
+                <option value="Fighter Props">Fighter Props</option>
+                <option value="Fighter Parlay">Fighter Parlay</option>
+                <option value="Parlay">Parlay</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
             <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px;">
               <input type="checkbox" id="sort-settled-bottom" onchange="applySortAndRender()" checked="" style="width: 16px; height: 16px; padding: 0; margin: 0; cursor: pointer; accent-color: var(--ufc-red);">
               <label for="sort-settled-bottom" style="font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; white-space: nowrap; --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">Push Settled to Bottom</label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-left: 12px;">
+              <input type="checkbox" id="filter-live-stream-only" onchange="applyFilters()" style="width: 16px; height: 16px; padding: 0; margin: 0; cursor: pointer; accent-color: var(--ufc-red);">
+              <label for="filter-live-stream-only" style="font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; white-space: nowrap; --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">Live Stream Only</label>
             </div>
           </div>
           <div style="font-size: 12px; color: var(--text-muted); font-weight: 500; --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" id="filter-summary-text" data-darkreader-inline-color="">Showing 7 of 26 wagers | Wagered: <strong>$45.00</strong> | Net: <strong style="color: var(--win-color);">+$0.00</strong></div>
@@ -1420,6 +1762,60 @@
 
     </div>
 
+  </div>
+
+  <!-- Validation Modal -->
+  <div class="modal-overlay" id="validation-modal-overlay" onclick="closeValidationModal(event)">
+    <div class="modal" onclick="event.stopPropagation()" style="max-width: 800px; width: 90%; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <h3 class="panel-title">Validate Bets with ESPN</h3>
+        <button class="modal-close" onclick="closeValidationModal()">×</button>
+      </div>
+      
+      <div style="overflow-y: auto; flex-grow: 1; padding: 16px 4px; display: flex; flex-direction: column; gap: 16px;">
+        <div id="validation-loading" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; gap: 12px;">
+          <div style="width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--ufc-red); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+          <div style="font-weight: 600; color: var(--text-main);">Fetching live data from ESPN...</div>
+        </div>
+        
+        <div id="validation-results-container" style="display: none; flex-direction: column; gap: 16px;">
+          <div style="background-color: #1a1a24; border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              Detected card results on ESPN. Below are bets with conflicts or pending bets that have finished.
+            </div>
+            <button class="btn btn-outline-dk" id="btn-val-toggle-all" onclick="toggleAllValidationCheckboxes()" style="font-size: 11px; padding: 4px 8px;">Deselect All</button>
+          </div>
+          
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--card-border); color: var(--text-muted); font-weight: 600;">
+                  <th style="padding: 8px; width: 40px; text-align: center;">Apply</th>
+                  <th style="padding: 8px;">Matchup / Selection</th>
+                  <th style="padding: 8px; text-align: center;">Current Status</th>
+                  <th style="padding: 8px; text-align: center;">ESPN Result</th>
+                  <th style="padding: 8px;">Details / Method</th>
+                </tr>
+              </thead>
+              <tbody id="validation-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div id="validation-no-conflicts" style="display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center;">
+          <svg width="48" height="48" fill="none" stroke="#22c55e" stroke-width="2" viewBox="0 0 24 24" style="margin-bottom: 12px;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <div style="font-weight: 700; font-size: 15px; color: var(--text-main); margin-bottom: 4px;">All Settled Bets are Consistent!</div>
+          <p style="font-size: 12px; color: var(--text-muted); max-width: 320px; margin: 0;">No conflicts found between your logged bets and ESPN's official fight results. All pending fights are still active.</p>
+        </div>
+      </div>
+      
+      <div class="modal-footer" style="padding-top: 12px; border-top: 1px solid var(--card-border); display: flex; justify-content: flex-end; gap: 12px;">
+        <button class="btn" onclick="closeValidationModal()">Close</button>
+        <button class="btn btn-primary" id="btn-apply-validation" onclick="applyValidationUpdates()" style="display: none;">Apply Confirmed Updates</button>
+      </div>
+    </div>
   </div>
 
   <!-- Obsidian Export Modal -->
@@ -1470,6 +1866,16 @@
           <div class="form-group">
             <label for="new-event-date">Event Date</label>
             <input type="date" id="new-event-date">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="new-event-prelims-start">Prelims Start Time</label>
+            <input type="text" id="new-event-prelims-start" placeholder="e.g., 6:00 PM ET">
+          </div>
+          <div class="form-group">
+            <label for="new-event-main-start">Main Card Start Time</label>
+            <input type="text" id="new-event-main-start" placeholder="e.g., 10:00 PM ET">
           </div>
         </div>
         <button class="btn btn-primary" onclick="createEvent()" style="justify-content: center;">
@@ -1558,7 +1964,8 @@
               <input type="number" id="card-ou-line" step="0.5" min="0.5" max="4.5" placeholder="e.g., 2.5" value="2.5">
             </div>
             <div class="form-group">
-              <!-- Spacer -->
+              <label for="card-fight-time">Start Time (Eastern Time)</label>
+              <input type="text" id="card-fight-time" placeholder="e.g., 6:30 PM or 10:15 PM">
             </div>
           </div>
           
@@ -3721,12 +4128,16 @@
     {
       "id": "event_muhammad_vs_bonfim",
       "name": "Muhammad vs. Bonfim",
-      "date": "2026-06-06"
+      "date": "2026-06-06",
+      "prelimsStart": "6:00 PM ET",
+      "mainStart": "10:00 PM ET"
     },
     {
       "id": "event_ufc_250",
       "name": "UFC Freedom 250: Topuria vs. Gaethje",
-      "date": "2026-06-14"
+      "date": "2026-06-14",
+      "prelimsStart": "6:00 PM ET",
+      "mainStart": "10:00 PM ET"
     }
   ],
   "cards": {
@@ -3945,6 +4356,11 @@
     let parlayLegs = [];
     let filterFight = 'all';
     let filterBook = 'all';
+    let filterBetType = 'all';
+    let filterLiveStreamOnly = false;
+    let analysisSortKey = 'profit';
+    let analysisSortDesc = true;
+    let selectedAnalysisCategory = 'all';
 
     function initTracker() {
       try {
@@ -4054,8 +4470,8 @@
 
         // Ensure default events exist
         const defaultEvents = [
-          { id: "event_muhammad_vs_bonfim", name: "Muhammad vs. Bonfim", date: "2026-06-06" },
-          { id: "event_ufc_250", name: "UFC Freedom 250: Topuria vs. Gaethje", date: "2026-06-14" }
+          { id: "event_muhammad_vs_bonfim", name: "Muhammad vs. Bonfim", date: "2026-06-06", prelimsStart: "6:00 PM ET", mainStart: "10:00 PM ET" },
+          { id: "event_ufc_250", name: "UFC Freedom 250: Topuria vs. Gaethje", date: "2026-06-14", prelimsStart: "6:00 PM ET", mainStart: "10:00 PM ET" }
         ];
 
         let eventsUpdated = false;
@@ -4068,10 +4484,15 @@
             if (!existing) {
               events.push(defaultEvt);
               eventsUpdated = true;
-            } else if (existing.name !== defaultEvt.name || existing.date !== defaultEvt.date) {
-              existing.name = defaultEvt.name;
-              existing.date = defaultEvt.date;
-              eventsUpdated = true;
+            } else {
+              // Upgrade legacy default events with start times
+              if (!existing.prelimsStart || !existing.mainStart || existing.name !== defaultEvt.name || existing.date !== defaultEvt.date) {
+                existing.name = defaultEvt.name;
+                existing.date = defaultEvt.date;
+                existing.prelimsStart = defaultEvt.prelimsStart;
+                existing.mainStart = defaultEvt.mainStart;
+                eventsUpdated = true;
+              }
             }
           });
         }
@@ -4144,6 +4565,9 @@
         });
         document.getElementById('btn-export-obsidian').addEventListener('click', () => toggleObsidianModal(true));
         document.getElementById('btn-reset').addEventListener('click', confirmReset);
+
+        // Initialize settings dropdown listeners
+        initSettingsDropdown();
       } catch (err) {
         console.error("Init Error:", err);
         alert("Loading Error: " + err.message + "\n" + err.stack);
@@ -4154,6 +4578,43 @@
       window.addEventListener('DOMContentLoaded', initTracker);
     } else {
       initTracker();
+    }
+
+    // Toggle Settings Dropdown Menu
+    function toggleSettingsMenu(event) {
+      if (event) event.stopPropagation();
+      const dropdown = document.getElementById('settings-dropdown');
+      if (dropdown) {
+        dropdown.classList.toggle('show');
+      }
+    }
+
+    // Close Settings Dropdown Menu
+    function closeSettingsMenu() {
+      const dropdown = document.getElementById('settings-dropdown');
+      if (dropdown) {
+        dropdown.classList.remove('show');
+      }
+    }
+
+    // Close settings dropdown on window click (outside click)
+    window.addEventListener('click', function(event) {
+      const container = document.querySelector('.settings-menu-container');
+      if (container && !container.contains(event.target)) {
+        closeSettingsMenu();
+      }
+    });
+
+    // Close dropdown when any item inside is clicked
+    function initSettingsDropdown() {
+      const dropdown = document.getElementById('settings-dropdown');
+      if (dropdown) {
+        dropdown.addEventListener('click', (e) => {
+          if (e.target.closest('.settings-item')) {
+            closeSettingsMenu();
+          }
+        });
+      }
     }
 
     // Render Event Dropdown
@@ -4181,6 +4642,8 @@
       const fightContainer = document.getElementById('fight-card-container');
       const cardPlaceholder = document.getElementById('fight-card-placeholder');
       const editCardBtn = document.getElementById('btn-edit-card');
+      const addBetSlipPanel = document.getElementById('add-bet-slip-panel');
+      const grid = document.querySelector('.workspace-grid');
 
       if (activeEventId === 'all') {
         headerTitle.textContent = 'Overall UFC Bet Tracker';
@@ -4191,20 +4654,35 @@
         if (placeholder) placeholder.style.display = 'flex';
         
         document.getElementById('parlay-builder-form').style.display = 'none';
+        if (addBetSlipPanel) addBetSlipPanel.style.display = 'none';
+        if (grid) grid.classList.add('overall-layout');
         
-        if (fightContainer) fightContainer.style.display = 'none';
-        if (cardPlaceholder) cardPlaceholder.style.display = 'flex';
-        if (editCardBtn) editCardBtn.style.display = 'none';
+        const fcPanel = document.getElementById('fight-card-panel');
+        if (fcPanel) fcPanel.style.display = 'none';
+        const anaPanel = document.getElementById('bet-type-analysis-panel');
+        if (anaPanel) anaPanel.style.display = 'flex';
       } else {
+        if (addBetSlipPanel) addBetSlipPanel.style.display = 'flex';
+        if (grid) grid.classList.remove('overall-layout');
         const activeEvent = events.find(e => e.id === activeEventId) || events[0];
         headerTitle.textContent = activeEvent.name;
-        headerDetails.textContent = `UFC Fight Night | ${activeEvent.date} | Sportsbook Bet Tracker`;
+        
+        let detailsText = `UFC Fight Night | ${activeEvent.date} | Sportsbook Bet Tracker`;
+        if (activeEvent.prelimsStart || activeEvent.mainStart) {
+          detailsText += ` | Prelims: ${activeEvent.prelimsStart || '—'} | Main: ${activeEvent.mainStart || '—'}`;
+        }
+        headerDetails.textContent = detailsText;
         
         if (tabHeader) tabHeader.style.display = 'grid';
         if (placeholder) placeholder.style.display = 'none';
         
         switchBetMode(betMode, true);
         
+        const fcPanel = document.getElementById('fight-card-panel');
+        if (fcPanel) fcPanel.style.display = 'flex';
+        const anaPanel = document.getElementById('bet-type-analysis-panel');
+        if (anaPanel) anaPanel.style.display = 'none';
+
         if (fightContainer) fightContainer.style.display = 'flex';
         if (cardPlaceholder) cardPlaceholder.style.display = 'none';
         if (editCardBtn) editCardBtn.style.display = 'inline-block';
@@ -4250,10 +4728,11 @@
         const row = document.createElement('div');
         row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background-color: #1a1a24; border: 1px solid var(--input-border); border-radius: 8px; padding: 10px;';
         
+        const startTimes = (evt.prelimsStart || evt.mainStart) ? ` | Prelims: ${evt.prelimsStart || '—'} | Main: ${evt.mainStart || '—'}` : '';
         row.innerHTML = `
           <div style="display: flex; flex-direction: column; gap: 2px;">
             <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">${evt.name}</div>
-            <div style="font-size: 11px; color: var(--text-muted);">${evt.date}</div>
+            <div style="font-size: 11px; color: var(--text-muted);">${evt.date}${startTimes}</div>
           </div>
           <button class="btn-delete" onclick="deleteEvent('${evt.id}')" title="Delete Event" style="padding: 6px; border-radius: 6px;">
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
@@ -4266,8 +4745,12 @@
     function createEvent() {
       const nameInput = document.getElementById('new-event-name');
       const dateInput = document.getElementById('new-event-date');
+      const prelimsInput = document.getElementById('new-event-prelims-start');
+      const mainInput = document.getElementById('new-event-main-start');
       const name = nameInput.value.trim();
       const date = dateInput.value.trim();
+      const prelimsStart = prelimsInput.value.trim();
+      const mainStart = mainInput.value.trim();
 
       if (!name || !date) {
         alert("Please enter both an event name and date.");
@@ -4275,7 +4758,7 @@
       }
 
       const eventId = "event_" + Date.now();
-      const newEvent = { id: eventId, name, date };
+      const newEvent = { id: eventId, name, date, prelimsStart, mainStart };
       
       events.push(newEvent);
       cards[eventId] = [];
@@ -4284,6 +4767,8 @@
 
       nameInput.value = '';
       dateInput.value = '';
+      prelimsInput.value = '';
+      mainInput.value = '';
 
       renderEventSelector();
       syncEventView();
@@ -4339,11 +4824,12 @@
         row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background-color: #1a1a24; border: 1px solid var(--input-border); border-radius: 8px; padding: 10px;';
         
         const placement = fight.main ? 'Main Card' : 'Prelims';
+        const timeStr = fight.time ? ` | Time: ${fight.time}` : '';
         
         row.innerHTML = `
           <div style="display: flex; flex-direction: column; gap: 2px;">
             <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">${fight.fighterA} vs. ${fight.fighterB}</div>
-            <div style="font-size: 11px; color: var(--text-muted);">${fight.weight} | ${placement} | A: ${fight.oddsA > 0 ? '+' : ''}${fight.oddsA} B: ${fight.oddsB > 0 ? '+' : ''}${fight.oddsB} | O/U: ${fight.ouLine || 2.5}</div>
+            <div style="font-size: 11px; color: var(--text-muted);">${fight.weight} | ${placement}${timeStr} | A: ${fight.oddsA > 0 ? '+' : ''}${fight.oddsA} B: ${fight.oddsB > 0 ? '+' : ''}${fight.oddsB} | O/U: ${fight.ouLine || 2.5}</div>
           </div>
           <button class="btn-delete" onclick="deleteMatchupFromCard(${idx})" title="Delete Matchup" style="padding: 6px; border-radius: 6px;">
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
@@ -4361,6 +4847,7 @@
       const weight = document.getElementById('card-weight').value.trim() || 'Welterweight';
       const isMain = document.getElementById('card-type-select').value === 'main';
       const ouLine = parseFloat(document.getElementById('card-ou-line').value) || 2.5;
+      const fightTime = document.getElementById('card-fight-time').value.trim();
 
       if (!fighterA || !fighterB || isNaN(oddsA) || isNaN(oddsB)) {
         alert("Please fill in both fighter names and their American odds.");
@@ -4374,7 +4861,8 @@
         weight,
         oddsA,
         oddsB,
-        ouLine
+        ouLine,
+        time: fightTime
       };
 
       if (!cards[activeEventId]) {
@@ -4389,6 +4877,7 @@
       document.getElementById('card-odds-a').value = '';
       document.getElementById('card-odds-b').value = '';
       document.getElementById('card-ou-line').value = '2.5';
+      document.getElementById('card-fight-time').value = '';
 
       renderCardFightsList();
       populateFightSelect();
@@ -4499,6 +4988,11 @@
           <div class="fight-details">
             <span class="weight-class">${fight.weight}</span>
             <span class="card-type ${fight.main ? 'main' : 'prelims'}">${fight.main ? 'MAIN CARD' : 'PRELIMS'}</span>
+            ${fight.time ? `
+            <span class="fight-time" style="font-size: 11px; font-weight: 600; color: #f59e0b; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px;">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              ${fight.time}
+            </span>` : ''}
           </div>
         `;
         container.appendChild(card);
@@ -4565,10 +5059,6 @@
         select.value = fightIdx;
         handleParlayFightChange();
         
-        const betTypeEl = document.getElementById('parlay-bet-type');
-        if (betTypeEl) {
-          betTypeEl.value = 'Moneyline';
-        }
         document.getElementById('parlay-selection-input').value = fighterName;
         document.getElementById('parlay-odds-input').value = odds;
         syncSelectionDropdown('parlay');
@@ -4611,6 +5101,7 @@
       const betType = document.getElementById('bet-type').value;
       const wagerVal = parseFloat(document.getElementById('wager-input').value);
       const oddsVal = parseInt(document.getElementById('odds-input').value);
+      const isLiveStream = document.getElementById('is-live-stream').checked;
 
       if (!selection || isNaN(wagerVal) || isNaN(oddsVal) || select.value === "") {
         alert("Please fill in all required fields.");
@@ -4640,6 +5131,7 @@
           bet.odds = oddsVal;
           bet.payout = payout;
           bet.isParlay = false;
+          bet.isLiveStream = isLiveStream;
           delete bet.legs; // Remove parlay details if switching type
           if (!bet.eventId) {
             bet.eventId = activeEventId;
@@ -4659,7 +5151,8 @@
           odds: oddsVal,
           payout: payout,
           result: 'Pending',
-          isParlay: false
+          isParlay: false,
+          isLiveStream: isLiveStream
         };
         bets.push(newBet);
       }
@@ -4692,6 +5185,7 @@
         document.getElementById('parlay-wager-input').value = bet.wager;
         document.getElementById('parlay-combined-odds-input').value = bet.odds;
         selectParlayBook(bet.book);
+        document.getElementById('parlay-is-live-stream').checked = !!bet.isLiveStream;
 
         // Auto check/uncheck Auto-calculate checkbox based on whether stored odds match calculated odds
         const calculated = calculateParlayOdds(bet.legs);
@@ -4743,6 +5237,7 @@
         wagerInput.value = bet.wager;
         oddsInput.value = bet.odds;
         selectBook(bet.book);
+        document.getElementById('is-live-stream').checked = !!bet.isLiveStream;
         syncSelectionDropdown('single');
         calculatePreview();
 
@@ -4878,6 +5373,14 @@
       if (startRoundSelect) startRoundSelect.value = '2';
       const parlayStartRoundSelect = clone.querySelector('#parlay-start-round-select');
       if (parlayStartRoundSelect) parlayStartRoundSelect.value = '2';
+      const pointSpreadContainer = clone.querySelector('#point-spread-container');
+      if (pointSpreadContainer) pointSpreadContainer.style.display = 'none';
+      const parlayPointSpreadContainer = clone.querySelector('#parlay-point-spread-container');
+      if (parlayPointSpreadContainer) parlayPointSpreadContainer.style.display = 'none';
+      const pointSpreadValueSelect = clone.querySelector('#point-spread-value-select');
+      if (pointSpreadValueSelect) pointSpreadValueSelect.value = '-1.5';
+      const parlayPointSpreadValueSelect = clone.querySelector('#parlay-point-spread-value-select');
+      if (parlayPointSpreadValueSelect) parlayPointSpreadValueSelect.value = '-1.5';
       if (parlaySelectionSelect) {
         parlaySelectionSelect.style.display = 'none';
         parlaySelectionSelect.innerHTML = '';
@@ -4919,6 +5422,16 @@
       cleanSelector('#filter-fight-select', '<option value="all">All Matchups</option>');
       const filterBook = clone.querySelector('#filter-book-select');
       if (filterBook) filterBook.value = 'all';
+      const filterBetTypeSel = clone.querySelector('#filter-bet-type-select');
+      if (filterBetTypeSel) filterBetTypeSel.value = 'all';
+      const filterLiveStreamBox = clone.querySelector('#filter-live-stream-only');
+      if (filterLiveStreamBox) filterLiveStreamBox.checked = false;
+      const analysisLiveFilterSel = clone.querySelector('#analysis-live-filter');
+      if (analysisLiveFilterSel) analysisLiveFilterSel.value = 'all';
+      const isLiveStreamBox = clone.querySelector('#is-live-stream');
+      if (isLiveStreamBox) isLiveStreamBox.checked = false;
+      const parlayIsLiveStreamBox = clone.querySelector('#parlay-is-live-stream');
+      if (parlayIsLiveStreamBox) parlayIsLiveStreamBox.checked = false;
 
       let htmlContent = '<!DOCTYPE html>\n<html lang="en">\n' + clone.innerHTML + '\n</html>';
 
@@ -5107,7 +5620,7 @@
       if ('showSaveFilePicker' in window) {
         try {
           const options = {
-            suggestedName: 'ufc-bet-tracker.html',
+            suggestedName: 'index.html',
             types: [{
               description: 'HTML Files',
               accept: {
@@ -5135,13 +5648,13 @@
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'ufc-bet-tracker.html';
+        a.download = 'index.html';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         updateSaveStatus(false);
-        alert('File download triggered! Overwrite your ufc-bet-tracker.html file with this new file to save your changes.');
+        alert('File download triggered! Overwrite your index.html file with this new file to save your changes.');
       } catch (err) {
         alert('Failed to save file: ' + err.message);
       }
@@ -5397,6 +5910,7 @@
         return;
       }
       const payout = calcPayout(wagerVal, combinedOdds);
+      const isLiveStream = document.getElementById('parlay-is-live-stream').checked;
 
       if (editingBetId !== null) {
         const bet = bets.find(b => b.id === editingBetId);
@@ -5410,6 +5924,7 @@
           bet.wager = wagerVal;
           bet.odds = combinedOdds;
           bet.payout = payout;
+          bet.isLiveStream = isLiveStream;
           if (!bet.eventId) {
             bet.eventId = activeEventId;
           }
@@ -5444,7 +5959,8 @@
           wager: wagerVal,
           odds: combinedOdds,
           payout: payout,
-          result: 'Pending'
+          result: 'Pending',
+          isLiveStream: isLiveStream
         };
         bets.push(newBet);
       }
@@ -5581,6 +6097,7 @@
       
       document.getElementById('parlay-submit-text').textContent = 'Log Parlay Bet';
       document.getElementById('btn-cancel-parlay-edit').style.display = 'none';
+      document.getElementById('parlay-is-live-stream').checked = false;
 
       // Reset Parlay fields
       const parlayFightSelect = document.getElementById('parlay-fight-select');
@@ -5595,6 +6112,8 @@
       if (parlayBetType) parlayBetType.value = 'Moneyline';
       const parlayStartRoundSelect = document.getElementById('parlay-start-round-select');
       if (parlayStartRoundSelect) parlayStartRoundSelect.value = '2';
+      const parlayPointSpreadValueSelect = document.getElementById('parlay-point-spread-value-select');
+      if (parlayPointSpreadValueSelect) parlayPointSpreadValueSelect.value = '-1.5';
       
       syncSelectionDropdown('parlay');
 
@@ -5691,6 +6210,234 @@
       if (status === 'Pending') return 0;
       if (status === 'Loss') return 2;
       return 1; // Win or Void
+    }
+
+    function getBetCategory(bet) {
+      if (bet.isParlay) return 'Parlay';
+      
+      const type = bet.betType || 'Other';
+      const sel = (bet.selection || '').toLowerCase();
+      
+      if (type === 'Moneyline') return 'Moneyline';
+      if (type === 'Point Spread') return 'Point Spread';
+      if (type === 'Over/Under') return 'Over/Under';
+      if (type === 'Fight to Start Round') return 'Fight to Start Round';
+      if (type === 'Round Prop') return 'Round Prop';
+      if (type === 'Fighter Props') return 'Fighter Props';
+      if (type === 'Fighter Parlay') return 'Fighter Parlay';
+      
+      // Keyword classification for Method of Victory and Other
+      if (sel.includes('sub') || sel.includes('submission')) return 'Submission';
+      if (sel.includes('ko') || sel.includes('tko') || sel.includes('knockout') || sel.includes('stoppage')) return 'KO/TKO';
+      if (sel.includes('dec') || sel.includes('decision') || sel.includes('points')) return 'Decision';
+      
+      if (type === 'Method of Victory') return 'Method of Victory';
+      return 'Other';
+    }
+
+    function handleAnalysisSort(key) {
+      if (analysisSortKey === key) {
+        analysisSortDesc = !analysisSortDesc;
+      } else {
+        analysisSortKey = key;
+        analysisSortDesc = (key === 'total' || key === 'winRate' || key === 'profit' || key === 'roi');
+      }
+      renderBetTypeAnalysis();
+    }
+
+    function selectAnalysisCategory(category) {
+      if (selectedAnalysisCategory === category) {
+        selectedAnalysisCategory = 'all';
+      } else {
+        selectedAnalysisCategory = category;
+      }
+      
+      const selectEl = document.getElementById('filter-bet-type-select');
+      if (selectEl) {
+        selectEl.value = selectedAnalysisCategory;
+      }
+      
+      filterBetType = selectedAnalysisCategory;
+      renderBets();
+      updateDashboard();
+      renderBetTypeAnalysis(); // Updates row highlighting
+    }
+
+    function renderBetTypeAnalysis() {
+      const panel = document.getElementById('bet-type-analysis-panel');
+      if (!panel || panel.style.display === 'none') return;
+
+      const bookFilter = document.getElementById('analysis-book-filter').value;
+      const statusFilter = document.getElementById('analysis-status-filter').value;
+      const liveFilter = document.getElementById('analysis-live-filter').value;
+
+      // Filter bets for stats
+      const relevantBets = activeEventId === 'all' ? bets : bets.filter(b => b.eventId === activeEventId);
+      const filteredForStats = relevantBets.filter(bet => {
+        if (bookFilter !== 'all' && bet.book !== bookFilter) return false;
+        if (statusFilter === 'settled' && bet.result === 'Pending') return false;
+        if (statusFilter === 'pending' && bet.result !== 'Pending') return false;
+        if (liveFilter === 'live' && !bet.isLiveStream) return false;
+        if (liveFilter === 'prematch' && bet.isLiveStream) return false;
+        return true;
+      });
+
+      // Categories to track
+      const categories = [
+        'Moneyline', 'KO/TKO', 'Submission', 'Decision', 'Over/Under', 
+        'Round Prop', 'Fight to Start Round', 'Fighter Props', 'Fighter Parlay', 
+        'Parlay', 'Other'
+      ];
+
+      // Initialize stats object
+      const statsMap = {};
+      categories.forEach(cat => {
+        statsMap[cat] = {
+          category: cat,
+          total: 0,
+          wins: 0,
+          losses: 0,
+          voids: 0,
+          pending: 0,
+          wagered: 0,
+          profit: 0,
+          winRate: 0,
+          roi: 0
+        };
+      });
+
+      // Accumulate stats
+      filteredForStats.forEach(bet => {
+        const cat = getBetCategory(bet);
+        if (!statsMap[cat]) {
+          statsMap[cat] = {
+            category: cat,
+            total: 0,
+            wins: 0,
+            losses: 0,
+            voids: 0,
+            pending: 0,
+            wagered: 0,
+            profit: 0,
+            winRate: 0,
+            roi: 0
+          };
+        }
+        
+        const s = statsMap[cat];
+        s.total++;
+        s.wagered += bet.wager;
+
+        if (bet.result === 'Win') {
+          s.wins++;
+          s.profit += (bet.payout - bet.wager);
+        } else if (bet.result === 'Loss') {
+          s.losses++;
+          s.profit -= bet.wager;
+        } else if (bet.result === 'Void') {
+          s.voids++;
+        } else if (bet.result === 'Pending') {
+          s.pending++;
+        }
+      });
+
+      // Calculate rates
+      const statsList = Object.values(statsMap);
+      statsList.forEach(s => {
+        const settled = s.wins + s.losses;
+        s.winRate = settled > 0 ? (s.wins / settled) * 100 : 0;
+        s.roi = s.wagered > 0 ? (s.profit / s.wagered) * 100 : 0;
+      });
+
+      // Sort stats list
+      statsList.sort((a, b) => {
+        let valA = a[analysisSortKey];
+        let valB = b[analysisSortKey];
+
+        if (typeof valA === 'string') {
+          valA = valA.toLowerCase();
+          valB = valB.toLowerCase();
+          return analysisSortDesc ? valB.localeCompare(valA) : valA.localeCompare(valB);
+        }
+
+        return analysisSortDesc ? valB - valA : valA - valB;
+      });
+
+      // Render rows
+      const tbody = document.getElementById('analysis-table-body');
+      tbody.innerHTML = '';
+
+      if (filteredForStats.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">No wagers found.</td></tr>`;
+        updateAnalysisSortIndicators();
+        return;
+      }
+
+      statsList.forEach(s => {
+        if (s.total === 0) return;
+
+        const tr = document.createElement('tr');
+        tr.style.cursor = 'pointer';
+        tr.style.transition = 'background-color 0.2s';
+        
+        // Highlight active category filter
+        const isHighlighted = selectedAnalysisCategory === s.category;
+        if (isHighlighted) {
+          tr.style.backgroundColor = 'rgba(255, 0, 51, 0.12)';
+          tr.style.borderLeft = '3px solid var(--ufc-red)';
+          tr.style.fontWeight = '600';
+        } else {
+          tr.addEventListener('mouseenter', () => tr.style.backgroundColor = '#1a1a24');
+          tr.addEventListener('mouseleave', () => tr.style.backgroundColor = 'transparent');
+        }
+
+        tr.onclick = () => selectAnalysisCategory(s.category);
+
+        const formatPL = (val) => val >= 0 ? `+$${val.toFixed(2)}` : `-$${Math.abs(val).toFixed(2)}`;
+        const plColor = s.profit > 0 ? 'var(--win-color)' : (s.profit < 0 ? 'var(--loss-color)' : 'var(--text-muted)');
+        const roiColor = s.roi > 0 ? 'var(--win-color)' : (s.roi < 0 ? 'var(--loss-color)' : 'var(--text-muted)');
+
+        // Format win rate
+        const settledCount = s.wins + s.losses;
+        const winRateText = settledCount > 0 ? `${s.winRate.toFixed(1)}%` : '—';
+
+        // Format record text
+        let recordText = `${s.wins}-${s.losses}-${s.voids}`;
+        if (s.pending > 0) {
+          recordText += ` (${s.pending} pending)`;
+        }
+
+        tr.innerHTML = `
+          <td style="padding: 10px 4px; display: flex; align-items: center; gap: 6px;">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background-color: ${isHighlighted ? 'var(--ufc-red)' : 'var(--text-muted)'}; display: inline-block;"></span>
+            ${s.category}
+          </td>
+          <td style="padding: 10px 4px; text-align: center;">${s.total}</td>
+          <td style="padding: 10px 4px; text-align: center; color: var(--text-muted); font-size: 11px;">${recordText}</td>
+          <td style="padding: 10px 4px; text-align: center;">${winRateText}</td>
+          <td style="padding: 10px 4px; text-align: right; color: ${plColor}; font-weight: 600;">${formatPL(s.profit)}</td>
+          <td style="padding: 10px 4px; text-align: right; color: ${roiColor};">${s.roi.toFixed(1)}%</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updateAnalysisSortIndicators();
+    }
+
+    function updateAnalysisSortIndicators() {
+      const keys = ['category', 'total', 'winRate', 'profit', 'roi'];
+      keys.forEach(k => {
+        const ind = document.getElementById(`sort-indicator-analysis-${k}`);
+        if (ind) {
+          if (analysisSortKey === k) {
+            ind.textContent = analysisSortDesc ? ' ▼' : ' ▲';
+            ind.style.color = 'var(--ufc-red)';
+          } else {
+            ind.textContent = ' ↕';
+            ind.style.color = 'rgb(75, 85, 99)';
+          }
+        }
+      });
     }
 
     function applySortAndRender() {
@@ -5815,8 +6562,14 @@
       });
 
       // Restore filter value if it still exists
-      const optionsArray = Array.from(select.options).map(o => o.value);
-      if (optionsArray.includes(currentVal)) {
+      let currentValExists = false;
+      for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].value === currentVal) {
+          currentValExists = true;
+          break;
+        }
+      }
+      if (currentValExists) {
         select.value = currentVal;
       } else {
         select.value = 'all';
@@ -5840,8 +6593,12 @@
     function applyFilters() {
       filterFight = document.getElementById('filter-fight-select').value;
       filterBook = document.getElementById('filter-book-select').value;
+      filterBetType = document.getElementById('filter-bet-type-select').value;
+      filterLiveStreamOnly = document.getElementById('filter-live-stream-only').checked;
+      selectedAnalysisCategory = filterBetType;
       renderBets();
       updateDashboard();
+      renderBetTypeAnalysis();
     }
 
     // Update Dashboard Metrics
@@ -5939,6 +6696,7 @@
       document.getElementById('exposure-dk-pl').style.color = dkPL >= 0 ? 'var(--win-color)' : 'var(--loss-color)';
       document.getElementById('exposure-fd-pl').textContent = formatPL(fdPL);
       document.getElementById('exposure-fd-pl').style.color = fdPL >= 0 ? 'var(--win-color)' : 'var(--loss-color)';
+      renderBetTypeAnalysis();
     }
 
     // Render Bets Table
@@ -5963,6 +6721,14 @@
           if (bet.book !== filterBook) return false;
         }
 
+        if (filterBetType !== 'all') {
+          if (getBetCategory(bet) !== filterBetType) return false;
+        }
+
+        if (filterLiveStreamOnly && !bet.isLiveStream) {
+          return false;
+        }
+
         return true;
       });
 
@@ -5981,7 +6747,7 @@
 
       const summaryText = document.getElementById('filter-summary-text');
       if (summaryText) {
-        if (filterFight !== 'all' || filterBook !== 'all') {
+        if (filterFight !== 'all' || filterBook !== 'all' || filterBetType !== 'all' || filterLiveStreamOnly) {
           const formatPL = (val) => val >= 0 ? `+$${val.toFixed(2)}` : `-$${Math.abs(val).toFixed(2)}`;
           const plColor = filteredProfit >= 0 ? 'var(--win-color)' : 'var(--loss-color)';
           summaryText.innerHTML = `Showing ${filteredBets.length} of ${relevantBets.length} wagers | Wagered: <strong>$${filteredWager.toFixed(2)}</strong> | Net: <strong style="color: ${plColor};">${formatPL(filteredProfit)}</strong>`;
@@ -5992,7 +6758,7 @@
 
       const countLabel = document.getElementById('active-bets-count');
       if (countLabel) {
-        if (filterFight !== 'all' || filterBook !== 'all') {
+        if (filterFight !== 'all' || filterBook !== 'all' || filterBetType !== 'all' || filterLiveStreamOnly) {
           countLabel.textContent = `Showing ${filteredBets.length} of ${relevantBets.length} wagers`;
         } else {
           countLabel.textContent = `${relevantBets.length} wagers logged`;
@@ -6018,10 +6784,14 @@
 
         let selectionContent = '';
         let matchupContent = '';
+        let liveBadge = bet.isLiveStream ? `<span style="display: inline-block; font-size: 8px; font-weight: 800; background-color: rgba(255, 0, 51, 0.15); color: var(--ufc-red); border: 1px solid rgba(255, 0, 51, 0.3); padding: 1px 4px; border-radius: 4px; margin-left: 6px; text-transform: uppercase; letter-spacing: 0.03em; vertical-align: middle;">Live</span>` : '';
 
         if (bet.isParlay) {
           selectionContent = `
-            <div style="font-weight: 700; color: #a855f7;">Parlay (${bet.legs.length} Legs)</div>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <div style="font-weight: 700; color: #a855f7;">Parlay (${bet.legs.length} Legs)</div>
+              ${liveBadge}
+            </div>
             <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px; padding-left: 8px; border-left: 2px solid #a855f7;">
               ${bet.legs.map((leg, idx) => `
                 <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 11px;">
@@ -6045,7 +6815,12 @@
             </div>
           `;
         } else {
-          selectionContent = `<div style="font-weight: 600;">${bet.selection}</div>`;
+          selectionContent = `
+            <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+              <div style="font-weight: 600;">${bet.selection}</div>
+              ${liveBadge}
+            </div>
+          `;
           let eventTag = '';
           if (activeEventId === 'all' && bet.eventId) {
             const eventObj = events.find(e => e.id === bet.eventId);
@@ -6259,6 +7034,7 @@
       const otherContainer = isSingle ? document.getElementById('other-container') : null;
       const fighterPropsContainer = isSingle ? document.getElementById('fighter-props-container') : null;
       const fighterParlayContainer = isSingle ? document.getElementById('fighter-parlay-container') : null;
+      const pointSpreadContainer = document.getElementById(isSingle ? 'point-spread-container' : 'parlay-point-spread-container');
 
       if (!select || !textInput || !selectDropdown) return;
 
@@ -6271,6 +7047,7 @@
       const isOther = betTypeEl ? (betTypeEl.value === 'Other') : false;
       const isFighterProps = betTypeEl ? (betTypeEl.value === 'Fighter Props') : false;
       const isFighterParlay = betTypeEl ? (betTypeEl.value === 'Fighter Parlay') : false;
+      const isPointSpread = betTypeEl ? (betTypeEl.value === 'Point Spread') : false;
 
       // Hide custom container divs by default
       if (methodContainer) {
@@ -6293,6 +7070,9 @@
       }
       if (fighterParlayContainer) {
         fighterParlayContainer.style.display = 'none';
+      }
+      if (pointSpreadContainer) {
+        pointSpreadContainer.style.display = 'none';
       }
 
       if (!isCustom && isMoneyline) {
@@ -6374,6 +7154,12 @@
             fighterSelect.value = '';
             methodTypeEl.value = 'KO';
             textInput.value = 'Fight will end by KO';
+          }
+
+          if (isSingle) {
+            handleMethodOfVictoryChange();
+          } else {
+            handleParlayMethodOfVictoryChange();
           }
           return;
         }
@@ -6622,7 +7408,14 @@
 
           fighterSelect.value = parsedFighter;
           methodSelect.value = parsedMethod;
-          if (Array.from(roundSelect.options).some(opt => opt.value === parsedRound)) {
+          let roundExists = false;
+          for (let i = 0; i < roundSelect.options.length; i++) {
+            if (roundSelect.options[i].value === parsedRound) {
+              roundExists = true;
+              break;
+            }
+          }
+          if (roundExists) {
             roundSelect.value = parsedRound;
           } else {
             roundSelect.value = 'Round 1';
@@ -6672,6 +7465,53 @@
           textInput.required = true;
         }
         return;
+      } else if (!isCustom && isPointSpread) {
+        const fightIdx = parseInt(select.value);
+        const activeFights = cards[activeEventId] || [];
+        const fight = activeFights[fightIdx];
+
+        if (fight) {
+          const fighterSelect = document.getElementById(isSingle ? 'point-spread-fighter-select' : 'parlay-point-spread-fighter-select');
+          fighterSelect.innerHTML = `
+            <option value="${fight.fighterA}">${fight.fighterA}</option>
+            <option value="${fight.fighterB}">${fight.fighterB}</option>
+          `;
+
+          selectDropdown.style.display = 'none';
+          textInput.style.display = 'none';
+          textInput.required = false;
+          selectDropdown.required = false;
+          pointSpreadContainer.style.display = 'flex';
+
+          // Try to parse existing selection to pre-fill dropdowns
+          const currentText = textInput.value.trim();
+          const valueSelect = document.getElementById(isSingle ? 'point-spread-value-select' : 'parlay-point-spread-value-select');
+
+          if (currentText.startsWith(fight.fighterA)) {
+            fighterSelect.value = fight.fighterA;
+            const spread = currentText.substring(fight.fighterA.length).trim();
+            if (spread) {
+              valueSelect.value = spread;
+            }
+          } else if (currentText.startsWith(fight.fighterB)) {
+            fighterSelect.value = fight.fighterB;
+            const spread = currentText.substring(fight.fighterB.length).trim();
+            if (spread) {
+              valueSelect.value = spread;
+            }
+          } else {
+            // Default: fighterA, valueSelect's current/default value, and update text input
+            fighterSelect.value = fight.fighterA;
+            textInput.value = `${fight.fighterA} ${valueSelect.value}`;
+          }
+
+          if (isSingle) {
+            handlePointSpreadChange();
+          } else {
+            handleParlayPointSpreadChange();
+          }
+          return;
+        }
       }
 
       // Default: Show text input
@@ -6824,6 +7664,36 @@
       calculatePreview();
     }
 
+    // Handle Point Spread dropdown changes to build selection string
+    function handlePointSpreadChange() {
+      const textInput = document.getElementById('selection-input');
+      const fighterSelect = document.getElementById('point-spread-fighter-select');
+      const valueSelect = document.getElementById('point-spread-value-select');
+
+      if (!textInput || !fighterSelect || !valueSelect) return;
+
+      const fighter = fighterSelect.value;
+      const spread = valueSelect.value;
+
+      textInput.value = `${fighter} ${spread}`;
+      calculatePreview();
+    }
+
+    // Handle Point Spread dropdown changes to build selection string for Parlay
+    function handleParlayPointSpreadChange() {
+      const textInput = document.getElementById('parlay-selection-input');
+      const fighterSelect = document.getElementById('parlay-point-spread-fighter-select');
+      const valueSelect = document.getElementById('parlay-point-spread-value-select');
+
+      if (!textInput || !fighterSelect || !valueSelect) return;
+
+      const fighter = fighterSelect.value;
+      const spread = valueSelect.value;
+
+      textInput.value = `${fighter} ${spread}`;
+      calculateParlayPreview();
+    }
+
     // Handle Other special bet dropdown changes
     function handleOtherSpecialChange() {
       const textInput = document.getElementById('selection-input');
@@ -6959,6 +7829,473 @@
       } else if (inputId === 'parlay-wager-input') {
         calculateParlayPreview();
       }
+    }
+
+    // ESPN validation functions
+    let validationPendingUpdates = [];
+
+    function openValidationModal() {
+      document.getElementById('validation-modal-overlay').classList.add('active');
+      document.getElementById('validation-loading').style.display = 'flex';
+      document.getElementById('validation-results-container').style.display = 'none';
+      document.getElementById('validation-no-conflicts').style.display = 'none';
+      document.getElementById('btn-apply-validation').style.display = 'none';
+    }
+
+    function closeValidationModal(e) {
+      if (!e || e.target.id === 'validation-modal-overlay' || e.target.className === 'modal-close' || e.target.tagName === 'BUTTON') {
+        document.getElementById('validation-modal-overlay').classList.remove('active');
+      }
+    }
+
+    async function validateBetsWithESPN() {
+      openValidationModal();
+      try {
+        const response = await fetch("https://site.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard");
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        
+        let espnComps = [];
+        if (data && data.events) {
+          data.events.forEach(evt => {
+            if (evt.competitions) {
+              espnComps = espnComps.concat(evt.competitions);
+            }
+          });
+        }
+        
+        const conflicts = [];
+        validationPendingUpdates = [];
+        
+        const betsToValidate = activeEventId === 'all' 
+          ? bets 
+          : bets.filter(b => b.eventId === activeEventId);
+
+        betsToValidate.forEach(bet => {
+          if (bet.isParlay) {
+            bet.legs.forEach((leg, legIdx) => {
+              const comp = findESPNCompetition(leg.fightName, espnComps);
+              if (comp && comp.status.type.completed) {
+                const evalRes = evaluateLegOutcome(leg, comp);
+                if (evalRes) {
+                  if (leg.result !== evalRes.result) {
+                    conflicts.push({
+                      betId: bet.id,
+                      isParlay: true,
+                      legIndex: legIdx,
+                      fightName: leg.fightName,
+                      selection: leg.selection,
+                      currentResult: leg.result,
+                      proposedResult: evalRes.result,
+                      details: evalRes.details
+                    });
+                  }
+                }
+              }
+            });
+          } else {
+            const comp = findESPNCompetition(bet.fightName, espnComps);
+            if (comp && comp.status.type.completed) {
+              const evalRes = evaluateSingleOutcome(bet, comp);
+              if (evalRes) {
+                if (bet.result !== evalRes.result) {
+                  conflicts.push({
+                    betId: bet.id,
+                    isParlay: false,
+                    legIndex: -1,
+                    fightName: bet.fightName,
+                    selection: bet.selection,
+                    currentResult: bet.result,
+                    proposedResult: evalRes.result,
+                    details: evalRes.details
+                  });
+                }
+              }
+            }
+          }
+        });
+        
+        renderValidationResults(conflicts);
+      } catch (err) {
+        console.error(err);
+        document.getElementById('validation-loading').innerHTML = `
+          <svg width="40" height="40" fill="none" stroke="var(--ufc-red)" stroke-width="2" viewBox="0 0 24 24" style="margin-bottom: 12px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          <div style="font-weight: 600; color: var(--text-main);">Error fetching results from ESPN</div>
+          <p style="font-size: 12px; color: var(--text-muted); margin: 4px 0 0 0;">Please check your internet connection and try again.</p>
+        `;
+      }
+    }
+
+    function findESPNCompetition(ourFightName, espnComps) {
+      if (!ourFightName) return null;
+      const cleanOurName = ourFightName.toLowerCase();
+      
+      let ourFighters = cleanOurName.split(/\s+vs\.?\s+/);
+      if (ourFighters.length < 2) {
+        ourFighters = cleanOurName.split(/\s+vs\s+/);
+      }
+      
+      for (const comp of espnComps) {
+        if (!comp.competitors || comp.competitors.length < 2) continue;
+        const name1 = comp.competitors[0].athlete.fullName.toLowerCase();
+        const name2 = comp.competitors[1].athlete.fullName.toLowerCase();
+        
+        const getLastName = (fullName) => {
+          const parts = fullName.trim().split(/\s+/);
+          return parts[parts.length - 1];
+        };
+        
+        const last1 = getLastName(name1);
+        const last2 = getLastName(name2);
+        
+        if (cleanOurName.includes(last1) && cleanOurName.includes(last2)) {
+          return comp;
+        }
+        
+        if (ourFighters.length === 2) {
+          const of1 = ourFighters[0];
+          const of2 = ourFighters[1];
+          if ((name1.includes(of1) || of1.includes(last1)) && (name2.includes(of2) || of2.includes(last2))) {
+            return comp;
+          }
+          if ((name1.includes(of2) || of2.includes(last1)) && (name2.includes(of1) || of1.includes(last2))) {
+            return comp;
+          }
+        }
+      }
+      return null;
+    }
+
+    function guessBetType(selection, defaultType) {
+      if (defaultType && defaultType !== 'Parlay') return defaultType;
+      const s = selection.toLowerCase();
+      if ((s.includes('over ') || s.includes('under ')) && s.includes('round')) return 'Over/Under';
+      if (s.includes('by ko') || s.includes('by submission') || s.includes('by decision') || s.includes('ko/tko') || s.includes('submission or decision') || s.includes('ko or decision') || s.includes('ko or submission')) return 'Method of Victory';
+      if (s.includes('-0.5') || s.includes('+0.5') || s.includes('-1.5') || s.includes('+1.5') || s.includes('-2.5') || s.includes('+2.5') || s.includes('-3.5') || s.includes('+3.5') || s.includes('-4.5') || s.includes('+4.5') || s.includes('-5.5') || s.includes('+5.5')) return 'Point Spread';
+      if (s.includes('start round')) return 'Fight to Start Round';
+      if (s.includes('go the distance')) return 'Other';
+      return 'Moneyline';
+    }
+
+    function evaluateOutcome(selection, betType, comp) {
+      const competitors = comp.competitors;
+      const f1Name = competitors[0].athlete.fullName.toLowerCase();
+      const f2Name = competitors[1].athlete.fullName.toLowerCase();
+      const f1LastName = competitors[0].athlete.fullName.trim().split(/\s+/).pop().toLowerCase();
+      const f2LastName = competitors[1].athlete.fullName.trim().split(/\s+/).pop().toLowerCase();
+      
+      const f1Winner = competitors[0].winner === true;
+      const f2Winner = competitors[1].winner === true;
+      
+      const winnerAthlete = f1Winner ? competitors[0] : (f2Winner ? competitors[1] : null);
+      
+      let espnMethod = 'Decision';
+      let detailsText = '';
+      if (comp.details) {
+        for (const det of comp.details) {
+          if (det.type && det.type.text) {
+            const txt = det.type.text.toLowerCase();
+            if (txt.includes('winner')) {
+              detailsText = det.type.text;
+              if (txt.includes('submission')) espnMethod = 'Submission';
+              else if (txt.includes('kotko') || txt.includes('ko') || txt.includes('tko')) espnMethod = 'KO/TKO';
+              else if (txt.includes('decision')) espnMethod = 'Decision';
+              break;
+            }
+          }
+        }
+      }
+      
+      const period = comp.status.period || 3;
+      const clock = comp.status.clock || 0;
+      const elapsedRounds = period - 1 + (clock / 300);
+      const cleanSel = selection.toLowerCase();
+      
+      let selectedFighterNum = 0;
+      let selLastName = '';
+      if (cleanSel.includes(f1LastName) || cleanSel.includes(f1Name)) {
+        selectedFighterNum = 1;
+        selLastName = f1LastName;
+      } else if (cleanSel.includes(f2LastName) || cleanSel.includes(f2Name)) {
+        selectedFighterNum = 2;
+        selLastName = f2LastName;
+      }
+      
+      const type = guessBetType(selection, betType);
+      
+      if (type === 'Moneyline') {
+        if (selectedFighterNum === 0) return null;
+        const isWin = (selectedFighterNum === 1 && f1Winner) || (selectedFighterNum === 2 && f2Winner);
+        const isLoss = (selectedFighterNum === 1 && f2Winner) || (selectedFighterNum === 2 && f1Winner);
+        
+        if (isWin) return { result: 'Win', details: `Winner: ${winnerAthlete.athlete.fullName} (${espnMethod}, Rd ${period})` };
+        if (isLoss) return { result: 'Loss', details: `Winner: ${winnerAthlete.athlete.fullName} (${espnMethod}, Rd ${period})` };
+        return { result: 'Void', details: `Draw or No Contest (${espnMethod}, Rd ${period})` };
+      }
+      
+      if (type === 'Method of Victory') {
+        if (selectedFighterNum === 0) return null;
+        const isFighterWinner = (selectedFighterNum === 1 && f1Winner) || (selectedFighterNum === 2 && f2Winner);
+        
+        if (!isFighterWinner) {
+          return { result: 'Loss', details: `${winnerAthlete ? winnerAthlete.athlete.fullName : 'Draw'} won the fight` };
+        }
+        
+        let methodMatched = false;
+        let methodDescription = '';
+        if (cleanSel.includes('ko') || cleanSel.includes('tko')) {
+          methodMatched = (espnMethod === 'KO/TKO');
+          methodDescription = 'KO/TKO';
+        } else if (cleanSel.includes('submission') || cleanSel.includes('sub')) {
+          methodMatched = (espnMethod === 'Submission');
+          methodDescription = 'Submission';
+        } else if (cleanSel.includes('decision') || cleanSel.includes('dec')) {
+          methodMatched = (espnMethod === 'Decision');
+          methodDescription = 'Decision';
+        }
+        
+        if (methodMatched) {
+          return { result: 'Win', details: `Won by ${espnMethod} in Rd ${period}` };
+        } else {
+          return { result: 'Loss', details: `Won by ${espnMethod} in Rd ${period} (User chose ${methodDescription || 'different method'})` };
+        }
+      }
+      
+      if (type === 'Over/Under') {
+        const lineMatch = cleanSel.match(/(\d+\.\d+)/);
+        if (!lineMatch) return null;
+        const lineVal = parseFloat(lineMatch[1]);
+        const isOver = cleanSel.includes('over');
+        const isUnder = cleanSel.includes('under');
+        
+        if (!isOver && !isUnder) return null;
+        
+        const elapsedText = `Fight ended at ${comp.status.displayClock} in Round ${period} (total ${elapsedRounds.toFixed(2)} rounds)`;
+        
+        if (isOver) {
+          if (elapsedRounds > lineVal) {
+            return { result: 'Win', details: `Over ${lineVal} hit. ${elapsedText}` };
+          } else {
+            return { result: 'Loss', details: `Over ${lineVal} failed. ${elapsedText}` };
+          }
+        } else {
+          if (elapsedRounds < lineVal) {
+            return { result: 'Win', details: `Under ${lineVal} hit. ${elapsedText}` };
+          } else {
+            return { result: 'Loss', details: `Under ${lineVal} failed. ${elapsedText}` };
+          }
+        }
+      }
+      
+      if (type === 'Fight to Start Round') {
+        const rdMatch = cleanSel.match(/round\s*(\d+)/) || cleanSel.match(/rd\s*(\d+)/);
+        if (!rdMatch) return null;
+        const targetRound = parseInt(rdMatch[1]);
+        const elapsedText = `Fight ended in Round ${period}`;
+        if (period >= targetRound) {
+          return { result: 'Win', details: `Fight started Round ${targetRound}. ${elapsedText}` };
+        } else {
+          return { result: 'Loss', details: `Fight did not start Round ${targetRound}. ${elapsedText}` };
+        }
+      }
+      
+      if (type === 'Point Spread') {
+        const spreadMatch = cleanSel.match(/([+-]\d+\.\d+)/) || cleanSel.match(/([+-]\d+)/);
+        if (!spreadMatch) return null;
+        const spreadVal = parseFloat(spreadMatch[1]);
+        if (selectedFighterNum === 0) return null;
+        
+        const selFighterWon = (selectedFighterNum === 1 && f1Winner) || (selectedFighterNum === 2 && f2Winner);
+        if (selFighterWon && espnMethod !== 'Decision') {
+          return { result: 'Win', details: `${selLastName.toUpperCase()} won by finish (${espnMethod}), automatically covering spread` };
+        }
+        if (!selFighterWon && espnMethod !== 'Decision') {
+          return { result: 'Loss', details: `Opponent won by finish, spread failed` };
+        }
+        
+        const s1Score = competitors[0].linescores && competitors[0].linescores[0] ? parseFloat(competitors[0].linescores[0].value) : 0;
+        const s2Score = competitors[1].linescores && competitors[1].linescores[0] ? parseFloat(competitors[1].linescores[0].value) : 0;
+        
+        if (s1Score === 0 || s2Score === 0) {
+          return { result: selFighterWon ? 'Win' : 'Loss', details: `Scorecards unavailable. Defaulted to fight winner: ${winnerAthlete.athlete.fullName}` };
+        }
+        
+        const selScore = selectedFighterNum === 1 ? s1Score : s2Score;
+        const oppScore = selectedFighterNum === 1 ? s2Score : s1Score;
+        const diff = selScore - oppScore;
+        const covered = diff > spreadVal;
+        
+        const scoreText = `Score: ${selScore} to ${oppScore} (diff: ${diff > 0 ? '+' : ''}${diff})`;
+        if (covered) {
+          return { result: 'Win', details: `Spread ${spreadVal > 0 ? '+' : ''}${spreadVal} covered. ${scoreText}` };
+        } else {
+          return { result: 'Loss', details: `Spread ${spreadVal > 0 ? '+' : ''}${spreadVal} not covered. ${scoreText}` };
+        }
+      }
+      
+      if (cleanSel.includes('go the distance')) {
+        const wentDistance = (espnMethod === 'Decision');
+        const userChoseYes = cleanSel.includes('yes') || !cleanSel.includes('no');
+        const correct = (wentDistance && userChoseYes) || (!wentDistance && !userChoseYes);
+        
+        const methodText = wentDistance ? 'went the distance (Decision)' : `ended by finish (${espnMethod} in Rd ${period})`;
+        if (correct) {
+          return { result: 'Win', details: `Fight ${methodText}` };
+        } else {
+          return { result: 'Loss', details: `Fight ${methodText}` };
+        }
+      }
+      
+      if (selectedFighterNum > 0) {
+        const isFighterWinner = (selectedFighterNum === 1 && f1Winner) || (selectedFighterNum === 2 && f2Winner);
+        return { result: isFighterWinner ? 'Win' : 'Loss', details: `Suggested based on fight winner (${winnerAthlete ? winnerAthlete.athlete.fullName : 'Draw'})` };
+      }
+      
+      return null;
+    }
+
+    function evaluateLegOutcome(leg, comp) {
+      return evaluateOutcome(leg.selection, null, comp);
+    }
+
+    function evaluateSingleOutcome(bet, comp) {
+      return evaluateOutcome(bet.selection, bet.betType, comp);
+    }
+
+    function renderValidationResults(conflicts) {
+      document.getElementById('validation-loading').style.display = 'none';
+      const container = document.getElementById('validation-results-container');
+      const noConflicts = document.getElementById('validation-no-conflicts');
+      const tableBody = document.getElementById('validation-table-body');
+      const applyBtn = document.getElementById('btn-apply-validation');
+      
+      tableBody.innerHTML = '';
+      validationPendingUpdates = [];
+      
+      if (conflicts.length === 0) {
+        container.style.display = 'none';
+        noConflicts.style.display = 'flex';
+        applyBtn.style.display = 'none';
+        return;
+      }
+      
+      container.style.display = 'flex';
+      noConflicts.style.display = 'none';
+      applyBtn.style.display = 'inline-block';
+      
+      const toggleBtn = document.getElementById('btn-val-toggle-all');
+      if (toggleBtn) toggleBtn.textContent = 'Deselect All';
+      
+      conflicts.forEach((c, index) => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid var(--card-border)';
+        
+        const checkboxId = `val-chk-${index}`;
+        const selectionText = c.isParlay 
+          ? `<strong style="color: #a855f7;">Parlay Leg:</strong> ${c.selection}<br><span style="font-size: 11px; color: var(--text-muted);">${c.fightName}</span>`
+          : `<strong>Single:</strong> ${c.selection}<br><span style="font-size: 11px; color: var(--text-muted);">${c.fightName}</span>`;
+          
+        const currentBadge = `<span class="leg-status-badge ${c.currentResult.toLowerCase()}">${c.currentResult}</span>`;
+        const proposedBadge = `<span class="leg-status-badge ${c.proposedResult.toLowerCase()}">${c.proposedResult}</span>`;
+        
+        tr.innerHTML = `
+          <td style="text-align: center; padding: 12px 8px; vertical-align: middle;">
+            <input type="checkbox" id="${checkboxId}" checked style="width: 16px; height: 16px; cursor: pointer; accent-color: var(--ufc-red);">
+          </td>
+          <td style="padding: 12px 8px; vertical-align: middle;">${selectionText}</td>
+          <td style="text-align: center; padding: 12px 8px; vertical-align: middle;">${currentBadge}</td>
+          <td style="text-align: center; padding: 12px 8px; vertical-align: middle;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="color: var(--text-muted);"><path stroke-linecap="round" stroke-linejoin="round" d="M19 13l-7 7-7-7m14-6l-7 7-7-7"></path></svg>
+              ${proposedBadge}
+            </div>
+          </td>
+          <td style="padding: 12px 8px; vertical-align: middle; color: var(--text-muted); font-size: 12px;">${c.details}</td>
+        `;
+        
+        tableBody.appendChild(tr);
+        
+        validationPendingUpdates.push({
+          checkboxId: checkboxId,
+          betId: c.betId,
+          isParlay: c.isParlay,
+          legIndex: c.legIndex,
+          proposedResult: c.proposedResult
+        });
+      });
+    }
+
+    function toggleAllValidationCheckboxes() {
+      const checkboxes = document.querySelectorAll('#validation-table-body input[type="checkbox"]');
+      if (checkboxes.length === 0) return;
+      
+      let checkedCount = 0;
+      checkboxes.forEach(chk => { if (chk.checked) checkedCount++; });
+      const shouldCheck = (checkedCount < checkboxes.length / 2);
+      
+      checkboxes.forEach(chk => { chk.checked = shouldCheck; });
+      
+      const toggleBtn = document.getElementById('btn-val-toggle-all');
+      if (toggleBtn) {
+        toggleBtn.textContent = shouldCheck ? 'Deselect All' : 'Select All';
+      }
+    }
+
+    function applyValidationUpdates() {
+      let appliedCount = 0;
+      
+      validationPendingUpdates.forEach(u => {
+        const chk = document.getElementById(u.checkboxId);
+        if (chk && chk.checked) {
+          const bet = bets.find(b => b.id === u.betId);
+          if (bet) {
+            if (u.isParlay) {
+              if (bet.legs && bet.legs[u.legIndex]) {
+                bet.legs[u.legIndex].result = u.proposedResult;
+                
+                let hasLoss = false;
+                let hasPending = false;
+                let allVoid = true;
+                bet.legs.forEach(l => {
+                  if (l.result === 'Loss') hasLoss = true;
+                  if (l.result === 'Pending') hasPending = true;
+                  if (l.result !== 'Void') allVoid = false;
+                });
+                
+                if (hasLoss) {
+                  bet.result = 'Loss';
+                } else if (hasPending) {
+                  bet.result = 'Pending';
+                } else if (allVoid) {
+                  bet.result = 'Void';
+                } else {
+                  bet.result = 'Win';
+                }
+                
+                const hasIncompleteOdds = bet.legs.some(l => l.odds === null || l.odds === undefined || isNaN(parseInt(l.odds)));
+                if (!hasIncompleteOdds) {
+                  bet.odds = calculateParlayOdds(bet.legs);
+                }
+                bet.payout = calcPayout(bet.wager, bet.odds);
+                appliedCount++;
+              }
+            } else {
+              bet.result = u.proposedResult;
+              appliedCount++;
+            }
+          }
+        }
+      });
+      
+      if (appliedCount > 0) {
+        saveState();
+        applySortAndRender();
+        updateDashboard();
+        updateSaveStatus(true);
+        alert(`Successfully applied ${appliedCount} updates! Remember to save your database to ufc-db.js via the Settings menu if you want them to persist.`);
+      }
+      
+      closeValidationModal();
     }
   </script>
 

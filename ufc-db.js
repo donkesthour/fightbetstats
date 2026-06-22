@@ -6,17 +6,30 @@
                    {
                        "id":  "event_muhammad_vs_bonfim",
                        "name":  "Muhammad vs. Bonfim",
-                       "date":  "2026-06-06"
+                       "date":  "2026-06-06",
+                       "prelimsStart":  "6:00 PM ET",
+                       "mainStart":  "10:00 PM ET"
                    },
                    {
                        "id":  "event_ufc_250",
                        "name":  "UFC Freedom 250: Topuria vs. Gaethje",
-                       "date":  "2026-06-14"
+                       "date":  "2026-06-14",
+                       "prelimsStart":  "6:00 PM ET",
+                       "mainStart":  "10:00 PM ET"
                    },
                    {
                        "id":  "event_kape_vs_horiguchi",
                        "name":  "UFC Fight Night: Kape vs. Horiguchi",
-                       "date":  "2026-06-20"
+                       "date":  "2026-06-20",
+                       "prelimsStart":  "6:00 PM ET",
+                       "mainStart":  "10:00 PM ET"
+                   },
+                   {
+                       "id":  "event_fiziev_vs_torres",
+                       "name":  "UFC Fight Night: Fiziev vs. Torres",
+                       "date":  "2026-06-27",
+                       "prelimsStart":  "6:00 PM ET",
+                       "mainStart":  "10:00 PM ET"
                    }
                ],
     "cards":  {
@@ -28,7 +41,8 @@
                                                       "weight":  "Flyweight",
                                                       "oddsA":  -156,
                                                       "oddsB":  135,
-                                                      "rounds":  5
+                                                      "rounds":  5,
+                                                      "time":  "12:00 AM ET"
                                                   },
                                                   {
                                                       "main":  true,
@@ -36,7 +50,8 @@
                                                       "fighterB":  "Ion Cutelaba",
                                                       "weight":  "Light Heavyweight",
                                                       "oddsA":  -350,
-                                                      "oddsB":  275
+                                                      "oddsB":  275,
+                                                      "time":  "11:30 PM ET"
                                                   },
                                                   {
                                                       "main":  true,
@@ -44,7 +59,8 @@
                                                       "fighterB":  "Andre Fili",
                                                       "weight":  "Featherweight",
                                                       "oddsA":  -350,
-                                                      "oddsB":  285
+                                                      "oddsB":  285,
+                                                      "time":  "11:00 PM ET"
                                                   },
                                                   {
                                                       "main":  true,
@@ -52,7 +68,8 @@
                                                       "fighterB":  "Hyder Amil",
                                                       "weight":  "Featherweight",
                                                       "oddsA":  -170,
-                                                      "oddsB":  140
+                                                      "oddsB":  140,
+                                                      "time":  "10:30 PM ET"
                                                   },
                                                   {
                                                       "main":  true,
@@ -60,7 +77,8 @@
                                                       "fighterB":  "Melsik Baghdasaryan",
                                                       "weight":  "Featherweight",
                                                       "oddsA":  -500,
-                                                      "oddsB":  385
+                                                      "oddsB":  385,
+                                                      "time":  "10:00 PM ET"
                                                   },
                                                   {
                                                       "main":  false,
@@ -68,7 +86,8 @@
                                                       "fighterB":  "Kevin Borjas",
                                                       "weight":  "Flyweight",
                                                       "oddsA":  -600,
-                                                      "oddsB":  450
+                                                      "oddsB":  450,
+                                                      "time":  "9:30 PM ET"
                                                   },
                                                   {
                                                       "main":  false,
@@ -76,7 +95,8 @@
                                                       "fighterB":  "Luana Santos",
                                                       "weight":  "Bantamweight",
                                                       "oddsA":  -120,
-                                                      "oddsB":  100
+                                                      "oddsB":  100,
+                                                      "time":  "9:00 PM ET"
                                                   },
                                                   {
                                                       "main":  false,
@@ -84,7 +104,8 @@
                                                       "fighterB":  "Melissa Mullins",
                                                       "weight":  "Bantamweight",
                                                       "oddsA":  -550,
-                                                      "oddsB":  410
+                                                      "oddsB":  410,
+                                                      "time":  "8:30 PM ET"
                                                   },
                                                   {
                                                       "main":  false,
@@ -92,7 +113,8 @@
                                                       "fighterB":  "Mitch Raposo",
                                                       "weight":  "Flyweight",
                                                       "oddsA":  -220,
-                                                      "oddsB":  180
+                                                      "oddsB":  180,
+                                                      "time":  "8:00 PM ET"
                                                   },
                                                   {
                                                       "main":  false,
@@ -100,7 +122,8 @@
                                                       "fighterB":  "Gaston Bolanos",
                                                       "weight":  "Featherweight",
                                                       "oddsA":  -300,
-                                                      "oddsB":  250
+                                                      "oddsB":  250,
+                                                      "time":  "7:30 PM ET"
                                                   },
                                                   {
                                                       "main":  false,
@@ -108,7 +131,8 @@
                                                       "fighterB":  "Leon Shahbazyan",
                                                       "weight":  "Lightweight",
                                                       "oddsA":  -310,
-                                                      "oddsB":  250
+                                                      "oddsB":  250,
+                                                      "time":  "7:00 PM ET"
                                                   },
                                                   {
                                                       "main":  false,
@@ -116,7 +140,8 @@
                                                       "fighterB":  "Otari Tanzilovi",
                                                       "weight":  "Lightweight",
                                                       "oddsA":  -175,
-                                                      "oddsB":  135
+                                                      "oddsB":  135,
+                                                      "time":  "6:30 PM ET"
                                                   }
                                               ],
                   "event_ufc_250":  [
@@ -276,8 +301,99 @@
                                                        "oddsA":  -150,
                                                        "oddsB":  125
                                                    }
-                                               ]
+                                               ],
+                  "event_fiziev_vs_torres":  [
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Rafael Fiziev",
+                                                     "fighterB":  "Manuel Torres",
+                                                     "weight":  "Lightweight",
+                                                     "oddsA":  -135,
+                                                     "oddsB":  115,
+                                                     "rounds":  5
+                                                 },
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Shara Magomedov",
+                                                     "fighterB":  "Michel Pereira",
+                                                     "weight":  "Middleweight",
+                                                     "oddsA":  -350,
+                                                     "oddsB":  250
+                                                 },
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Ikram Aliskerov",
+                                                     "fighterB":  "Brunno Ferreira",
+                                                     "weight":  "Middleweight",
+                                                     "oddsA":  -300,
+                                                     "oddsB":  250
+                                                 },
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Asu Almabayev",
+                                                     "fighterB":  "Charles Johnson",
+                                                     "weight":  "Flyweight",
+                                                     "oddsA":  -400,
+                                                     "oddsB":  330
+                                                 },
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Abus Magomedov",
+                                                     "fighterB":  "Michal Oleksiejczuk",
+                                                     "weight":  "Middleweight",
+                                                     "oddsA":  -190,
+                                                     "oddsB":  165
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Nursulton Ruziboev",
+                                                     "fighterB":  "Andrey Pulyaev",
+                                                     "weight":  "Middleweight",
+                                                     "oddsA":  -220,
+                                                     "oddsB":  180
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Bekzat Almakhan",
+                                                     "fighterB":  "Jean Matsumoto",
+                                                     "weight":  "Bantamweight",
+                                                     "oddsA":  130,
+                                                     "oddsB":  -160
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Nazim Sadykhov",
+                                                     "fighterB":  "Matheus Camilo",
+                                                     "weight":  "Lightweight",
+                                                     "oddsA":  -220,
+                                                     "oddsB":  190
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Farman Hasanov",
+                                                     "fighterB":  "Eric Nolan",
+                                                     "weight":  "Welterweight",
+                                                     "oddsA":  -160,
+                                                     "oddsB":  135
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Abdul-Rakhman Yakhyaev",
+                                                     "fighterB":  "Julius Walker",
+                                                     "weight":  "Light Heavyweight",
+                                                     "oddsA":  -450,
+                                                     "oddsB":  350
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Daniil Donchenko",
+                                                     "fighterB":  "Theodor Berggren",
+                                                     "weight":  "Welterweight",
+                                                     "oddsA":  -500,
+                                                     "oddsB":  400
+                                                 }
+                                             ]
               },
-    "activeEventId":  "event_kape_vs_horiguchi",
-    "lastUpdated":  1781836462887
+    "activeEventId":  "event_fiziev_vs_torres",
+    "lastUpdated":  1782098111830
 };
