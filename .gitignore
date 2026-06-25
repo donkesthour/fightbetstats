@@ -1,8 +1,10 @@
 # Ignore local database backups and template files
 ufc-db-temp.js
 ufc-db-template.js
+ufc-db.js
 ufc-bet-tracker61426.html
 bets.html
+
 
 # Ignore Obsidian markdown notes (to keep personal notes out of the public repo)
 *.md

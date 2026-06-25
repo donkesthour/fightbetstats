@@ -29,14 +29,9 @@ if ($content -match 'window\.EMBEDDED_DATA\s*=\s*(\{[\s\S]*\});?\s*$') {
 
     # Reassemble the clean JavaScript string
     $cleanJson = ConvertTo-Json $data -Depth 100
-    $cleanContent = "window.EMBEDDED_DATA = $cleanJson;"
 
     Write-Host "Preparing clean files for commit..."
     
-    # Temporarily swap the database with the clean version
-    Rename-Item -Path $dbPath -NewName "ufc-db-temp.js"
-    Set-Content -Path $dbPath -Value $cleanContent -Encoding UTF8
-
     # Temporarily swap index.html with the clean version
     $htmlPath = "$PSScriptRoot\index.html"
     Rename-Item -Path $htmlPath -NewName "index-temp.html"
@@ -55,8 +50,8 @@ if ($content -match 'window\.EMBEDDED_DATA\s*=\s*(\{[\s\S]*\});?\s*$') {
             git checkout -b main 2>$null
         }
 
-        # Stage files (index.html, ufc-db.js, .gitignore, and the publish script)
-        git add index.html ufc-db.js .gitignore publish-to-github.ps1
+        # Stage files (index.html, .gitignore, and the publish script)
+        git add index.html .gitignore publish-to-github.ps1
 
         # Commit changes
         Write-Host "Creating git commit..."
@@ -72,19 +67,13 @@ if ($content -match 'window\.EMBEDDED_DATA\s*=\s*(\{[\s\S]*\});?\s*$') {
             git push origin main
         }
     } finally {
-        # Always restore your original database with bets
-        if (Test-Path $dbPath) {
-            Remove-Item -Path $dbPath -Force
-        }
-        Rename-Item -Path "$PSScriptRoot\ufc-db-temp.js" -NewName "ufc-db.js"
-
         # Always restore your original HTML with bets
         if (Test-Path $htmlPath) {
             Remove-Item -Path $htmlPath -Force
         }
         Rename-Item -Path "$PSScriptRoot\index-temp.html" -NewName "index.html"
 
-        Write-Host "Database and HTML restored locally with your private wagers intact."
+        Write-Host "HTML restored locally with your private wagers intact."
     }
 } else {
     Write-Error "ufc-db.js is not formatted correctly. Could not find EMBEDDED_DATA."
