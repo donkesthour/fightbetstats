@@ -391,9 +391,25 @@
                                                      "weight":  "Welterweight",
                                                      "oddsA":  -500,
                                                      "oddsB":  400
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Javier Reyes",
+                                                     "fighterB":  "Kaan Ofli",
+                                                     "weight":  "Featherweight",
+                                                     "oddsA":  -160,
+                                                     "oddsB":  140
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Jefferson Nascimento",
+                                                     "fighterB":  "Tahir Abdullayev",
+                                                     "weight":  "Welterweight",
+                                                     "oddsA":  -200,
+                                                     "oddsB":  170
                                                  }
                                              ]
               },
     "activeEventId":  "event_fiziev_vs_torres",
-    "lastUpdated":  1782098111830
+    "lastUpdated":  1782361564904
 };

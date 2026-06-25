@@ -37,6 +37,15 @@ if ($content -match 'window\.EMBEDDED_DATA\s*=\s*(\{[\s\S]*\});?\s*$') {
     Rename-Item -Path $dbPath -NewName "ufc-db-temp.js"
     Set-Content -Path $dbPath -Value $cleanContent -Encoding UTF8
 
+    # Temporarily swap index.html with the clean version
+    $htmlPath = "$PSScriptRoot\index.html"
+    Rename-Item -Path $htmlPath -NewName "index-temp.html"
+    $htmlContent = Get-Content -Raw -Path "$PSScriptRoot\index-temp.html"
+    $cleanFallback = "// DATABASE_START`r`n    if (typeof window.EMBEDDED_DATA === 'undefined') {`r`n      window.EMBEDDED_DATA = $cleanJson;`r`n    }`r`n    // DATABASE_END"
+    $regex = '(?s)//\s*DATABASE_START.*?//\s*DATABASE_END'
+    $cleanHtmlContent = $htmlContent -replace $regex, $cleanFallback
+    Set-Content -Path $htmlPath -Value $cleanHtmlContent -Encoding UTF8
+
     try {
         # Check if git is initialized
         if (!(git rev-parse --is-inside-work-tree 2>$null)) {
@@ -68,7 +77,14 @@ if ($content -match 'window\.EMBEDDED_DATA\s*=\s*(\{[\s\S]*\});?\s*$') {
             Remove-Item -Path $dbPath -Force
         }
         Rename-Item -Path "$PSScriptRoot\ufc-db-temp.js" -NewName "ufc-db.js"
-        Write-Host "Database restored locally with your private wagers intact."
+
+        # Always restore your original HTML with bets
+        if (Test-Path $htmlPath) {
+            Remove-Item -Path $htmlPath -Force
+        }
+        Rename-Item -Path "$PSScriptRoot\index-temp.html" -NewName "index.html"
+
+        Write-Host "Database and HTML restored locally with your private wagers intact."
     }
 } else {
     Write-Error "ufc-db.js is not formatted correctly. Could not find EMBEDDED_DATA."

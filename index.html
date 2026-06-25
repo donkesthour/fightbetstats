@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1040,6 +1040,115 @@
       border-color: var(--loss-color);
       color: #fff;
     }
+    
+    /* Mobile View Mode Styles */
+    body.mobile-view {
+      padding: 12px 8px;
+    }
+    body.mobile-view .container {
+      gap: 12px;
+    }
+    body.mobile-view header {
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      padding-bottom: 24px;
+      justify-content: center;
+    }
+    body.mobile-view .header-title {
+      flex-direction: column;
+      gap: 8px;
+    }
+    body.mobile-view .header-controls {
+      position: static;
+      transform: none;
+      width: 100%;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    body.mobile-view .workspace-grid {
+      grid-template-columns: 1fr !important;
+      gap: 12px;
+    }
+    body.mobile-view .metrics-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 8px;
+    }
+    body.mobile-view .form-row {
+      grid-template-columns: 1fr !important;
+      gap: 12px;
+    }
+    body.mobile-view .form-group.full-width {
+      grid-column: span 1 !important;
+    }
+    body.mobile-view #bets-table,
+    body.mobile-view #bets-table thead,
+    body.mobile-view #bets-table tbody,
+    body.mobile-view #bets-table tr,
+    body.mobile-view #bets-table th,
+    body.mobile-view #bets-table td {
+      display: block;
+    }
+    body.mobile-view #bets-table thead {
+      display: none;
+    }
+    body.mobile-view #bets-table tr {
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      background-color: #17171e;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    body.mobile-view #bets-table td {
+      border-bottom: 1px dashed rgba(255,255,255,0.05);
+      padding: 8px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      text-align: right;
+    }
+    body.mobile-view #bets-table td:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-top: 8px;
+      justify-content: center;
+    }
+    body.mobile-view #bets-table td::before {
+      content: attr(data-label);
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      float: left;
+      text-align: left;
+    }
+    body.mobile-view #bets-table td[data-label="Status"] {
+      font-size: 14px;
+      justify-content: space-between;
+    }
+    body.mobile-view #bets-table td[data-label="Selection"] {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+    body.mobile-view #bets-table td[data-label="Selection"]::before {
+      align-self: flex-start;
+    }
+    body.mobile-view #bets-table td[data-label="Matchup"] {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+    body.mobile-view #bets-table td[data-label="Matchup"]::before {
+      align-self: flex-start;
+    }
+    body.mobile-view #bets-table td[data-label="Actions"] {
+      justify-content: flex-end;
+      gap: 8px;
+    }
   </style>
 </head>
 <body>
@@ -1060,6 +1169,12 @@
           <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--win-color); display: inline-block; box-shadow: 0 0 8px var(--win-glow);"></span>
           <span>Saved to HTML</span>
         </span>
+        <button class="btn" id="btn-toggle-view" onclick="toggleMobileView()" style="display: flex; align-items: center; gap: 8px;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" id="view-toggle-icon">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+          </svg>
+          <span id="view-toggle-text">Mobile View</span>
+        </button>
         <div class="settings-menu-container">
           <button class="btn" id="btn-settings-toggle" onclick="toggleSettingsMenu(event)" style="display: flex; align-items: center; gap: 8px;">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -1081,6 +1196,10 @@
             <button class="settings-item" id="btn-save-file" onclick="saveTrackerToFile()">
               <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
               Save HTML File
+            </button>
+            <button class="settings-item" id="btn-save-clean-file" onclick="saveTrackerToFile(true)">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+              Export Clean HTML (No Bets)
             </button>
             <button class="settings-item" id="btn-export-obsidian">
               <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
@@ -1660,12 +1779,12 @@
             <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;" id="analysis-table">
               <thead>
                 <tr style="border-bottom: 1px solid var(--card-border); color: var(--text-muted); font-weight: 600; font-size: 12px;">
-                  <th class="sortable" onclick="handleAnalysisSort('category')" style="padding: 8px 4px;">Bet Type<span class="sort-indicator" id="sort-indicator-analysis-category" style="color: rgb(75, 85, 99);"> ↕</span></th>
-                  <th class="sortable" onclick="handleAnalysisSort('total')" style="padding: 8px 4px; text-align: center;">Bets<span class="sort-indicator" id="sort-indicator-analysis-total" style="color: rgb(75, 85, 99);"> ↕</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('category')" style="padding: 8px 4px;">Bet Type<span class="sort-indicator" id="sort-indicator-analysis-category" style="color: rgb(75, 85, 99);"> â†•</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('total')" style="padding: 8px 4px; text-align: center;">Bets<span class="sort-indicator" id="sort-indicator-analysis-total" style="color: rgb(75, 85, 99);"> â†•</span></th>
                   <th style="padding: 8px 4px; text-align: center; color: var(--text-muted);">Record (W-L-V)</th>
-                  <th class="sortable" onclick="handleAnalysisSort('winRate')" style="padding: 8px 4px; text-align: center;">Win %<span class="sort-indicator" id="sort-indicator-analysis-winRate" style="color: rgb(75, 85, 99);"> ↕</span></th>
-                  <th class="sortable" onclick="handleAnalysisSort('profit')" style="padding: 8px 4px; text-align: right;">Net P/L<span class="sort-indicator" id="sort-indicator-analysis-profit" style="color: rgb(75, 85, 99);"> ↕</span></th>
-                  <th class="sortable" onclick="handleAnalysisSort('roi')" style="padding: 8px 4px; text-align: right;">ROI<span class="sort-indicator" id="sort-indicator-analysis-roi" style="color: rgb(75, 85, 99);"> ↕</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('winRate')" style="padding: 8px 4px; text-align: center;">Win %<span class="sort-indicator" id="sort-indicator-analysis-winRate" style="color: rgb(75, 85, 99);"> â†•</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('profit')" style="padding: 8px 4px; text-align: right;">Net P/L<span class="sort-indicator" id="sort-indicator-analysis-profit" style="color: rgb(75, 85, 99);"> â†•</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('roi')" style="padding: 8px 4px; text-align: right;">ROI<span class="sort-indicator" id="sort-indicator-analysis-roi" style="color: rgb(75, 85, 99);"> â†•</span></th>
                 </tr>
               </thead>
               <tbody id="analysis-table-body">
@@ -1743,14 +1862,14 @@
           <table id="bets-table">
             <thead>
               <tr>
-                <th class="sortable" width="85" onclick="handleSort('result')">Status<span class="sort-indicator" id="sort-indicator-result" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
-                <th class="sortable" onclick="handleSort('selection')">Selection<span class="sort-indicator" id="sort-indicator-selection" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
-                <th class="sortable" onclick="handleSort('fightName')">Fight Matchup<span class="sort-indicator" id="sort-indicator-fightName" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
-                <th class="sortable" onclick="handleSort('book')">Book<span class="sort-indicator" id="sort-indicator-book" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
-                <th class="sortable" onclick="handleSort('betType')">Bet Type<span class="sort-indicator" id="sort-indicator-betType" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
-                <th class="sortable" onclick="handleSort('wager')">Wager<span class="sort-indicator" id="sort-indicator-wager" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
-                <th class="sortable" onclick="handleSort('odds')">Odds<span class="sort-indicator" id="sort-indicator-odds" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
-                <th class="sortable" onclick="handleSort('payout')">Est. Payout<span class="sort-indicator" id="sort-indicator-payout" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
+                <th class="sortable" width="85" onclick="handleSort('result')">Status<span class="sort-indicator" id="sort-indicator-result" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
+                <th class="sortable" onclick="handleSort('selection')">Selection<span class="sort-indicator" id="sort-indicator-selection" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
+                <th class="sortable" onclick="handleSort('fightName')">Fight Matchup<span class="sort-indicator" id="sort-indicator-fightName" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
+                <th class="sortable" onclick="handleSort('book')">Book<span class="sort-indicator" id="sort-indicator-book" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
+                <th class="sortable" onclick="handleSort('betType')">Bet Type<span class="sort-indicator" id="sort-indicator-betType" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
+                <th class="sortable" onclick="handleSort('wager')">Wager<span class="sort-indicator" id="sort-indicator-wager" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
+                <th class="sortable" onclick="handleSort('odds')">Odds<span class="sort-indicator" id="sort-indicator-odds" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
+                <th class="sortable" onclick="handleSort('payout')">Est. Payout<span class="sort-indicator" id="sort-indicator-payout" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
                 <th>Settle Result</th>
                 <th width="80">Actions</th>
               </tr>
@@ -1769,7 +1888,7 @@
     <div class="modal" onclick="event.stopPropagation()" style="max-width: 800px; width: 90%; max-height: 90vh; display: flex; flex-direction: column;">
       <div class="modal-header">
         <h3 class="panel-title">Validate Bets with ESPN</h3>
-        <button class="modal-close" onclick="closeValidationModal()">×</button>
+        <button class="modal-close" onclick="closeValidationModal()">Ã—</button>
       </div>
       
       <div style="overflow-y: auto; flex-grow: 1; padding: 16px 4px; display: flex; flex-direction: column; gap: 16px;">
@@ -1823,7 +1942,7 @@
     <div class="modal" onclick="event.stopPropagation()">
       <div class="modal-header">
         <h3 class="panel-title">Obsidian Markdown Code</h3>
-        <button class="modal-close" onclick="toggleObsidianModal(false)">×</button>
+        <button class="modal-close" onclick="toggleObsidianModal(false)">Ã—</button>
       </div>
       <p style="font-size: 13px; color: var(--text-muted); --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">
         Copy the table and metrics block below and paste them into your Obsidian note: <br>
@@ -1844,7 +1963,7 @@
     <div class="modal" onclick="event.stopPropagation()" style="max-width: 500px;">
       <div class="modal-header">
         <h3 class="panel-title">Manage UFC Events</h3>
-        <button class="modal-close" onclick="closeEventsModal()">×</button>
+        <button class="modal-close" onclick="closeEventsModal()">Ã—</button>
       </div>
       
       <!-- List of current events -->
@@ -1895,7 +2014,7 @@
     <div class="modal" onclick="event.stopPropagation()" style="max-width: 600px; max-height: 90vh; display: flex; flex-direction: column;">
       <div class="modal-header">
         <h3 class="panel-title">Edit Event Fight Card</h3>
-        <button class="modal-close" onclick="closeFightCardModal()">×</button>
+        <button class="modal-close" onclick="closeFightCardModal()">Ã—</button>
       </div>
       
       <div style="overflow-y: auto; flex-grow: 1; padding-right: 4px; display: flex; flex-direction: column; gap: 16px;">
@@ -1988,2320 +2107,419 @@
     // DATABASE_START
     if (typeof window.EMBEDDED_DATA === 'undefined') {
       window.EMBEDDED_DATA = {
-  "bets": [
-    {
-      "id": "1781486380492",
-      "eventId": "event_ufc_250",
-      "fightName": "Bo Nickal vs. Kyle Daukaus",
-      "selection": "Kyle Daukaus by Submission",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 550,
-      "payout": 16.25,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781486367786",
-      "eventId": "event_ufc_250",
-      "fightName": "Bo Nickal vs. Kyle Daukaus",
-      "selection": "Kyle Daukaus by Submission in Round 2",
-      "betType": "Fighter Parlay",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 2000,
-      "payout": 52.5,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781486351157",
-      "eventId": "event_ufc_250",
-      "fightName": "Bo Nickal vs. Kyle Daukaus",
-      "selection": "Bo Nickal by KO in Round 2",
-      "betType": "Fighter Parlay",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 850,
-      "payout": 23.75,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781485793277",
-      "eventId": "event_ufc_250",
-      "fightName": "Bo Nickal vs. Kyle Daukaus",
-      "selection": "Fight will end by KO in Round 1",
-      "betType": "Fighter Parlay",
-      "book": "FD",
-      "wager": 5,
-      "odds": 430,
-      "payout": 26.5,
-      "result": "Win",
-      "isParlay": false
-    },
-    {
-      "id": "1781481647649",
-      "eventId": "event_ufc_250",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Sean O'Malley vs. Aiemann Zahabi",
-          "selection": "Sean O'Malley by KO",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Ilia Topuria vs. Justin Gaethje",
-          "selection": "Ilia Topuria",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Josh Hokit vs. Derrick Lewis",
-          "selection": "Josh Hokit",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Mauricio Ruffy vs. Michael Chandler",
-          "selection": "Mauricio Ruffy",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Alex Pereira vs. Ciryl Gane",
-          "selection": "Fight will end by KO",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "fightName": "5-Leg Parlay",
-      "selection": "Sean O'Malley by KO + Ilia Topuria + Josh Hokit + Mauricio Ruffy + Fight will end by KO",
-      "betType": "Parlay",
-      "book": "FD",
-      "wager": 5,
-      "odds": 1792,
-      "payout": 94.60000000000001,
-      "result": "Loss"
-    },
-    {
-      "id": "1781481591320",
-      "eventId": "event_ufc_250",
-      "fightName": "Sean O'Malley vs. Aiemann Zahabi",
-      "selection": "Sean O'Malley by Submission",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 2200,
-      "payout": 115,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781481558873",
-      "eventId": "event_ufc_250",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Mauricio Ruffy vs. Michael Chandler",
-          "selection": "Michael Chandler by Submission",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Josh Hokit vs. Derrick Lewis",
-          "selection": "Josh Hokit by KO",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "fightName": "2-Leg Parlay",
-      "selection": "Michael Chandler by Submission + Josh Hokit by KO",
-      "betType": "Parlay",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 3016,
-      "payout": 77.9,
-      "result": "Loss"
-    },
-    {
-      "id": "1781481531411",
-      "eventId": "event_ufc_250",
-      "fightName": "Mauricio Ruffy vs. Michael Chandler",
-      "selection": "Michael Chandler by Submission",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 1600,
-      "payout": 42.5,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781481518631",
-      "eventId": "event_ufc_250",
-      "fightName": "Mauricio Ruffy vs. Michael Chandler",
-      "selection": "Mauricio Ruffy by Submission",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 1100,
-      "payout": 30,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781481504321",
-      "eventId": "event_ufc_250",
-      "fightName": "Mauricio Ruffy vs. Michael Chandler",
-      "selection": "Fight will end by Submission",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 750,
-      "payout": 21.25,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781416812559",
-      "eventId": "event_ufc_250",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Ilia Topuria vs. Justin Gaethje",
-          "selection": "Ilia Topuria by Submission",
-          "odds": 425,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Josh Hokit vs. Derrick Lewis",
-          "selection": "Josh Hokit",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "fightName": "2-Leg Parlay",
-      "selection": "Ilia Topuria by Submission + Josh Hokit",
-      "betType": "Parlay",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 3190,
-      "payout": 82.25,
-      "result": "Loss"
-    },
-    {
-      "id": "1781416769529",
-      "eventId": "event_ufc_250",
-      "fightName": "Josh Hokit vs. Derrick Lewis",
-      "selection": "Fight will end by KO",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": -210,
-      "payout": 7.380952380952381,
-      "result": "Win",
-      "isParlay": false
-    },
-    {
-      "id": "1781416752538",
-      "eventId": "event_ufc_250",
-      "fightName": "Alex Pereira vs. Ciryl Gane",
-      "selection": "Fight will end by KO",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": -165,
-      "payout": 8.030303030303031,
-      "result": "Win",
-      "isParlay": false
-    },
-    {
-      "id": "1781416693630",
-      "eventId": "event_ufc_250",
-      "fightName": "Mauricio Ruffy vs. Michael Chandler",
-      "selection": "Michael Chandler",
-      "betType": "Moneyline",
-      "book": "DK",
-      "wager": 5,
-      "odds": 500,
-      "payout": 30,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781416681082",
-      "eventId": "event_ufc_250",
-      "fightName": "Josh Hokit vs. Derrick Lewis",
-      "selection": "Derrick Lewis by KO in Round 1",
-      "betType": "Fighter Parlay",
-      "book": "DK",
-      "wager": 2.5,
-      "odds": 650,
-      "payout": 18.75,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781416658254",
-      "eventId": "event_ufc_250",
-      "fightName": "Ilia Topuria vs. Justin Gaethje",
-      "selection": "Justin Gaethje",
-      "betType": "Moneyline",
-      "book": "DK",
-      "wager": 5,
-      "odds": 400,
-      "payout": 25,
-      "result": "Win",
-      "isParlay": false
-    },
-    {
-      "id": "1781416639505",
-      "eventId": "event_ufc_250",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Ilia Topuria vs. Justin Gaethje",
-          "selection": "Ilia Topuria",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Alex Pereira vs. Ciryl Gane",
-          "selection": "Alex Pereira",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Josh Hokit vs. Derrick Lewis",
-          "selection": "Josh Hokit",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "fightName": "3-Leg Parlay",
-      "selection": "Ilia Topuria + Alex Pereira + Josh Hokit",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 15,
-      "odds": 188,
-      "payout": 43.2,
-      "result": "Loss"
-    },
-    {
-      "id": "1781416601100",
-      "eventId": "event_ufc_250",
-      "fightName": "Bo Nickal vs. Kyle Daukaus",
-      "selection": "Kyle Daukaus",
-      "betType": "Moneyline",
-      "book": "DK",
-      "wager": 10,
-      "odds": 280,
-      "payout": 38,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781416448123",
-      "eventId": "event_ufc_250",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Josh Hokit vs. Derrick Lewis",
-          "selection": "Derrick Lewis",
-          "odds": 110,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Ilia Topuria vs. Justin Gaethje",
-          "selection": "Justin Gaethje",
-          "odds": 425,
-          "result": "Win"
-        },
-        {
-          "fightName": "Mauricio Ruffy vs. Michael Chandler",
-          "selection": "Michael Chandler",
-          "odds": 425,
-          "result": "Loss"
-        }
-      ],
-      "fightName": "3-Leg Parlay",
-      "selection": "Derrick Lewis + Justin Gaethje + Michael Chandler",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 1,
-      "odds": 12500,
-      "payout": 126,
-      "result": "Loss"
-    },
-    {
-      "id": "1781416115907",
-      "eventId": "event_ufc_250",
-      "fightName": "Mauricio Ruffy vs. Michael Chandler",
-      "selection": "Fight to start Round 2",
-      "betType": "Fight to Start Round",
-      "book": "DK",
-      "wager": 7.5,
-      "odds": -130,
-      "payout": 13.26923076923077,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781415865002",
-      "eventId": "event_ufc_250",
-      "fightName": "Bo Nickal vs. Kyle Daukaus",
-      "selection": "Finish in last 10 seconds of any round",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 3500,
-      "payout": 36,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781415849293",
-      "eventId": "event_ufc_250",
-      "fightName": "Mauricio Ruffy vs. Michael Chandler",
-      "selection": "Finish in last 10 seconds of any round",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 2800,
-      "payout": 29,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781415833031",
-      "eventId": "event_ufc_250",
-      "fightName": "Alex Pereira vs. Ciryl Gane",
-      "selection": "Finish in last 10 seconds of any round",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 3500,
-      "payout": 36,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781415820400",
-      "eventId": "event_ufc_250",
-      "fightName": "Sean O'Malley vs. Aiemann Zahabi",
-      "selection": "Finish in last 10 seconds of any round",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 5500,
-      "payout": 56,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781415803204",
-      "eventId": "event_ufc_250",
-      "fightName": "Josh Hokit vs. Derrick Lewis",
-      "selection": "Finish in last 10 seconds of any round",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 2500,
-      "payout": 26,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781415744657",
-      "eventId": "event_ufc_250",
-      "fightName": "Ilia Topuria vs. Justin Gaethje",
-      "selection": "Finish in last 10 seconds of any round",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 2500,
-      "payout": 26,
-      "result": "Win",
-      "isParlay": false
-    },
-    {
-      "id": "1781415713312",
-      "eventId": "event_ufc_250",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Diego Lopes vs. Steve Garcia",
-          "selection": "Over 1.5 rounds",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Ilia Topuria vs. Justin Gaethje",
-          "selection": "Over 1.5 rounds",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "fightName": "2-Leg Parlay",
-      "selection": "Over 1.5 rounds + Over 1.5 rounds",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 5,
-      "odds": 227,
-      "payout": 16.35,
-      "result": "Win"
-    },
-    {
-      "id": "1781415680710",
-      "eventId": "event_ufc_250",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Ilia Topuria vs. Justin Gaethje",
-          "selection": "Ilia Topuria",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Alex Pereira vs. Ciryl Gane",
-          "selection": "Over 2.5 rounds",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Sean O'Malley vs. Aiemann Zahabi",
-          "selection": "Sean O'Malley",
-          "odds": -425,
-          "result": "Win"
-        },
-        {
-          "fightName": "Josh Hokit vs. Derrick Lewis",
-          "selection": "Under 1.5 rounds",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Mauricio Ruffy vs. Michael Chandler",
-          "selection": "Mauricio Ruffy",
-          "odds": -650,
-          "result": "Win"
-        },
-        {
-          "fightName": "Bo Nickal vs. Kyle Daukaus",
-          "selection": "Over 1.5 rounds",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Diego Lopes vs. Steve Garcia",
-          "selection": "Over 1.5 rounds",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "fightName": "7-Leg Parlay",
-      "selection": "Ilia Topuria + Over 2.5 rounds + Sean O'Malley + Under 1.5 rounds + Mauricio Ruffy + Over 1.5 rounds + Over 1.5 rounds",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 2.5,
-      "odds": 1007,
-      "payout": 27.675,
-      "result": "Loss"
-    },
-    {
-      "id": "1781415363446",
-      "eventId": "event_ufc_250",
-      "fightName": "Mauricio Ruffy vs. Michael Chandler",
-      "selection": "Mauricio Ruffy by KO in Round 2",
-      "betType": "Fighter Parlay",
-      "book": "DK",
-      "wager": 5,
-      "odds": 380,
-      "payout": 24,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781402169986",
-      "eventId": "event_ufc_250",
-      "fightName": "Ilia Topuria vs. Justin Gaethje",
-      "selection": "Ilia Topuria by KO in Round 1",
-      "betType": "Fighter Parlay",
-      "book": "FD",
-      "wager": 10,
-      "odds": 250,
-      "payout": 35,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781401944604",
-      "eventId": "event_ufc_250",
-      "fightName": "Bo Nickal vs. Kyle Daukaus",
-      "selection": "Bo Nickal by KO or Submission",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 12.5,
-      "odds": -115,
-      "payout": 23.369565217391305,
-      "result": "Win",
-      "isParlay": false
-    },
-    {
-      "id": "1781401669973",
-      "eventId": "event_ufc_250",
-      "fightName": "Sean O'Malley vs. Aiemann Zahabi",
-      "selection": "Aiemann Zahabi Over 1 Takedowns",
-      "betType": "Fighter Props",
-      "book": "FD",
-      "wager": 5,
-      "odds": 175,
-      "payout": 13.75,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781400598960",
-      "eventId": "event_ufc_250",
-      "fightName": "Alex Pereira vs. Ciryl Gane",
-      "selection": "Ciryl Gane",
-      "betType": "Moneyline",
-      "book": "FD",
-      "wager": 5,
-      "odds": -113,
-      "payout": 9.424778761061948,
-      "result": "Win",
-      "isParlay": false
-    },
-    {
-      "id": "1780803334129",
-      "eventId": "event_ufc_250",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Diego Lopes vs. Steve Garcia",
-          "selection": "Diego Lopes",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Bo Nickal vs. Kyle Daukaus",
-          "selection": "Bo Nickal",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Josh Hokit vs. Derrick Lewis",
-          "selection": "Josh Hokit",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Alex Pereira vs. Ciryl Gane",
-          "selection": "Ciryl Gane",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Sean O'Malley vs. Aiemann Zahabi",
-          "selection": "Sean O'Malley",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "fightName": "5-Leg Parlay",
-      "selection": "Diego Lopes + Bo Nickal + Josh Hokit + Ciryl Gane + Sean O'Malley",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 5,
-      "odds": 519,
-      "payout": 30.950000000000003,
-      "result": "Win"
-    },
-    {
-      "id": "1781483755286",
-      "eventId": "event_ufc_250",
-      "fightName": "Diego Lopes vs. Steve Garcia",
-      "selection": "Fight will end by KO in Round 2",
-      "betType": "Fighter Parlay",
-      "book": "FD",
-      "wager": 5,
-      "odds": 500,
-      "payout": 30,
-      "result": "Win",
-      "isParlay": false
-    },
-    {
-      "id": "1780792150635",
-      "fightName": "Bryce Mitchell vs. Santiago Luna",
-      "selection": "Bryce Mitchell Sub",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 400,
-      "payout": 25,
-      "result": "Win",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780787315205",
-      "fightName": "Matt Schnell vs. Alessandro Costa",
-      "selection": "Under 1.5",
-      "betType": "Over/Under",
-      "book": "DK",
-      "wager": 7.5,
-      "odds": -145,
-      "payout": 12.672413793103448,
-      "result": "Win",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780786851901",
-      "fightName": "Bruno Silva vs. Edgar Chairez",
-      "selection": "Chai sub Rnd 1",
-      "betType": "Method of Victory",
-      "book": "DK",
-      "wager": 5,
-      "odds": 1300,
-      "payout": 70,
-      "result": "Win",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780783133537",
-      "fightName": "Jordan Leavitt vs. Joanderson Brito",
-      "selection": "Brito Sub 1st",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 1200,
-      "payout": 32.5,
-      "result": "Win",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780782180941",
-      "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-      "selection": "Bonfim ML",
-      "betType": "Moneyline",
-      "book": "FD",
-      "wager": 20,
-      "odds": -104,
-      "payout": 39.230769230769226,
-      "result": "Win",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780782008337",
-      "fightName": "2-Leg Parlay",
-      "selection": "Over 1.5 rnds + Over 1.5 rnds",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 10,
-      "odds": 119,
-      "payout": 21.9,
-      "result": "Win",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Fares Ziam vs. Tom Nolan",
-          "selection": "Over 1.5 rnds",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Brendan Allen vs. Edmen Shahbazyan",
-          "selection": "Over 1.5 rnds",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781728622",
-      "fightName": "Bryce Mitchell vs. Santiago Luna",
-      "selection": "Last 10 seconds",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 6500,
-      "payout": 66,
-      "result": "Win",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781696994",
-      "fightName": "Bryce Mitchell vs. Santiago Luna",
-      "selection": "Bryce Mitchell Sub/Dec",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 15,
-      "odds": -135,
-      "payout": 26.11111111111111,
-      "result": "Win",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781579922",
-      "fightName": "2-Leg Parlay",
-      "selection": "Iwo Baraniewski ML + Brendan Allen ML",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 10,
-      "odds": -109,
-      "payout": 19.174311926605505,
-      "result": "Win",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Iwo Baraniewski vs. Junior Tafa",
-          "selection": "Iwo Baraniewski ML",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Brendan Allen vs. Edmen Shahbazyan",
-          "selection": "Brendan Allen ML",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780886116",
-      "fightName": "Bruno Silva vs. Edgar Chairez",
-      "selection": "Chairez ML",
-      "betType": "Moneyline",
-      "book": "FD",
-      "wager": 10,
-      "odds": 114,
-      "payout": 21.4,
-      "result": "Win",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780846444",
-      "fightName": "Priscila Cachoeira vs. Chelsea Chandler",
-      "selection": "Chandler Sub",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 550,
-      "payout": 16.25,
-      "result": "Win",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780188213",
-      "fightName": "Ketlen Souza vs. Ariane Carnelossi",
-      "selection": "Ketlen Souza - Double Chance",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 220,
-      "payout": 8,
-      "result": "Win",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780107100",
-      "fightName": "Ketlen Souza vs. Ariane Carnelossi",
-      "selection": "Ketlen Souza - KO",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 440,
-      "payout": 13.5,
-      "result": "Win",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780025304",
-      "fightName": "3-Leg Parlay",
-      "selection": "Bryce Mitchell ML + Marcus McGhee ML + Ketlen Souza ML",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 17.5,
-      "odds": 181,
-      "payout": 49.175,
-      "result": "Win",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Bryce Mitchell vs. Santiago Luna",
-          "selection": "Bryce Mitchell ML",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Marcus McGhee vs. John Yannis",
-          "selection": "Marcus McGhee ML",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Ketlen Souza vs. Ariane Carnelossi",
-          "selection": "Ketlen Souza ML",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780779980309",
-      "fightName": "2-Leg Parlay",
-      "selection": "Jeisla Chaves ML + Ketlen Souza ML",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 10,
-      "odds": -147,
-      "payout": 16.802721088435373,
-      "result": "Win",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Jeisla Chaves vs. Yuneisy Duben",
-          "selection": "Jeisla Chaves ML",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Ketlen Souza vs. Ariane Carnelossi",
-          "selection": "Ketlen Souza ML",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1781485495610",
-      "eventId": "event_ufc_250",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Diego Lopes vs. Steve Garcia",
-          "selection": "Steve Garcia",
-          "odds": 145,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Ilia Topuria vs. Justin Gaethje",
-          "selection": "Ilia Topuria",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Alex Pereira vs. Ciryl Gane",
-          "selection": "Alex Pereira",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Sean O'Malley vs. Aiemann Zahabi",
-          "selection": "Sean O'Malley",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Josh Hokit vs. Derrick Lewis",
-          "selection": "Josh Hokit",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Mauricio Ruffy vs. Michael Chandler",
-          "selection": "Mauricio Ruffy",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Bo Nickal vs. Kyle Daukaus",
-          "selection": "Bo Nickal",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "fightName": "7-Leg Parlay",
-      "selection": "Steve Garcia + Ilia Topuria + Alex Pereira + Sean O'Malley + Josh Hokit + Mauricio Ruffy + Bo Nickal",
-      "betType": "Parlay",
-      "book": "FD",
-      "wager": 5,
-      "odds": 1186,
-      "payout": 64.3,
-      "result": "Loss"
-    },
-    {
-      "id": "1781484494665",
-      "eventId": "event_ufc_250",
-      "fightName": "Diego Lopes vs. Steve Garcia",
-      "selection": "Diego Lopes by Submission in Round 2",
-      "betType": "Fighter Parlay",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 1500,
-      "payout": 40,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781484478413",
-      "eventId": "event_ufc_250",
-      "fightName": "Diego Lopes vs. Steve Garcia",
-      "selection": "Steve Garcia by KO in Round 1",
-      "betType": "Fighter Parlay",
-      "book": "FD",
-      "wager": 5,
-      "odds": 700,
-      "payout": 40,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781481735043",
-      "eventId": "event_ufc_250",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Ilia Topuria vs. Justin Gaethje",
-          "selection": "Ilia Topuria by Submission",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Diego Lopes vs. Steve Garcia",
-          "selection": "Steve Garcia by Decision",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Josh Hokit vs. Derrick Lewis",
-          "selection": "Josh Hokit by KO",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "fightName": "3-Leg Parlay",
-      "selection": "Ilia Topuria by Submission + Steve Garcia by Decision + Josh Hokit by KO",
-      "betType": "Parlay",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 10822,
-      "payout": 273.05,
-      "result": "Loss"
-    },
-    {
-      "id": "1781416616468",
-      "eventId": "event_ufc_250",
-      "fightName": "Diego Lopes vs. Steve Garcia",
-      "selection": "Steve Garcia",
-      "betType": "Moneyline",
-      "book": "DK",
-      "wager": 15,
-      "odds": 136,
-      "payout": 35.400000000000006,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1781415776129",
-      "eventId": "event_ufc_250",
-      "fightName": "Diego Lopes vs. Steve Garcia",
-      "selection": "Finish in last 10 seconds of any round",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 3500,
-      "payout": 36,
-      "result": "Loss",
-      "isParlay": false
-    },
-    {
-      "id": "1780800605441",
-      "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-      "selection": "Belal Muhammad LIVE ML",
-      "betType": "Moneyline",
-      "book": "DK",
-      "wager": 5,
-      "odds": 1400,
-      "payout": 75,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780799912117",
-      "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-      "selection": "Bonfim Sub",
-      "betType": "Moneyline",
-      "book": "DK",
-      "wager": 5,
-      "odds": 500,
-      "payout": 30,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780799718829",
-      "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-      "selection": "Bonfim Sub 3rd",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 2500,
-      "payout": 65,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780799693200",
-      "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-      "selection": "Bonfim Sub 2nd",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 2200,
-      "payout": 57.5,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780799680042",
-      "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-      "selection": "Bonfim Sub 1st",
-      "betType": "Moneyline",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 1700,
-      "payout": 45,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780796328031",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-          "selection": "Belal Muhammad KO",
-          "odds": null,
-          "result": "Pending"
-        },
-        {
-          "fightName": "Brendan Allen vs. Edmen Shahbazyan",
-          "selection": "Brendan Allen Sub",
-          "odds": null,
-          "result": "Loss"
-        }
-      ],
-      "fightName": "2-Leg Parlay",
-      "selection": "Belal Muhammad KO + Brendan Allen Sub",
-      "betType": "Parlay",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 2540,
-      "payout": 66,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780795402346",
-      "fightName": "Fares Ziam vs. Tom Nolan",
-      "selection": "Fares Ziam Live bet",
-      "betType": "Moneyline",
-      "book": "DK",
-      "wager": 2.5,
-      "odds": 438,
-      "payout": 13.45,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780794362069",
-      "fightName": "Fares Ziam vs. Tom Nolan",
-      "selection": "FDNTGD",
-      "betType": "Other",
-      "book": "FD",
-      "wager": 20,
-      "odds": -118,
-      "payout": 36.94915254237288,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780794300581",
-      "fightName": "Fares Ziam vs. Tom Nolan",
-      "selection": "Fares Ziam Sub rnd 2",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 1500,
-      "payout": 80,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780794288134",
-      "fightName": "Fares Ziam vs. Tom Nolan",
-      "selection": "Fares Ziam Sub 1st",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 1200,
-      "payout": 65,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780793875336",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-          "selection": "Bonfim",
-          "odds": null,
-          "result": "Pending"
-        },
-        {
-          "fightName": "Brendan Allen vs. Edmen Shahbazyan",
-          "selection": "Brendan Allen",
-          "odds": null,
-          "result": "Pending"
-        },
-        {
-          "fightName": "Fares Ziam vs. Tom Nolan",
-          "selection": "Fares Ziam",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Bryce Mitchell vs. Santiago Luna",
-          "selection": "Luna",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Iwo Baraniewski vs. Junior Tafa",
-          "selection": "Iwo Baraniewski",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "fightName": "5-Leg Parlay",
-      "selection": "Bonfim + Brendan Allen + Fares Ziam + Luna + Iwo Baraniewski",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 2.5,
-      "odds": 885,
-      "payout": 24.625,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780792187614",
-      "fightName": "Bryce Mitchell vs. Santiago Luna",
-      "selection": "Luna KO 2nd",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 1400,
-      "payout": 75,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780792169517",
-      "fightName": "Bryce Mitchell vs. Santiago Luna",
-      "selection": "Luna KO 1st",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 1000,
-      "payout": 55,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780792047734",
-      "fightName": "Bryce Mitchell vs. Santiago Luna",
-      "selection": "Luna ML",
-      "betType": "Moneyline",
-      "book": "FD",
-      "wager": 7.5,
-      "odds": 104,
-      "payout": 15.3,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780791162021",
-      "fightName": "Iwo Baraniewski vs. Junior Tafa",
-      "selection": "Iwo Baraniewski sub rnd 3",
-      "betType": "Method of Victory",
-      "book": "DK",
-      "wager": 0.5,
-      "odds": 5000,
-      "payout": 25.5,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780791143290",
-      "fightName": "Iwo Baraniewski vs. Junior Tafa",
-      "selection": "Iwo Baraniewski Sub rnd 2",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 0.5,
-      "odds": 1600,
-      "payout": 8.5,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780791067378",
-      "fightName": "Iwo Baraniewski vs. Junior Tafa",
-      "selection": "Iwo Baraniewski Sub 1st",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 410,
-      "payout": 12.75,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780791033406",
-      "fightName": "Iwo Baraniewski vs. Junior Tafa",
-      "selection": "Iwo Baraniewski Sub rnd 3",
-      "betType": "Method of Victory",
-      "book": "DK",
-      "wager": 2.5,
-      "odds": 4500,
-      "payout": 115,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780791009408",
-      "fightName": "Iwo Baraniewski vs. Junior Tafa",
-      "selection": "Iwo Baraniewski Sub rnd 2",
-      "betType": "Method of Victory",
-      "book": "DK",
-      "wager": 2.5,
-      "odds": 1600,
-      "payout": 42.5,
-      "result": "Loss",
-      "isParlay": false,
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780790463176",
-      "fightName": "Iwo Baraniewski vs. Junior Tafa",
-      "selection": "Tafa KO 1st",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 750,
-      "payout": 42.5,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780790231492",
-      "fightName": "5-Leg Parlay",
-      "selection": "Fares Ziam + Bonfim + Fares Ziam + Bryce Mitchell + Iwo Baraniewski",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 5,
-      "odds": 764,
-      "payout": 43.199999999999996,
-      "result": "Loss",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Fares Ziam vs. Tom Nolan",
-          "selection": "Fares Ziam",
-          "odds": null,
-          "result": "Pending"
-        },
-        {
-          "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-          "selection": "Bonfim",
-          "odds": null,
-          "result": "Pending"
-        },
-        {
-          "fightName": "Fares Ziam vs. Tom Nolan",
-          "selection": "Fares Ziam",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Bryce Mitchell vs. Santiago Luna",
-          "selection": "Bryce Mitchell",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Iwo Baraniewski vs. Junior Tafa",
-          "selection": "Iwo Baraniewski",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780790002200",
-      "fightName": "Bryce Mitchell vs. Santiago Luna",
-      "selection": "Luna",
-      "betType": "Moneyline",
-      "book": "DK",
-      "wager": 2.5,
-      "odds": 105,
-      "payout": 5.125,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780789576535",
-      "fightName": "Matt Schnell vs. Alessandro Costa",
-      "selection": "Matt Schnell Sub",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 1000,
-      "payout": 27.5,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780787427187",
-      "fightName": "Marcus McGhee vs. John Yannis",
-      "selection": "Yannis KO 2nd",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 3000,
-      "payout": 77.5,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780787409777",
-      "fightName": "Marcus McGhee vs. John Yannis",
-      "selection": "Yannis KO 1st",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 1800,
-      "payout": 47.5,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780787378987",
-      "fightName": "Marcus McGhee vs. John Yannis",
-      "selection": "Marcus McGhee",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 1200,
-      "payout": 65,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780787355223",
-      "fightName": "Marcus McGhee vs. John Yannis",
-      "selection": "Marcus McGhee Sub 1st",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 900,
-      "payout": 50,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780787291178",
-      "fightName": "Marcus McGhee vs. John Yannis",
-      "selection": "Yannis round 1",
-      "betType": "Round Prop",
-      "book": "DK",
-      "wager": 2.5,
-      "odds": 1400,
-      "payout": 37.5,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780786986739",
-      "fightName": "Priscila Cachoeira vs. Chelsea Chandler",
-      "selection": "Priscila Cachoeira rnd 2 KO",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 900,
-      "payout": 25,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780786967855",
-      "fightName": "Priscila Cachoeira vs. Chelsea Chandler",
-      "selection": "Priscila Cachoeira rnd 1 KO",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 700,
-      "payout": 20,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780786877878",
-      "fightName": "Bruno Silva vs. Edgar Chairez",
-      "selection": "Chairez Sub Rnd 2",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 2000,
-      "payout": 105,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780786684560",
-      "fightName": "2-Leg Parlay",
-      "selection": "Under 2.5 Rnds + Under 2.5rnds",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 5,
-      "odds": 348,
-      "payout": 22.4,
-      "result": "Loss",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Bruno Silva vs. Edgar Chairez",
-          "selection": "Under 2.5 Rnds",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Marcus McGhee vs. John Yannis",
-          "selection": "Under 2.5rnds",
-          "odds": null,
-          "result": "Loss"
-        }
-      ],
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780783115219",
-      "fightName": "Jordan Leavitt vs. Joanderson Brito",
-      "selection": "Brito 2nd KO",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 1000,
-      "payout": 27.5,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780783097713",
-      "fightName": "Jordan Leavitt vs. Joanderson Brito",
-      "selection": "Brito KO 1st",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 850,
-      "payout": 23.75,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780782260208",
-      "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-      "selection": "Last 10 seconds",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 5000,
-      "payout": 51,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780782235884",
-      "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-      "selection": "Bonfim Rnd 2",
-      "betType": "Round Prop",
-      "book": "FD",
-      "wager": 5,
-      "odds": 1000,
-      "payout": 55,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780782219147",
-      "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-      "selection": "Bonfim Rnd 1",
-      "betType": "Round Prop",
-      "book": "FD",
-      "wager": 5,
-      "odds": 800,
-      "payout": 45,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780782194715",
-      "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-      "selection": "Bonfim SUB",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 450,
-      "payout": 27.5,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780782146601",
-      "fightName": "Brendan Allen vs. Edmen Shahbazyan",
-      "selection": "Last 10 seconds",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 4500,
-      "payout": 46,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780782126608",
-      "fightName": "Brendan Allen vs. Edmen Shahbazyan",
-      "selection": "Brendan Allen Sub",
-      "betType": "Method of Victory",
-      "book": "DK",
-      "wager": 10,
-      "odds": 220,
-      "payout": 32,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780782069192",
-      "fightName": "2-Leg Parlay",
-      "selection": "Fares Ziam ML + Brendan Allen",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 10,
-      "odds": 103,
-      "payout": 20.3,
-      "result": "Loss",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Fares Ziam vs. Tom Nolan",
-          "selection": "Fares Ziam ML",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Brendan Allen vs. Edmen Shahbazyan",
-          "selection": "Brendan Allen",
-          "odds": null,
-          "result": "Pending"
-        }
-      ],
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781929683",
-      "fightName": "Fares Ziam vs. Tom Nolan",
-      "selection": "Last 10",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 4500,
-      "payout": 46,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781860746",
-      "fightName": "3-Leg Parlay",
-      "selection": "Marcus McGhee Sub + Brendan Allen Sub + Fares Ziam Sub",
-      "betType": "Parlay",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 11324,
-      "payout": 285.59999999999997,
-      "result": "Loss",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Marcus McGhee vs. John Yannis",
-          "selection": "Marcus McGhee Sub",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Brendan Allen vs. Edmen Shahbazyan",
-          "selection": "Brendan Allen Sub",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Fares Ziam vs. Tom Nolan",
-          "selection": "Fares Ziam Sub",
-          "odds": null,
-          "result": "Loss"
-        }
-      ],
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781801057",
-      "fightName": "Fares Ziam vs. Tom Nolan",
-      "selection": "Fares Ziam Dec",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 185,
-      "payout": 14.25,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781778835",
-      "fightName": "Fares Ziam vs. Tom Nolan",
-      "selection": "Nolan KO",
-      "betType": "Moneyline",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 700,
-      "payout": 20,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781655338",
-      "fightName": "Iwo Baraniewski vs. Junior Tafa",
-      "selection": "Tafa Sub 1st",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 1,
-      "odds": 4000,
-      "payout": 41,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781625320",
-      "fightName": "Iwo Baraniewski vs. Junior Tafa",
-      "selection": "Tafa Rnd 1",
-      "betType": "Round Prop",
-      "book": "FD",
-      "wager": 2,
-      "odds": 650,
-      "payout": 15,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781557535",
-      "fightName": "Iwo Baraniewski vs. Junior Tafa",
-      "selection": "Tafa Sub 3rd",
-      "betType": "Method of Victory",
-      "book": "DK",
-      "wager": 1,
-      "odds": 20000,
-      "payout": 201,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781535575",
-      "fightName": "Iwo Baraniewski vs. Junior Tafa",
-      "selection": "Tafa Sub 2nd",
-      "betType": "Method of Victory",
-      "book": "DK",
-      "wager": 1,
-      "odds": 11000,
-      "payout": 111,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781519562",
-      "fightName": "Iwo Baraniewski vs. Junior Tafa",
-      "selection": "Tafa Sub 1st",
-      "betType": "Method of Victory",
-      "book": "DK",
-      "wager": 2,
-      "odds": 5000,
-      "payout": 102,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781495016",
-      "fightName": "Iwo Baraniewski vs. Junior Tafa",
-      "selection": "Tafa Sub",
-      "betType": "Method of Victory",
-      "book": "DK",
-      "wager": 2.5,
-      "odds": 4000,
-      "payout": 102.5,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781459689",
-      "fightName": "Matt Schnell vs. Alessandro Costa",
-      "selection": "Last 10 secs",
-      "betType": "Over/Under",
-      "book": "DK",
-      "wager": 1,
-      "odds": 3000,
-      "payout": 31,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781439566",
-      "fightName": "Matt Schnell vs. Alessandro Costa",
-      "selection": "Matt Schnell",
-      "betType": "Moneyline",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 490,
-      "payout": 14.75,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781396484",
-      "fightName": "2-Leg Parlay",
-      "selection": "Iwo Baraniewski Sub + Marcus McGhee SUB",
-      "betType": "Parlay",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 2700,
-      "payout": 70,
-      "result": "Loss",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Iwo Baraniewski vs. Junior Tafa",
-          "selection": "Iwo Baraniewski Sub",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Marcus McGhee vs. John Yannis",
-          "selection": "Marcus McGhee SUB",
-          "odds": null,
-          "result": "Loss"
-        }
-      ],
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781275961",
-      "fightName": "Jeisla Chaves vs. Yuneisy Duben",
-      "selection": "Duben 2nd sub",
-      "betType": "Method of Victory",
-      "book": "DK",
-      "wager": 1.5,
-      "odds": 5000,
-      "payout": 76.5,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781260146",
-      "fightName": "Jeisla Chaves vs. Yuneisy Duben",
-      "selection": "Duben Sub 1st",
-      "betType": "Method of Victory",
-      "book": "DK",
-      "wager": 1.5,
-      "odds": 4000,
-      "payout": 61.5,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781239953",
-      "fightName": "Jeisla Chaves vs. Yuneisy Duben",
-      "selection": "Duben KO 2nd",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 2200,
-      "payout": 115,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781220977",
-      "fightName": "Jeisla Chaves vs. Yuneisy Duben",
-      "selection": "Duben KO 1st",
-      "betType": "Moneyline",
-      "book": "FD",
-      "wager": 5,
-      "odds": 1400,
-      "payout": 75,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781194642",
-      "fightName": "Jeisla Chaves vs. Yuneisy Duben",
-      "selection": "Jeisla Chaves KO 2nd",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 900,
-      "payout": 50,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780781179440",
-      "fightName": "Jeisla Chaves vs. Yuneisy Duben",
-      "selection": "Jeisla Chaves KO 1st",
-      "betType": "Method of Victory",
-      "book": "FD",
-      "wager": 5,
-      "odds": 650,
-      "payout": 37.5,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780995894",
-      "fightName": "Marcus McGhee vs. John Yannis",
-      "selection": "Last 10 seconds",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 4100,
-      "payout": 42,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780970919",
-      "fightName": "Bruno Silva vs. Edgar Chairez",
-      "selection": "Last 10 seconds",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 5500,
-      "payout": 56,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780825938",
-      "fightName": "3-Leg Parlay",
-      "selection": "DGTD + Costa KO + Iwo Baraniewski SUB",
-      "betType": "Parlay",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 1238,
-      "payout": 33.45,
-      "result": "Loss",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Priscila Cachoeira vs. Chelsea Chandler",
-          "selection": "DGTD",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Matt Schnell vs. Alessandro Costa",
-          "selection": "Costa KO",
-          "odds": null,
-          "result": "Win"
-        },
-        {
-          "fightName": "Iwo Baraniewski vs. Junior Tafa",
-          "selection": "Iwo Baraniewski SUB",
-          "odds": null,
-          "result": "Loss"
-        }
-      ],
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780772588",
-      "fightName": "Priscila Cachoeira vs. Chelsea Chandler",
-      "selection": "Last 10 seconds",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 4500,
-      "payout": 46,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780754482",
-      "fightName": "Jordan Leavitt vs. Joanderson Brito",
-      "selection": "Last 10 seconds",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 5000,
-      "payout": 51,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780534779",
-      "fightName": "3-Leg Parlay",
-      "selection": "Brendan Allen DEC + Nolan KO + Brito Sub",
-      "betType": "Parlay",
-      "book": "FD",
-      "wager": 2.5,
-      "odds": 17684,
-      "payout": 444.6,
-      "result": "Loss",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Brendan Allen vs. Edmen Shahbazyan",
-          "selection": "Brendan Allen DEC",
-          "odds": null,
-          "result": "Pending"
-        },
-        {
-          "fightName": "Fares Ziam vs. Tom Nolan",
-          "selection": "Nolan KO",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Jordan Leavitt vs. Joanderson Brito",
-          "selection": "Brito Sub",
-          "odds": null,
-          "result": "Win"
-        }
-      ],
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780417618",
-      "fightName": "3-Leg Parlay",
-      "selection": "Duben KO + Bonfim ML + Under 2.5 rnds",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 2.5,
-      "odds": 3230,
-      "payout": 83.25,
-      "result": "Loss",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Jeisla Chaves vs. Yuneisy Duben",
-          "selection": "Duben KO",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-          "selection": "Bonfim ML",
-          "odds": null,
-          "result": "Pending"
-        },
-        {
-          "fightName": "Belal Muhammad vs. Gabriel Bonfim",
-          "selection": "Under 2.5 rnds",
-          "odds": null,
-          "result": "Pending"
-        }
-      ],
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780335133",
-      "fightName": "Jeisla Chaves vs. Yuneisy Duben",
-      "selection": "Last 10 seconds",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 5000,
-      "payout": 51,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780780310114",
-      "fightName": "3-Leg Parlay",
-      "selection": "Fares Ziam Double chance + Jeisla Chaves Double chance + Over 1.5 rnds",
-      "betType": "Parlay",
-      "book": "DK",
-      "wager": 2.5,
-      "odds": 631,
-      "payout": 18.275,
-      "result": "Loss",
-      "isParlay": true,
-      "legs": [
-        {
-          "fightName": "Fares Ziam vs. Tom Nolan",
-          "selection": "Fares Ziam Double chance",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Jeisla Chaves vs. Yuneisy Duben",
-          "selection": "Jeisla Chaves Double chance",
-          "odds": null,
-          "result": "Loss"
-        },
-        {
-          "fightName": "Brendan Allen vs. Edmen Shahbazyan",
-          "selection": "Over 1.5 rnds",
-          "odds": null,
-          "result": "Pending"
-        }
-      ],
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780779921637",
-      "fightName": "Ketlen Souza vs. Ariane Carnelossi",
-      "selection": "Ketlen Souza - Sub",
-      "betType": "Method of Victory",
-      "book": "DK",
-      "wager": 5,
-      "odds": 550,
-      "payout": 32.5,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    },
-    {
-      "id": "1780779903321",
-      "fightName": "Ketlen Souza vs. Ariane Carnelossi",
-      "selection": "Last 10 seconds",
-      "betType": "Other",
-      "book": "DK",
-      "wager": 1,
-      "odds": 7000,
-      "payout": 71,
-      "result": "Loss",
-      "eventId": "event_muhammad_vs_bonfim"
-    }
-  ],
-  "events": [
-    {
-      "id": "event_muhammad_vs_bonfim",
-      "name": "Muhammad vs. Bonfim",
-      "date": "2026-06-06",
-      "prelimsStart": "6:00 PM ET",
-      "mainStart": "10:00 PM ET"
-    },
-    {
-      "id": "event_ufc_250",
-      "name": "UFC Freedom 250: Topuria vs. Gaethje",
-      "date": "2026-06-14",
-      "prelimsStart": "6:00 PM ET",
-      "mainStart": "10:00 PM ET"
-    }
-  ],
-  "cards": {
-    "event_ufc_250": [
-      {
-        "main": true,
-        "fighterA": "Ilia Topuria",
-        "fighterB": "Justin Gaethje",
-        "weight": "Lightweight",
-        "oddsA": -750,
-        "oddsB": 425,
-        "rounds": 5
-      },
-      {
-        "main": true,
-        "fighterA": "Alex Pereira",
-        "fighterB": "Ciryl Gane",
-        "weight": "Heavyweight",
-        "oddsA": -115,
-        "oddsB": -105,
-        "rounds": 5
-      },
-      {
-        "main": true,
-        "fighterA": "Sean O'Malley",
-        "fighterB": "Aiemann Zahabi",
-        "weight": "Bantamweight",
-        "oddsA": -425,
-        "oddsB": 300
-      },
-      {
-        "main": true,
-        "fighterA": "Josh Hokit",
-        "fighterB": "Derrick Lewis",
-        "weight": "Heavyweight",
-        "oddsA": -130,
-        "oddsB": 110
-      },
-      {
-        "main": true,
-        "fighterA": "Mauricio Ruffy",
-        "fighterB": "Michael Chandler",
-        "weight": "Lightweight",
-        "oddsA": -650,
-        "oddsB": 425
-      },
-      {
-        "main": true,
-        "fighterA": "Bo Nickal",
-        "fighterB": "Kyle Daukaus",
-        "weight": "Middleweight",
-        "oddsA": -370,
-        "oddsB": 270
-      },
-      {
-        "main": false,
-        "fighterA": "Diego Lopes",
-        "fighterB": "Steve Garcia",
-        "weight": "Featherweight",
-        "oddsA": -190,
-        "oddsB": 145
-      }
-    ],
-    "event_muhammad_vs_bonfim": [
-      {
-        "main": true,
-        "fighterA": "Belal Muhammad",
-        "fighterB": "Gabriel Bonfim",
-        "weight": "Welterweight",
-        "oddsA": -130,
-        "oddsB": 100
-      },
-      {
-        "main": true,
-        "fighterA": "Brendan Allen",
-        "fighterB": "Edmen Shahbazyan",
-        "weight": "Middleweight",
-        "oddsA": -180,
-        "oddsB": 150
-      },
-      {
-        "main": true,
-        "fighterA": "Fares Ziam",
-        "fighterB": "Tom Nolan",
-        "weight": "Lightweight",
-        "oddsA": 100,
-        "oddsB": -120
-      },
-      {
-        "main": true,
-        "fighterA": "Bryce Mitchell",
-        "fighterB": "Santiago Luna",
-        "weight": "Bantamweight",
-        "oddsA": -250,
-        "oddsB": 200
-      },
-      {
-        "main": true,
-        "fighterA": "Iwo Baraniewski",
-        "fighterB": "Junior Tafa",
-        "weight": "Light Heavyweight",
-        "oddsA": 120,
-        "oddsB": -150
-      },
-      {
-        "main": false,
-        "fighterA": "Matt Schnell",
-        "fighterB": "Alessandro Costa",
-        "weight": "Catchweight",
-        "oddsA": 150,
-        "oddsB": -180
-      },
-      {
-        "main": false,
-        "fighterA": "Marcus McGhee",
-        "fighterB": "John Yannis",
-        "weight": "Bantamweight",
-        "oddsA": -220,
-        "oddsB": 180
-      },
-      {
-        "main": false,
-        "fighterA": "Bruno Silva",
-        "fighterB": "Edgar Chairez",
-        "weight": "Flyweight",
-        "oddsA": -140,
-        "oddsB": 115
-      },
-      {
-        "main": false,
-        "fighterA": "Priscila Cachoeira",
-        "fighterB": "Chelsea Chandler",
-        "weight": "Bantamweight",
-        "oddsA": 130,
-        "oddsB": -160
-      },
-      {
-        "main": false,
-        "fighterA": "Jordan Leavitt",
-        "fighterB": "Joanderson Brito",
-        "weight": "Featherweight",
-        "oddsA": 220,
-        "oddsB": -280
-      },
-      {
-        "main": false,
-        "fighterA": "Jeisla Chaves",
-        "fighterB": "Yuneisy Duben",
-        "weight": "Flyweight",
-        "oddsA": 110,
-        "oddsB": -130
-      },
-      {
-        "main": false,
-        "fighterA": "Ketlen Souza",
-        "fighterB": "Ariane Carnelossi",
-        "weight": "Strawweight",
-        "oddsA": -150,
-        "oddsB": 125
-      }
-    ]
-  },
-  "activeEventId": "event_ufc_250",
-  "lastUpdated": 1781486859509
+    "bets":  [
+
+             ],
+    "events":  [
+                   {
+                       "id":  "event_muhammad_vs_bonfim",
+                       "name":  "Muhammad vs. Bonfim",
+                       "date":  "2026-06-06",
+                       "prelimsStart":  "6:00 PM ET",
+                       "mainStart":  "10:00 PM ET"
+                   },
+                   {
+                       "id":  "event_ufc_250",
+                       "name":  "UFC Freedom 250: Topuria vs. Gaethje",
+                       "date":  "2026-06-14",
+                       "prelimsStart":  "6:00 PM ET",
+                       "mainStart":  "10:00 PM ET"
+                   },
+                   {
+                       "id":  "event_kape_vs_horiguchi",
+                       "name":  "UFC Fight Night: Kape vs. Horiguchi",
+                       "date":  "2026-06-20",
+                       "prelimsStart":  "6:00 PM ET",
+                       "mainStart":  "10:00 PM ET"
+                   },
+                   {
+                       "id":  "event_fiziev_vs_torres",
+                       "name":  "UFC Fight Night: Fiziev vs. Torres",
+                       "date":  "2026-06-27",
+                       "prelimsStart":  "6:00 PM ET",
+                       "mainStart":  "10:00 PM ET"
+                   }
+               ],
+    "cards":  {
+                  "event_kape_vs_horiguchi":  [
+                                                  {
+                                                      "main":  true,
+                                                      "fighterA":  "Manel Kape",
+                                                      "fighterB":  "Kyoji Horiguchi",
+                                                      "weight":  "Flyweight",
+                                                      "oddsA":  -156,
+                                                      "oddsB":  135,
+                                                      "rounds":  5,
+                                                      "time":  "12:00 AM ET"
+                                                  },
+                                                  {
+                                                      "main":  true,
+                                                      "fighterA":  "Navajo Stirling",
+                                                      "fighterB":  "Ion Cutelaba",
+                                                      "weight":  "Light Heavyweight",
+                                                      "oddsA":  -350,
+                                                      "oddsB":  275,
+                                                      "time":  "11:30 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  true,
+                                                      "fighterA":  "Vinicius Oliveira",
+                                                      "fighterB":  "Andre Fili",
+                                                      "weight":  "Featherweight",
+                                                      "oddsA":  -350,
+                                                      "oddsB":  285,
+                                                      "time":  "11:00 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  true,
+                                                      "fighterA":  "Christian Rodriguez",
+                                                      "fighterB":  "Hyder Amil",
+                                                      "weight":  "Featherweight",
+                                                      "oddsA":  -170,
+                                                      "oddsB":  140,
+                                                      "time":  "10:30 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  true,
+                                                      "fighterA":  "Murtazali Magomedov",
+                                                      "fighterB":  "Melsik Baghdasaryan",
+                                                      "weight":  "Featherweight",
+                                                      "oddsA":  -500,
+                                                      "oddsB":  385,
+                                                      "time":  "10:00 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Andre Lima",
+                                                      "fighterB":  "Kevin Borjas",
+                                                      "weight":  "Flyweight",
+                                                      "oddsA":  -600,
+                                                      "oddsB":  450,
+                                                      "time":  "9:30 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Karol Rosa",
+                                                      "fighterB":  "Luana Santos",
+                                                      "weight":  "Bantamweight",
+                                                      "oddsA":  -120,
+                                                      "oddsB":  100,
+                                                      "time":  "9:00 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Bia Mesquita",
+                                                      "fighterB":  "Melissa Mullins",
+                                                      "weight":  "Bantamweight",
+                                                      "oddsA":  -550,
+                                                      "oddsB":  410,
+                                                      "time":  "8:30 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Allan Nascimento",
+                                                      "fighterB":  "Mitch Raposo",
+                                                      "weight":  "Flyweight",
+                                                      "oddsA":  -220,
+                                                      "oddsB":  180,
+                                                      "time":  "8:00 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Michael Aswell Jr.",
+                                                      "fighterB":  "Gaston Bolanos",
+                                                      "weight":  "Featherweight",
+                                                      "oddsA":  -300,
+                                                      "oddsB":  250,
+                                                      "time":  "7:30 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Levan Chokheli",
+                                                      "fighterB":  "Leon Shahbazyan",
+                                                      "weight":  "Lightweight",
+                                                      "oddsA":  -310,
+                                                      "oddsB":  250,
+                                                      "time":  "7:00 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Shane Collins",
+                                                      "fighterB":  "Otari Tanzilovi",
+                                                      "weight":  "Lightweight",
+                                                      "oddsA":  -175,
+                                                      "oddsB":  135,
+                                                      "time":  "6:30 PM ET"
+                                                  }
+                                              ],
+                  "event_ufc_250":  [
+                                        {
+                                            "main":  true,
+                                            "fighterA":  "Ilia Topuria",
+                                            "fighterB":  "Justin Gaethje",
+                                            "weight":  "Lightweight",
+                                            "oddsA":  -750,
+                                            "oddsB":  425,
+                                            "rounds":  5
+                                        },
+                                        {
+                                            "main":  true,
+                                            "fighterA":  "Alex Pereira",
+                                            "fighterB":  "Ciryl Gane",
+                                            "weight":  "Heavyweight",
+                                            "oddsA":  -115,
+                                            "oddsB":  -105,
+                                            "rounds":  5
+                                        },
+                                        {
+                                            "main":  true,
+                                            "fighterA":  "Sean O\u0027Malley",
+                                            "fighterB":  "Aiemann Zahabi",
+                                            "weight":  "Bantamweight",
+                                            "oddsA":  -425,
+                                            "oddsB":  300
+                                        },
+                                        {
+                                            "main":  true,
+                                            "fighterA":  "Josh Hokit",
+                                            "fighterB":  "Derrick Lewis",
+                                            "weight":  "Heavyweight",
+                                            "oddsA":  -130,
+                                            "oddsB":  110
+                                        },
+                                        {
+                                            "main":  true,
+                                            "fighterA":  "Mauricio Ruffy",
+                                            "fighterB":  "Michael Chandler",
+                                            "weight":  "Lightweight",
+                                            "oddsA":  -650,
+                                            "oddsB":  425
+                                        },
+                                        {
+                                            "main":  true,
+                                            "fighterA":  "Bo Nickal",
+                                            "fighterB":  "Kyle Daukaus",
+                                            "weight":  "Middleweight",
+                                            "oddsA":  -370,
+                                            "oddsB":  270
+                                        },
+                                        {
+                                            "main":  false,
+                                            "fighterA":  "Diego Lopes",
+                                            "fighterB":  "Steve Garcia",
+                                            "weight":  "Featherweight",
+                                            "oddsA":  -190,
+                                            "oddsB":  145
+                                        }
+                                    ],
+                  "event_muhammad_vs_bonfim":  [
+                                                   {
+                                                       "main":  true,
+                                                       "fighterA":  "Belal Muhammad",
+                                                       "fighterB":  "Gabriel Bonfim",
+                                                       "weight":  "Welterweight",
+                                                       "oddsA":  -130,
+                                                       "oddsB":  100
+                                                   },
+                                                   {
+                                                       "main":  true,
+                                                       "fighterA":  "Brendan Allen",
+                                                       "fighterB":  "Edmen Shahbazyan",
+                                                       "weight":  "Middleweight",
+                                                       "oddsA":  -180,
+                                                       "oddsB":  150
+                                                   },
+                                                   {
+                                                       "main":  true,
+                                                       "fighterA":  "Fares Ziam",
+                                                       "fighterB":  "Tom Nolan",
+                                                       "weight":  "Lightweight",
+                                                       "oddsA":  100,
+                                                       "oddsB":  -120
+                                                   },
+                                                   {
+                                                       "main":  true,
+                                                       "fighterA":  "Bryce Mitchell",
+                                                       "fighterB":  "Santiago Luna",
+                                                       "weight":  "Bantamweight",
+                                                       "oddsA":  -250,
+                                                       "oddsB":  200
+                                                   },
+                                                   {
+                                                       "main":  true,
+                                                       "fighterA":  "Iwo Baraniewski",
+                                                       "fighterB":  "Junior Tafa",
+                                                       "weight":  "Light Heavyweight",
+                                                       "oddsA":  120,
+                                                       "oddsB":  -150
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Matt Schnell",
+                                                       "fighterB":  "Alessandro Costa",
+                                                       "weight":  "Catchweight",
+                                                       "oddsA":  150,
+                                                       "oddsB":  -180
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Marcus McGhee",
+                                                       "fighterB":  "John Yannis",
+                                                       "weight":  "Bantamweight",
+                                                       "oddsA":  -220,
+                                                       "oddsB":  180
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Bruno Silva",
+                                                       "fighterB":  "Edgar Chairez",
+                                                       "weight":  "Flyweight",
+                                                       "oddsA":  -140,
+                                                       "oddsB":  115
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Priscila Cachoeira",
+                                                       "fighterB":  "Chelsea Chandler",
+                                                       "weight":  "Bantamweight",
+                                                       "oddsA":  130,
+                                                       "oddsB":  -160
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Jordan Leavitt",
+                                                       "fighterB":  "Joanderson Brito",
+                                                       "weight":  "Featherweight",
+                                                       "oddsA":  220,
+                                                       "oddsB":  -280
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Jeisla Chaves",
+                                                       "fighterB":  "Yuneisy Duben",
+                                                       "weight":  "Flyweight",
+                                                       "oddsA":  110,
+                                                       "oddsB":  -130
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Ketlen Souza",
+                                                       "fighterB":  "Ariane Carnelossi",
+                                                       "weight":  "Strawweight",
+                                                       "oddsA":  -150,
+                                                       "oddsB":  125
+                                                   }
+                                               ],
+                  "event_fiziev_vs_torres":  [
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Rafael Fiziev",
+                                                     "fighterB":  "Manuel Torres",
+                                                     "weight":  "Lightweight",
+                                                     "oddsA":  -135,
+                                                     "oddsB":  115,
+                                                     "rounds":  5
+                                                 },
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Shara Magomedov",
+                                                     "fighterB":  "Michel Pereira",
+                                                     "weight":  "Middleweight",
+                                                     "oddsA":  -350,
+                                                     "oddsB":  250
+                                                 },
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Ikram Aliskerov",
+                                                     "fighterB":  "Brunno Ferreira",
+                                                     "weight":  "Middleweight",
+                                                     "oddsA":  -300,
+                                                     "oddsB":  250
+                                                 },
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Asu Almabayev",
+                                                     "fighterB":  "Charles Johnson",
+                                                     "weight":  "Flyweight",
+                                                     "oddsA":  -400,
+                                                     "oddsB":  330
+                                                 },
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Abus Magomedov",
+                                                     "fighterB":  "Michal Oleksiejczuk",
+                                                     "weight":  "Middleweight",
+                                                     "oddsA":  -190,
+                                                     "oddsB":  165
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Nursulton Ruziboev",
+                                                     "fighterB":  "Andrey Pulyaev",
+                                                     "weight":  "Middleweight",
+                                                     "oddsA":  -220,
+                                                     "oddsB":  180
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Bekzat Almakhan",
+                                                     "fighterB":  "Jean Matsumoto",
+                                                     "weight":  "Bantamweight",
+                                                     "oddsA":  130,
+                                                     "oddsB":  -160
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Nazim Sadykhov",
+                                                     "fighterB":  "Matheus Camilo",
+                                                     "weight":  "Lightweight",
+                                                     "oddsA":  -220,
+                                                     "oddsB":  190
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Farman Hasanov",
+                                                     "fighterB":  "Eric Nolan",
+                                                     "weight":  "Welterweight",
+                                                     "oddsA":  -160,
+                                                     "oddsB":  135
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Abdul-Rakhman Yakhyaev",
+                                                     "fighterB":  "Julius Walker",
+                                                     "weight":  "Light Heavyweight",
+                                                     "oddsA":  -450,
+                                                     "oddsB":  350
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Daniil Donchenko",
+                                                     "fighterB":  "Theodor Berggren",
+                                                     "weight":  "Welterweight",
+                                                     "oddsA":  -500,
+                                                     "oddsB":  400
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Javier Reyes",
+                                                     "fighterB":  "Kaan Ofli",
+                                                     "weight":  "Featherweight",
+                                                     "oddsA":  -160,
+                                                     "oddsB":  140
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Jefferson Nascimento",
+                                                     "fighterB":  "Tahir Abdullayev",
+                                                     "weight":  "Welterweight",
+                                                     "oddsA":  -200,
+                                                     "oddsB":  170
+                                                 }
+                                             ]
+              },
+    "activeEventId":  "event_fiziev_vs_torres",
+    "lastUpdated":  1782361564904
 };
     }
     // DATABASE_END
@@ -4364,6 +2582,17 @@
 
     function initTracker() {
       try {
+        const savedLayout = safeLocalStorage.getItem('ufc_bet_tracker_layout_mode');
+        if (savedLayout === 'mobile') {
+          document.body.classList.add('mobile-view');
+          setTimeout(() => {
+            const textSpan = document.getElementById('view-toggle-text');
+            const iconSvg = document.getElementById('view-toggle-icon');
+            if (textSpan) textSpan.textContent = 'Desktop View';
+            if (iconSvg) iconSvg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>';
+          }, 0);
+        }
+
         // Load and merge state from EMBEDDED_DATA and localStorage
         let loadedEvents = null;
         let loadedCards = null;
@@ -4580,6 +2809,24 @@
       initTracker();
     }
 
+    // Toggle Mobile/Desktop View Layout
+    function toggleMobileView() {
+      const body = document.body;
+      const isMobile = body.classList.toggle('mobile-view');
+      const textSpan = document.getElementById('view-toggle-text');
+      const iconSvg = document.getElementById('view-toggle-icon');
+      
+      if (isMobile) {
+        if (textSpan) textSpan.textContent = 'Desktop View';
+        if (iconSvg) iconSvg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>';
+        safeLocalStorage.setItem('ufc_bet_tracker_layout_mode', 'mobile');
+      } else {
+        if (textSpan) textSpan.textContent = 'Mobile View';
+        if (iconSvg) iconSvg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>';
+        safeLocalStorage.setItem('ufc_bet_tracker_layout_mode', 'desktop');
+      }
+    }
+
     // Toggle Settings Dropdown Menu
     function toggleSettingsMenu(event) {
       if (event) event.stopPropagation();
@@ -4669,7 +2916,7 @@
         
         let detailsText = `UFC Fight Night | ${activeEvent.date} | Sportsbook Bet Tracker`;
         if (activeEvent.prelimsStart || activeEvent.mainStart) {
-          detailsText += ` | Prelims: ${activeEvent.prelimsStart || '—'} | Main: ${activeEvent.mainStart || '—'}`;
+          detailsText += ` | Prelims: ${activeEvent.prelimsStart || 'â€”'} | Main: ${activeEvent.mainStart || 'â€”'}`;
         }
         headerDetails.textContent = detailsText;
         
@@ -4728,7 +2975,7 @@
         const row = document.createElement('div');
         row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background-color: #1a1a24; border: 1px solid var(--input-border); border-radius: 8px; padding: 10px;';
         
-        const startTimes = (evt.prelimsStart || evt.mainStart) ? ` | Prelims: ${evt.prelimsStart || '—'} | Main: ${evt.mainStart || '—'}` : '';
+        const startTimes = (evt.prelimsStart || evt.mainStart) ? ` | Prelims: ${evt.prelimsStart || 'â€”'} | Main: ${evt.mainStart || 'â€”'}` : '';
         row.innerHTML = `
           <div style="display: flex; flex-direction: column; gap: 2px;">
             <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">${evt.name}</div>
@@ -5316,7 +3563,7 @@
       }
     }
 
-    function getCleanHtmlContent() {
+    function getCleanHtmlContent(stripBets = false) {
       const clone = document.documentElement.cloneNode(true);
 
       const cleanSelector = (selector, html = '') => {
@@ -5436,7 +3683,7 @@
       let htmlContent = '<!DOCTYPE html>\n<html lang="en">\n' + clone.innerHTML + '\n</html>';
 
       const state = {
-        bets: bets,
+        bets: stripBets ? [] : bets,
         events: events,
         cards: cards,
         activeEventId: activeEventId,
@@ -5445,7 +3692,425 @@
 
       const stateJson = JSON.stringify(state, null, 2);
       const regex = /(\/\/\s*DATABASE_START\s*)[\s\S]*?(\/\/\s*DATABASE_END)/;
-      const replacement = `// DATABASE_START\n    if (typeof window.EMBEDDED_DATA === 'undefined') {\n      window.EMBEDDED_DATA = ${stateJson};\n    }\n    // DATABASE_END`;
+      const replacement = `// DATABASE_START
+    if (typeof window.EMBEDDED_DATA === 'undefined') {
+      window.EMBEDDED_DATA = {
+    "bets":  [
+
+             ],
+    "events":  [
+                   {
+                       "id":  "event_muhammad_vs_bonfim",
+                       "name":  "Muhammad vs. Bonfim",
+                       "date":  "2026-06-06",
+                       "prelimsStart":  "6:00 PM ET",
+                       "mainStart":  "10:00 PM ET"
+                   },
+                   {
+                       "id":  "event_ufc_250",
+                       "name":  "UFC Freedom 250: Topuria vs. Gaethje",
+                       "date":  "2026-06-14",
+                       "prelimsStart":  "6:00 PM ET",
+                       "mainStart":  "10:00 PM ET"
+                   },
+                   {
+                       "id":  "event_kape_vs_horiguchi",
+                       "name":  "UFC Fight Night: Kape vs. Horiguchi",
+                       "date":  "2026-06-20",
+                       "prelimsStart":  "6:00 PM ET",
+                       "mainStart":  "10:00 PM ET"
+                   },
+                   {
+                       "id":  "event_fiziev_vs_torres",
+                       "name":  "UFC Fight Night: Fiziev vs. Torres",
+                       "date":  "2026-06-27",
+                       "prelimsStart":  "6:00 PM ET",
+                       "mainStart":  "10:00 PM ET"
+                   }
+               ],
+    "cards":  {
+                  "event_kape_vs_horiguchi":  [
+                                                  {
+                                                      "main":  true,
+                                                      "fighterA":  "Manel Kape",
+                                                      "fighterB":  "Kyoji Horiguchi",
+                                                      "weight":  "Flyweight",
+                                                      "oddsA":  -156,
+                                                      "oddsB":  135,
+                                                      "rounds":  5,
+                                                      "time":  "12:00 AM ET"
+                                                  },
+                                                  {
+                                                      "main":  true,
+                                                      "fighterA":  "Navajo Stirling",
+                                                      "fighterB":  "Ion Cutelaba",
+                                                      "weight":  "Light Heavyweight",
+                                                      "oddsA":  -350,
+                                                      "oddsB":  275,
+                                                      "time":  "11:30 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  true,
+                                                      "fighterA":  "Vinicius Oliveira",
+                                                      "fighterB":  "Andre Fili",
+                                                      "weight":  "Featherweight",
+                                                      "oddsA":  -350,
+                                                      "oddsB":  285,
+                                                      "time":  "11:00 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  true,
+                                                      "fighterA":  "Christian Rodriguez",
+                                                      "fighterB":  "Hyder Amil",
+                                                      "weight":  "Featherweight",
+                                                      "oddsA":  -170,
+                                                      "oddsB":  140,
+                                                      "time":  "10:30 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  true,
+                                                      "fighterA":  "Murtazali Magomedov",
+                                                      "fighterB":  "Melsik Baghdasaryan",
+                                                      "weight":  "Featherweight",
+                                                      "oddsA":  -500,
+                                                      "oddsB":  385,
+                                                      "time":  "10:00 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Andre Lima",
+                                                      "fighterB":  "Kevin Borjas",
+                                                      "weight":  "Flyweight",
+                                                      "oddsA":  -600,
+                                                      "oddsB":  450,
+                                                      "time":  "9:30 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Karol Rosa",
+                                                      "fighterB":  "Luana Santos",
+                                                      "weight":  "Bantamweight",
+                                                      "oddsA":  -120,
+                                                      "oddsB":  100,
+                                                      "time":  "9:00 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Bia Mesquita",
+                                                      "fighterB":  "Melissa Mullins",
+                                                      "weight":  "Bantamweight",
+                                                      "oddsA":  -550,
+                                                      "oddsB":  410,
+                                                      "time":  "8:30 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Allan Nascimento",
+                                                      "fighterB":  "Mitch Raposo",
+                                                      "weight":  "Flyweight",
+                                                      "oddsA":  -220,
+                                                      "oddsB":  180,
+                                                      "time":  "8:00 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Michael Aswell Jr.",
+                                                      "fighterB":  "Gaston Bolanos",
+                                                      "weight":  "Featherweight",
+                                                      "oddsA":  -300,
+                                                      "oddsB":  250,
+                                                      "time":  "7:30 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Levan Chokheli",
+                                                      "fighterB":  "Leon Shahbazyan",
+                                                      "weight":  "Lightweight",
+                                                      "oddsA":  -310,
+                                                      "oddsB":  250,
+                                                      "time":  "7:00 PM ET"
+                                                  },
+                                                  {
+                                                      "main":  false,
+                                                      "fighterA":  "Shane Collins",
+                                                      "fighterB":  "Otari Tanzilovi",
+                                                      "weight":  "Lightweight",
+                                                      "oddsA":  -175,
+                                                      "oddsB":  135,
+                                                      "time":  "6:30 PM ET"
+                                                  }
+                                              ],
+                  "event_ufc_250":  [
+                                        {
+                                            "main":  true,
+                                            "fighterA":  "Ilia Topuria",
+                                            "fighterB":  "Justin Gaethje",
+                                            "weight":  "Lightweight",
+                                            "oddsA":  -750,
+                                            "oddsB":  425,
+                                            "rounds":  5
+                                        },
+                                        {
+                                            "main":  true,
+                                            "fighterA":  "Alex Pereira",
+                                            "fighterB":  "Ciryl Gane",
+                                            "weight":  "Heavyweight",
+                                            "oddsA":  -115,
+                                            "oddsB":  -105,
+                                            "rounds":  5
+                                        },
+                                        {
+                                            "main":  true,
+                                            "fighterA":  "Sean O\u0027Malley",
+                                            "fighterB":  "Aiemann Zahabi",
+                                            "weight":  "Bantamweight",
+                                            "oddsA":  -425,
+                                            "oddsB":  300
+                                        },
+                                        {
+                                            "main":  true,
+                                            "fighterA":  "Josh Hokit",
+                                            "fighterB":  "Derrick Lewis",
+                                            "weight":  "Heavyweight",
+                                            "oddsA":  -130,
+                                            "oddsB":  110
+                                        },
+                                        {
+                                            "main":  true,
+                                            "fighterA":  "Mauricio Ruffy",
+                                            "fighterB":  "Michael Chandler",
+                                            "weight":  "Lightweight",
+                                            "oddsA":  -650,
+                                            "oddsB":  425
+                                        },
+                                        {
+                                            "main":  true,
+                                            "fighterA":  "Bo Nickal",
+                                            "fighterB":  "Kyle Daukaus",
+                                            "weight":  "Middleweight",
+                                            "oddsA":  -370,
+                                            "oddsB":  270
+                                        },
+                                        {
+                                            "main":  false,
+                                            "fighterA":  "Diego Lopes",
+                                            "fighterB":  "Steve Garcia",
+                                            "weight":  "Featherweight",
+                                            "oddsA":  -190,
+                                            "oddsB":  145
+                                        }
+                                    ],
+                  "event_muhammad_vs_bonfim":  [
+                                                   {
+                                                       "main":  true,
+                                                       "fighterA":  "Belal Muhammad",
+                                                       "fighterB":  "Gabriel Bonfim",
+                                                       "weight":  "Welterweight",
+                                                       "oddsA":  -130,
+                                                       "oddsB":  100
+                                                   },
+                                                   {
+                                                       "main":  true,
+                                                       "fighterA":  "Brendan Allen",
+                                                       "fighterB":  "Edmen Shahbazyan",
+                                                       "weight":  "Middleweight",
+                                                       "oddsA":  -180,
+                                                       "oddsB":  150
+                                                   },
+                                                   {
+                                                       "main":  true,
+                                                       "fighterA":  "Fares Ziam",
+                                                       "fighterB":  "Tom Nolan",
+                                                       "weight":  "Lightweight",
+                                                       "oddsA":  100,
+                                                       "oddsB":  -120
+                                                   },
+                                                   {
+                                                       "main":  true,
+                                                       "fighterA":  "Bryce Mitchell",
+                                                       "fighterB":  "Santiago Luna",
+                                                       "weight":  "Bantamweight",
+                                                       "oddsA":  -250,
+                                                       "oddsB":  200
+                                                   },
+                                                   {
+                                                       "main":  true,
+                                                       "fighterA":  "Iwo Baraniewski",
+                                                       "fighterB":  "Junior Tafa",
+                                                       "weight":  "Light Heavyweight",
+                                                       "oddsA":  120,
+                                                       "oddsB":  -150
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Matt Schnell",
+                                                       "fighterB":  "Alessandro Costa",
+                                                       "weight":  "Catchweight",
+                                                       "oddsA":  150,
+                                                       "oddsB":  -180
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Marcus McGhee",
+                                                       "fighterB":  "John Yannis",
+                                                       "weight":  "Bantamweight",
+                                                       "oddsA":  -220,
+                                                       "oddsB":  180
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Bruno Silva",
+                                                       "fighterB":  "Edgar Chairez",
+                                                       "weight":  "Flyweight",
+                                                       "oddsA":  -140,
+                                                       "oddsB":  115
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Priscila Cachoeira",
+                                                       "fighterB":  "Chelsea Chandler",
+                                                       "weight":  "Bantamweight",
+                                                       "oddsA":  130,
+                                                       "oddsB":  -160
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Jordan Leavitt",
+                                                       "fighterB":  "Joanderson Brito",
+                                                       "weight":  "Featherweight",
+                                                       "oddsA":  220,
+                                                       "oddsB":  -280
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Jeisla Chaves",
+                                                       "fighterB":  "Yuneisy Duben",
+                                                       "weight":  "Flyweight",
+                                                       "oddsA":  110,
+                                                       "oddsB":  -130
+                                                   },
+                                                   {
+                                                       "main":  false,
+                                                       "fighterA":  "Ketlen Souza",
+                                                       "fighterB":  "Ariane Carnelossi",
+                                                       "weight":  "Strawweight",
+                                                       "oddsA":  -150,
+                                                       "oddsB":  125
+                                                   }
+                                               ],
+                  "event_fiziev_vs_torres":  [
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Rafael Fiziev",
+                                                     "fighterB":  "Manuel Torres",
+                                                     "weight":  "Lightweight",
+                                                     "oddsA":  -135,
+                                                     "oddsB":  115,
+                                                     "rounds":  5
+                                                 },
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Shara Magomedov",
+                                                     "fighterB":  "Michel Pereira",
+                                                     "weight":  "Middleweight",
+                                                     "oddsA":  -350,
+                                                     "oddsB":  250
+                                                 },
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Ikram Aliskerov",
+                                                     "fighterB":  "Brunno Ferreira",
+                                                     "weight":  "Middleweight",
+                                                     "oddsA":  -300,
+                                                     "oddsB":  250
+                                                 },
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Asu Almabayev",
+                                                     "fighterB":  "Charles Johnson",
+                                                     "weight":  "Flyweight",
+                                                     "oddsA":  -400,
+                                                     "oddsB":  330
+                                                 },
+                                                 {
+                                                     "main":  true,
+                                                     "fighterA":  "Abus Magomedov",
+                                                     "fighterB":  "Michal Oleksiejczuk",
+                                                     "weight":  "Middleweight",
+                                                     "oddsA":  -190,
+                                                     "oddsB":  165
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Nursulton Ruziboev",
+                                                     "fighterB":  "Andrey Pulyaev",
+                                                     "weight":  "Middleweight",
+                                                     "oddsA":  -220,
+                                                     "oddsB":  180
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Bekzat Almakhan",
+                                                     "fighterB":  "Jean Matsumoto",
+                                                     "weight":  "Bantamweight",
+                                                     "oddsA":  130,
+                                                     "oddsB":  -160
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Nazim Sadykhov",
+                                                     "fighterB":  "Matheus Camilo",
+                                                     "weight":  "Lightweight",
+                                                     "oddsA":  -220,
+                                                     "oddsB":  190
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Farman Hasanov",
+                                                     "fighterB":  "Eric Nolan",
+                                                     "weight":  "Welterweight",
+                                                     "oddsA":  -160,
+                                                     "oddsB":  135
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Abdul-Rakhman Yakhyaev",
+                                                     "fighterB":  "Julius Walker",
+                                                     "weight":  "Light Heavyweight",
+                                                     "oddsA":  -450,
+                                                     "oddsB":  350
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Daniil Donchenko",
+                                                     "fighterB":  "Theodor Berggren",
+                                                     "weight":  "Welterweight",
+                                                     "oddsA":  -500,
+                                                     "oddsB":  400
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Javier Reyes",
+                                                     "fighterB":  "Kaan Ofli",
+                                                     "weight":  "Featherweight",
+                                                     "oddsA":  -160,
+                                                     "oddsB":  140
+                                                 },
+                                                 {
+                                                     "main":  false,
+                                                     "fighterA":  "Jefferson Nascimento",
+                                                     "fighterB":  "Tahir Abdullayev",
+                                                     "weight":  "Welterweight",
+                                                     "oddsA":  -200,
+                                                     "oddsB":  170
+                                                 }
+                                             ]
+              },
+    "activeEventId":  "event_fiziev_vs_torres",
+    "lastUpdated":  1782361564904
+};
+    }
+    // DATABASE_END`;
       
       htmlContent = htmlContent.replace(regex, replacement);
       return htmlContent;
@@ -5614,13 +4279,13 @@
       }
     }
 
-    async function saveTrackerToFile() {
-      const cleanHtml = getCleanHtmlContent();
+    async function saveTrackerToFile(stripBets = false) {
+      const cleanHtml = getCleanHtmlContent(stripBets);
 
       if ('showSaveFilePicker' in window) {
         try {
           const options = {
-            suggestedName: 'index.html',
+            suggestedName: stripBets ? 'ufc-bet-tracker-clean.html' : 'index.html',
             types: [{
               description: 'HTML Files',
               accept: {
@@ -5648,7 +4313,7 @@
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'index.html';
+        a.download = stripBets ? 'ufc-bet-tracker-clean.html' : 'index.html';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -5836,7 +4501,7 @@
         const item = document.createElement('div');
         item.style.cssText = 'background-color: #1a1a24; border: 1px solid var(--input-border); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center;';
         
-        const formattedOdds = (leg.odds !== null && leg.odds !== undefined) ? (leg.odds > 0 ? `+${leg.odds}` : leg.odds) : '—';
+        const formattedOdds = (leg.odds !== null && leg.odds !== undefined) ? (leg.odds > 0 ? `+${leg.odds}` : leg.odds) : 'â€”';
 
         item.innerHTML = `
           <div style="display: flex; flex-direction: column; gap: 2px;">
@@ -6399,7 +5064,7 @@
 
         // Format win rate
         const settledCount = s.wins + s.losses;
-        const winRateText = settledCount > 0 ? `${s.winRate.toFixed(1)}%` : '—';
+        const winRateText = settledCount > 0 ? `${s.winRate.toFixed(1)}%` : 'â€”';
 
         // Format record text
         let recordText = `${s.wins}-${s.losses}-${s.voids}`;
@@ -6430,10 +5095,10 @@
         const ind = document.getElementById(`sort-indicator-analysis-${k}`);
         if (ind) {
           if (analysisSortKey === k) {
-            ind.textContent = analysisSortDesc ? ' ▼' : ' ▲';
+            ind.textContent = analysisSortDesc ? ' â–¼' : ' â–²';
             ind.style.color = 'var(--ufc-red)';
           } else {
-            ind.textContent = ' ↕';
+            ind.textContent = ' â†•';
             ind.style.color = 'rgb(75, 85, 99)';
           }
         }
@@ -6482,10 +5147,10 @@
         const span = document.getElementById(`sort-indicator-${key}`);
         if (span) {
           if (sortKey === key) {
-            span.innerHTML = sortAsc ? ' ▲' : ' ▼';
+            span.innerHTML = sortAsc ? ' â–²' : ' â–¼';
             span.style.color = 'var(--ufc-red)';
           } else {
-            span.innerHTML = ' ↕';
+            span.innerHTML = ' â†•';
             span.style.color = '#4b5563';
           }
         }
@@ -6835,15 +5500,15 @@
         let payoutVal = parseFloat(bet.payout) || 0;
 
         tr.innerHTML = `
-          <td style="font-family: monospace; font-weight: bold; text-align: center; color: var(--text-muted);">${checkboxStatus}</td>
-          <td>${selectionContent}</td>
-          <td>${matchupContent}</td>
-          <td><span class="book-badge ${bet.book.toLowerCase()}">${bet.book}</span></td>
-          <td><span style="font-size: 12px; font-weight: 500;">${bet.betType}</span></td>
-          <td style="font-weight: 600;">$${wagerVal.toFixed(2)}</td>
-          <td style="font-family: 'Outfit'; font-weight: 700;">${formattedOdds}</td>
-          <td style="font-weight: 600; color: #eab308;">$${payoutVal.toFixed(2)}</td>
-          <td>
+          <td data-label="Status" style="font-family: monospace; font-weight: bold; text-align: center; color: var(--text-muted);">${checkboxStatus}</td>
+          <td data-label="Selection">${selectionContent}</td>
+          <td data-label="Matchup">${matchupContent}</td>
+          <td data-label="Book"><span class="book-badge ${bet.book.toLowerCase()}">${bet.book}</span></td>
+          <td data-label="Bet Type"><span style="font-size: 12px; font-weight: 500;">${bet.betType}</span></td>
+          <td data-label="Wager" style="font-weight: 600;">$${wagerVal.toFixed(2)}</td>
+          <td data-label="Odds" style="font-family: 'Outfit'; font-weight: 700;">${formattedOdds}</td>
+          <td data-label="Est. Payout" style="font-weight: 600; color: #eab308;">$${payoutVal.toFixed(2)}</td>
+          <td data-label="Result">
             <div class="result-actions">
               <button class="btn-result ${bet.result === 'Pending' ? 'active-pending' : ''}" onclick="settleBet('${bet.id}', 'Pending')">Pnd</button>
               <button class="btn-result ${bet.result === 'Win' ? 'active-win' : ''}" onclick="settleBet('${bet.id}', 'Win')">Win</button>
@@ -6851,7 +5516,7 @@
               <button class="btn-result ${bet.result === 'Void' ? 'active-void' : ''}" onclick="settleBet('${bet.id}', 'Void')">Void</button>
             </div>
           </td>
-          <td>
+          <td data-label="Actions">
             <div style="display: flex; gap: 8px;">
               <button class="btn-edit" onclick="editBet('${bet.id}')" title="Edit Bet">
                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
@@ -6943,7 +5608,7 @@
         }
       }
 
-      let md = `## 📊 Betting Summary Dashboard - ${titleName}\n\n`;
+      let md = `## ðŸ“Š Betting Summary Dashboard - ${titleName}\n\n`;
       md += `| Metric | Value |\n`;
       md += `| :--- | :--- |\n`;
       md += `| **Total Bets** | \`${relevantBets.length}\` |\n`;
@@ -6953,12 +5618,12 @@
       md += `| **Total ROI** | \`${roi.toFixed(1)}%\` |\n`;
       md += `| **Record (W-L-V)** | \`${wins}-${losses}-${voids}\` |\n\n`;
       
-      md += `### 💳 Sportsbook Exposure\n`;
+      md += `### ðŸ’³ Sportsbook Exposure\n`;
       md += `* **DraftKings:** \`$${dkSpent.toFixed(2)}\` wagered | Net Profit: \`${formatCurrency(dkPL)}\`\n`;
       md += `* **FanDuel:** \`$${fdSpent.toFixed(2)}\` wagered | Net Profit: \`${formatCurrency(fdPL)}\`\n\n`;
       
       md += `---\n\n`;
-      md += `## 📝 Active Wagers\n\n`;
+      md += `## ðŸ“ Active Wagers\n\n`;
       md += `| Status | Selection | Fight Matchup | Book | Bet Type | Wager | Odds | Est. Payout | Result | Net P/L |\n`;
       md += `| :---: | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |\n`;
 
@@ -6967,7 +5632,7 @@
       } else {
         relevantBets.forEach(bet => {
           const status = bet.result === 'Pending' ? '[ ]' : '[x]';
-          const formatOdds = (bet.odds !== null && bet.odds !== undefined && bet.odds !== '') ? (bet.odds > 0 ? `+${bet.odds}` : bet.odds) : '—';
+          const formatOdds = (bet.odds !== null && bet.odds !== undefined && bet.odds !== '') ? (bet.odds > 0 ? `+${bet.odds}` : bet.odds) : 'â€”';
           
           let wagerVal = parseFloat(bet.wager) || 0;
           let payoutVal = parseFloat(bet.payout) || 0;
@@ -6980,7 +5645,7 @@
           if (bet.isParlay) {
             selectionCell = `**Parlay (${bet.legs.length} Legs)**<br>` + bet.legs.map(l => {
               const formattedLegOdds = (l.odds !== null && l.odds !== undefined) ? ` (${l.odds > 0 ? '+' : ''}${l.odds})` : '';
-              return `• ${l.selection}${formattedLegOdds} [${l.result}]`;
+              return `â€¢ ${l.selection}${formattedLegOdds} [${l.result}]`;
             }).join('<br>');
             matchupCell = bet.legs.map(l => `*${l.fightName}*`).join('<br>');
           } else {
