@@ -1449,6 +1449,7 @@
                   <div id="other-container" style="display: none; width: 100%; flex-direction: column; gap: 8px;">
                     <select id="other-special-select" style="width: 100%;" onchange="handleOtherSpecialChange()">
                       <option value="custom">-- Custom Special Bet --</option>
+                      <option value="Finish Only Moneyline (If Decision No Action)">Finish Only Moneyline (If Decision No Action)</option>
                       <option value="Finish in last 10 seconds of any round">Finish in last 10 seconds of any round</option>
                       <option value="Fight does go the distance">Fight does go the distance</option>
                       <option value="Fight to end in a draw">Fight to end in a draw</option>
@@ -1461,6 +1462,9 @@
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
                       </select>
+                    </div>
+                    <div id="finish-only-fighter-container" style="display: none; width: 100%;">
+                      <select id="finish-only-fighter-select" style="width: 100%;" onchange="handleFinishOnlyFighterChange()"></select>
                     </div>
                   </div>
                   <div id="fighter-props-container" style="display: none; width: 100%; flex-direction: column; gap: 8px;">
@@ -1507,7 +1511,6 @@
                   <label for="bet-type">Bet Type</label>
                   <select id="bet-type" required="">
                     <option value="Moneyline" selected="">Moneyline</option>
-                    <option value="Finish Only Moneyline (If Decision No Action)">Finish Only Moneyline (If Decision No Action)</option>
                     <option value="Method of Victory">Method of Victory</option>
                     <option value="Round Prop">Round Prop</option>
                     <option value="Over/Under">Over/Under</option>
@@ -1668,7 +1671,6 @@
                   <label for="parlay-bet-type">Bet Type</label>
                   <select id="parlay-bet-type" required="">
                     <option value="Moneyline" selected="">Moneyline</option>
-                    <option value="Finish Only Moneyline (If Decision No Action)">Finish Only Moneyline (If Decision No Action)</option>
                     <option value="Method of Victory">Method of Victory</option>
                     <option value="Over/Under">Over/Under</option>
                     <option value="Point Spread">Point Spread</option>
@@ -2256,7 +2258,6 @@
               <label for="ocr-input-bettype">Bet Type</label>
               <select id="ocr-input-bettype" onchange="handleOcrBetTypeChange()">
                 <option value="Moneyline">Moneyline</option>
-                <option value="Finish Only Moneyline (If Decision No Action)">Finish Only Moneyline (If Decision No Action)</option>
                 <option value="Method of Victory">Method of Victory</option>
                 <option value="Round Prop">Round Prop</option>
                 <option value="Over/Under">Over/Under</option>
@@ -5625,7 +5626,7 @@
       if (betType !== "Moneyline" && betType !== "Parlay" && selection) {
         const selLower = selection.toLowerCase();
         if (selLower.includes("finish only") || selLower.includes("decision no action") || selLower.includes("if decision")) {
-          betType = "Finish Only Moneyline (If Decision No Action)";
+          betType = "Other";
         } else if (selLower.includes("over") || selLower.includes("under")) {
           betType = "Over/Under";
         } else if (/\bround\s+[1-5]\b/i.test(selection) || /\brd\s+[1-5]\b/i.test(selection)) {
@@ -6042,7 +6043,7 @@
       const sel = (bet.selection || '').toLowerCase();
       
       if (type === 'Moneyline') return 'Moneyline';
-      if (type === 'Finish Only Moneyline (If Decision No Action)') return 'Finish Only Moneyline (If Decision No Action)';
+      if (type === 'Finish Only Moneyline (If Decision No Action)' || sel.includes('finish only') || sel.includes('decision no action')) return 'Finish Only Moneyline (If Decision No Action)';
       if (type === 'Point Spread') return 'Point Spread';
       if (type === 'Over/Under') return 'Over/Under';
       if (type === 'Fight to Start Round') return 'Fight to Start Round';
@@ -7260,7 +7261,23 @@
         const otherSelect = document.getElementById('other-special-select');
         const goDistanceContainer = document.getElementById('go-distance-container');
         const goDistanceSelect = document.getElementById('go-distance-select');
+        const finishFighterContainer = document.getElementById('finish-only-fighter-container');
+        const finishFighterSelect = document.getElementById('finish-only-fighter-select');
         const currentText = textInput.value.trim();
+
+        const fightIdx = parseInt(select.value);
+        const activeFights = cards[activeEventId] || [];
+        const fight = activeFights[fightIdx];
+
+        if (fight && finishFighterSelect) {
+          finishFighterSelect.innerHTML = `
+            <option value="${fight.fighterA}">${fight.fighterA}</option>
+            <option value="${fight.fighterB}">${fight.fighterB}</option>
+          `;
+        }
+
+        if (finishFighterContainer) finishFighterContainer.style.display = 'none';
+        if (goDistanceContainer) goDistanceContainer.style.display = 'none';
 
         let foundMatch = false;
         if (currentText.startsWith("Fight does go the distance: ")) {
@@ -7269,8 +7286,19 @@
           if (goDistanceSelect) goDistanceSelect.value = ans;
           if (goDistanceContainer) goDistanceContainer.style.display = 'block';
           foundMatch = true;
+        } else if (currentText.includes("Finish Only Moneyline (If Decision No Action)")) {
+          otherSelect.value = "Finish Only Moneyline (If Decision No Action)";
+          if (finishFighterContainer) finishFighterContainer.style.display = 'block';
+          
+          if (fight && finishFighterSelect) {
+            if (currentText.startsWith(fight.fighterB)) {
+              finishFighterSelect.value = fight.fighterB;
+            } else {
+              finishFighterSelect.value = fight.fighterA;
+            }
+          }
+          foundMatch = true;
         } else {
-          if (goDistanceContainer) goDistanceContainer.style.display = 'none';
           for (let i = 0; i < otherSelect.options.length; i++) {
             if (otherSelect.options[i].value === currentText) {
               otherSelect.value = currentText;
@@ -7524,12 +7552,16 @@
       const otherSelect = document.getElementById('other-special-select');
       const goDistanceContainer = document.getElementById('go-distance-container');
       const goDistanceSelect = document.getElementById('go-distance-select');
+      const finishFighterContainer = document.getElementById('finish-only-fighter-container');
+      const finishFighterSelect = document.getElementById('finish-only-fighter-select');
       
       if (!textInput || !otherSelect) return;
 
+      if (goDistanceContainer) goDistanceContainer.style.display = 'none';
+      if (finishFighterContainer) finishFighterContainer.style.display = 'none';
+
       const val = otherSelect.value;
       if (val === 'custom') {
-        if (goDistanceContainer) goDistanceContainer.style.display = 'none';
         textInput.style.display = 'block';
         textInput.required = true;
         textInput.value = '';
@@ -7539,11 +7571,25 @@
         textInput.style.display = 'none';
         textInput.required = false;
         textInput.value = `Fight does go the distance: ${goDistanceSelect ? goDistanceSelect.value : 'Yes'}`;
+      } else if (val === 'Finish Only Moneyline (If Decision No Action)') {
+        if (finishFighterContainer) finishFighterContainer.style.display = 'block';
+        textInput.style.display = 'none';
+        textInput.required = false;
+        textInput.value = `${finishFighterSelect ? finishFighterSelect.value : ''} - Finish Only Moneyline (If Decision No Action)`;
       } else {
-        if (goDistanceContainer) goDistanceContainer.style.display = 'none';
         textInput.style.display = 'none';
         textInput.required = false;
         textInput.value = val;
+      }
+      calculatePreview();
+    }
+
+    // Handle Finish Only fighter selection dropdown changes
+    function handleFinishOnlyFighterChange() {
+      const textInput = document.getElementById('selection-input');
+      const finishFighterSelect = document.getElementById('finish-only-fighter-select');
+      if (textInput && finishFighterSelect) {
+        textInput.value = `${finishFighterSelect.value} - Finish Only Moneyline (If Decision No Action)`;
       }
       calculatePreview();
     }
