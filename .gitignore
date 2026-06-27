@@ -12,3 +12,6 @@ bets.html
 # Ignore system/editor files
 .DS_Store
 Thumbs.db
+
+# Ignore local publish script
+publish-to-github.ps1
