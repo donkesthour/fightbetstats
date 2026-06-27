@@ -8,6 +8,7 @@ bets.html
 
 # Ignore Obsidian markdown notes (to keep personal notes out of the public repo)
 *.md
+!README.md
 
 # Ignore system/editor files
 .DS_Store
