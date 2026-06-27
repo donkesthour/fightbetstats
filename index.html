@@ -5710,6 +5710,22 @@
         return cleaned;
       }
 
+      function inferOddsFromWagerPayout(wagerVal, payoutVal) {
+        const w = parseFloat(wagerVal);
+        const p = parseFloat(payoutVal);
+        if (isNaN(w) || isNaN(p) || w <= 0 || p <= w) return "";
+        
+        const profit = p - w;
+        let oddsNum = 0;
+        if (profit >= w) {
+          oddsNum = Math.round((profit / w) * 100);
+          return '+' + oddsNum;
+        } else {
+          oddsNum = Math.round(-(w / profit) * 100);
+          return oddsNum.toString();
+        }
+      }
+
       // Helper function to identify excluded/disclaimer lines
       function isExcludedLine(line) {
         const lLine = line.toLowerCase();
@@ -5757,7 +5773,7 @@
           if (lines[i].toLowerCase().includes("parlay")) {
             // Search this line and the line below for 3-5 digit odds
             for (let j = i; j <= Math.min(lines.length - 1, i + 1); j++) {
-              const match = lines[j].match(/([+-~â€”â€“]\s*[a-zA-Z0-9]{2,5}\b|\b[+-~â€”â€“]?\s*[a-zA-Z0-9]{3,5}\b)/);
+              const match = lines[j].match(/([+-~â€”â€“]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
               if (match) {
                 odds = cleanOcrOdds(match[0]);
                 break;
@@ -5772,7 +5788,7 @@
       if (!odds) {
         for (const line of lines) {
           if (isExcludedLine(line)) continue;
-          const match = line.match(/([+-~â€”â€“]\s*[a-zA-Z0-9]{2,5}\b|\b[+-~â€”â€“]?\s*[a-zA-Z0-9]{3,5}\b)/);
+          const match = line.match(/([+-~â€”â€“]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
           if (match) {
             odds = cleanOcrOdds(match[0]);
             break;
@@ -5796,6 +5812,12 @@
         payout = payoutMatch[1].replace(/,/g, '');
       }
       document.getElementById('ocr-input-payout').value = payout;
+
+      // Fallback: Infer global odds if they couldn't be parsed but we have wager & payout
+      if (!odds && wager && payout) {
+        odds = inferOddsFromWagerPayout(wager, payout);
+        document.getElementById('ocr-input-odds').value = odds;
+      }
 
       // 5. Extract Candidate Selection (ignoring disclaimers and wager info)
       let selectionLines = [];
@@ -5977,7 +5999,7 @@
               const line = lines[i];
               if (isExcludedLine(line)) continue;
               
-              const oddsMatch = line.match(/([+-~â€”â€“]\s*[a-zA-Z0-9]{2,5}\b|\b[+-~â€”â€“]?\s*[a-zA-Z0-9]{3,5}\b)/);
+              const oddsMatch = line.match(/([+-~â€”â€“]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
               if (oddsMatch) {
                 legOdds = cleanOcrOdds(oddsMatch[0]);
                 break;
@@ -6129,10 +6151,15 @@
               }
             }
 
+            let finalLegOdds = leg.odds;
+            if (!finalLegOdds && legWager && legPayout) {
+              finalLegOdds = inferOddsFromWagerPayout(legWager, legPayout);
+            }
+
             addOcrMultiBetRow({
               matchupIdx: leg.matchupIdx,
               selection: leg.selection,
-              odds: leg.odds,
+              odds: finalLegOdds,
               wager: legWager,
               payout: legPayout,
               betType: legBetType
