@@ -2277,6 +2277,34 @@
               <div class="form-group full-width">
                 <label for="ocr-input-selection">Selection</label>
                 <input type="text" id="ocr-input-selection" placeholder="e.g. Fighter A or Over 2.5" required="">
+                <select id="ocr-selection-select" style="display: none;" onchange="handleOcrSelectionChange()"></select>
+                <div id="ocr-method-victory-container" style="display: none; width: 100%; gap: 8px; margin-top: 8px;">
+                  <select id="ocr-method-fighter-select" style="flex: 1;" onchange="handleOcrMethodOfVictoryChange()">
+                    <option value="">-- Any / Fight Ends By --</option>
+                  </select>
+                  <select id="ocr-method-type-select" style="flex: 1;" onchange="handleOcrMethodOfVictoryChange()">
+                    <option value="KO">KO</option>
+                    <option value="Submission">Submission</option>
+                    <option value="Decision">Decision</option>
+                    <option value="KO or Submission">KO or Submission</option>
+                    <option value="KO or Decision">KO or Decision</option>
+                    <option value="Submission or Decision">Submission or Decision</option>
+                  </select>
+                </div>
+                <select id="ocr-selection-select" style="display: none;" onchange="handleOcrSelectionChange()"></select>
+                <div id="ocr-method-victory-container" style="display: none; width: 100%; gap: 8px; margin-top: 8px;">
+                  <select id="ocr-method-fighter-select" style="flex: 1;" onchange="handleOcrMethodOfVictoryChange()">
+                    <option value="">-- Any / Fight Ends By --</option>
+                  </select>
+                  <select id="ocr-method-type-select" style="flex: 1;" onchange="handleOcrMethodOfVictoryChange()">
+                    <option value="KO">KO</option>
+                    <option value="Submission">Submission</option>
+                    <option value="Decision">Decision</option>
+                    <option value="KO or Submission">KO or Submission</option>
+                    <option value="KO or Decision">KO or Decision</option>
+                    <option value="Submission or Decision">Submission or Decision</option>
+                  </select>
+                </div>
               </div>
             </div>
             <!-- Parlay Legs Section -->
@@ -5216,6 +5244,29 @@
       }
     }
 
+    function handleOcrSelectionChange() {
+      const textInput = document.getElementById('ocr-input-selection');
+      const selectDropdown = document.getElementById('ocr-selection-select');
+      if (selectDropdown.style.display !== 'none' && selectDropdown.value) {
+        textInput.value = selectDropdown.value;
+      }
+    }
+    
+    function handleOcrMethodOfVictoryChange() {
+      const textInput = document.getElementById('ocr-input-selection');
+      const fighterSelect = document.getElementById('ocr-method-fighter-select');
+      const methodTypeEl = document.getElementById('ocr-method-type-select');
+      if (!textInput || !fighterSelect || !methodTypeEl) return;
+      
+      const fighter = fighterSelect.value;
+      const method = methodTypeEl.value;
+      if (fighter === '') {
+        textInput.value = `Fight will end by ${method}`;
+      } else {
+        textInput.value = `${fighter} by ${method}`;
+      }
+    }
+
     function handleOcrBetTypeChange() {
       const betTypeSelect = document.getElementById('ocr-input-bettype');
       const parlayLegsSection = document.getElementById('ocr-parlay-legs-section');
@@ -5252,6 +5303,7 @@
         oddsInput.placeholder = "e.g. -135 or +2500";
         oddsInput.readOnly = false;
       }
+      syncSelectionDropdown('ocr');
     }
 
     function handleOcrLegMatchupChange(selectEl) {
@@ -7643,11 +7695,12 @@
     // Sync selection drop-down with active fight matchup & bet type
     function syncSelectionDropdown(type) {
       const isSingle = (type === 'single');
-      const select = document.getElementById(isSingle ? 'fight-select' : 'parlay-fight-select');
-      const textInput = document.getElementById(isSingle ? 'selection-input' : 'parlay-selection-input');
-      const selectDropdown = document.getElementById(isSingle ? 'selection-select' : 'parlay-selection-select');
-      const betTypeEl = document.getElementById(isSingle ? 'bet-type' : 'parlay-bet-type');
-      const methodContainer = document.getElementById(isSingle ? 'method-victory-container' : 'parlay-method-victory-container');
+      const isOcr = (type === 'ocr');
+      const select = document.getElementById(isSingle ? 'fight-select' : isOcr ? 'ocr-input-matchup' : 'parlay-fight-select');
+      const textInput = document.getElementById(isSingle ? 'selection-input' : isOcr ? 'ocr-input-selection' : 'parlay-selection-input');
+      const selectDropdown = document.getElementById(isSingle ? 'selection-select' : isOcr ? 'ocr-selection-select' : 'parlay-selection-select');
+      const betTypeEl = document.getElementById(isSingle ? 'bet-type' : isOcr ? 'ocr-input-bettype' : 'parlay-bet-type');
+      const methodContainer = document.getElementById(isSingle ? 'method-victory-container' : isOcr ? 'ocr-method-victory-container' : 'parlay-method-victory-container');
       const roundContainer = isSingle ? document.getElementById('round-prop-container') : null;
       const ouContainer = document.getElementById(isSingle ? 'ou-container' : 'parlay-ou-container');
       const startRoundContainer = document.getElementById(isSingle ? 'start-round-container' : 'parlay-start-round-container');
@@ -8983,4 +9036,5 @@
 
 </body>
 </html>
+
 
