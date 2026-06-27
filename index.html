@@ -2945,6 +2945,61 @@
     let analysisSortDesc = true;
     let selectedAnalysisCategory = 'all';
 
+    function getDefaultActiveEventId(eventList) {
+      if (!Array.isArray(eventList) || eventList.length === 0) {
+        return 'event_mcgregor_vs_holloway';
+      }
+
+      const now = new Date();
+
+      function getEventEndTime(evt) {
+        if (!evt.date) return new Date(0);
+        const [yr, mo, dy] = evt.date.split('-').map(Number);
+        let hour = 22;
+        let minute = 0;
+        
+        const startStr = evt.mainStart || evt.prelimsStart;
+        if (startStr) {
+          const match = startStr.match(/(\d+):?(\d*)\s*(AM|PM)/i);
+          if (match) {
+            let h = parseInt(match[1]);
+            const m = parseInt(match[2] || "0");
+            const ampm = match[3].toUpperCase();
+            if (ampm === 'PM' && h < 12) h += 12;
+            if (ampm === 'AM' && h === 12) h = 0;
+            hour = h;
+            minute = m;
+          }
+        }
+        
+        // Months in JS Date are 0-indexed. End time is 6 hours after start time.
+        const startTime = new Date(yr, mo - 1, dy, hour, minute, 0);
+        return new Date(startTime.getTime() + 6 * 60 * 60 * 1000);
+      }
+
+      const futureEvents = [];
+      const pastEvents = [];
+
+      eventList.forEach(evt => {
+        const endTime = getEventEndTime(evt);
+        if (endTime > now) {
+          futureEvents.push({ event: evt, endTime });
+        } else {
+          pastEvents.push({ event: evt, endTime });
+        }
+      });
+
+      if (futureEvents.length > 0) {
+        futureEvents.sort((a, b) => a.endTime - b.endTime);
+        return futureEvents[0].event.id;
+      } else if (pastEvents.length > 0) {
+        pastEvents.sort((a, b) => b.endTime - a.endTime);
+        return pastEvents[0].event.id;
+      }
+
+      return eventList[0].id;
+    }
+
     function initTracker() {
       try {
         const savedLayout = safeLocalStorage.getItem('ufc_bet_tracker_layout_mode');
@@ -3089,6 +3144,37 @@
               }
             }
           });
+        }
+
+        // Default to the most recent upcoming fight. After it ends, default to the next one.
+        const calculatedDefaultEventId = getDefaultActiveEventId(events);
+        
+        function isEventEnded(evtId) {
+          const evt = events.find(e => e.id === evtId);
+          if (!evt) return true;
+          const [yr, mo, dy] = evt.date.split('-').map(Number);
+          let hour = 22;
+          let minute = 0;
+          const startStr = evt.mainStart || evt.prelimsStart;
+          if (startStr) {
+            const match = startStr.match(/(\d+):?(\d*)\s*(AM|PM)/i);
+            if (match) {
+              let h = parseInt(match[1]);
+              const m = parseInt(match[2] || "0");
+              const ampm = match[3].toUpperCase();
+              if (ampm === 'PM' && h < 12) h += 12;
+              if (ampm === 'AM' && h === 12) h = 0;
+              hour = h;
+              minute = m;
+            }
+          }
+          const endTime = new Date(yr, mo - 1, dy, hour, minute, 0).getTime() + 6 * 60 * 60 * 1000;
+          return Date.now() > endTime;
+        }
+
+        // If the current activeEventId has ended or isn't set, default to the upcoming one.
+        if (!activeEventId || isEventEnded(activeEventId)) {
+          activeEventId = calculatedDefaultEventId;
         }
 
         // Ensure default cards exist
