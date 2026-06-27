@@ -6169,21 +6169,48 @@
             let legBetType = "Moneyline";
             if (fight) {
               const selLower = leg.selection.toLowerCase();
-              if (selLower.includes(fight.fighterA.toLowerCase()) || selLower.includes(fight.fighterB.toLowerCase())) {
-                legBetType = "Moneyline";
+              
+              let hasMethodOfVictoryLabel = false;
+              let hasMoneylineLabel = false;
+              let hasRoundBettingLabel = false;
+              
+              if (matchLineIdx >= 0) {
+                const startLabelIdx = Math.max(0, matchLineIdx - 2);
+                const endLabelIdx = Math.min(lines.length - 1, matchLineIdx + 4);
+                for (let i = startLabelIdx; i <= endLabelIdx; i++) {
+                  const l = lines[i].toLowerCase();
+                  if (l.includes("method of victory")) hasMethodOfVictoryLabel = true;
+                  if (l.includes("moneyline")) hasMoneylineLabel = true;
+                  if (l.includes("round betting") || l.includes("round prop")) hasRoundBettingLabel = true;
+                }
               }
-              if (selLower.includes("over") || selLower.includes("under")) {
-                legBetType = "Over/Under";
-              } else if (/\bround\s+[1-5]\b/i.test(leg.selection) || /\brd\s+[1-5]\b/i.test(leg.selection)) {
-                legBetType = "Round Prop";
-              } else if (selLower.includes("start")) {
-                legBetType = "Fight to Start Round";
-              } else if (selLower.includes("ko") || selLower.includes("tko") || selLower.includes("sub") || selLower.includes("submission") || selLower.includes("decision")) {
+
+              if (hasMethodOfVictoryLabel) {
                 legBetType = "Method of Victory";
-              } else if (/\b[+-][0-5]\.5\b/.test(leg.selection)) {
-                legBetType = "Point Spread";
-              } else if (selLower !== fight.fighterA.toLowerCase() && selLower !== fight.fighterB.toLowerCase()) {
-                legBetType = "Other";
+              } else if (hasMoneylineLabel) {
+                legBetType = "Moneyline";
+              } else if (hasRoundBettingLabel) {
+                legBetType = "Round Prop";
+              } else {
+                if (selLower.includes(fight.fighterA.toLowerCase()) || selLower.includes(fight.fighterB.toLowerCase())) {
+                  legBetType = "Moneyline";
+                }
+                if (selLower.includes("over") || selLower.includes("under")) {
+                  legBetType = "Over/Under";
+                } else if (/\bround\s+[1-5]\b/i.test(leg.selection) || /\brd\s+[1-5]\b/i.test(leg.selection)) {
+                  legBetType = "Round Prop";
+                } else if (selLower.includes("start")) {
+                  legBetType = "Fight to Start Round";
+                } /**************
+                 * MODIFICATION: Keep standard keyword searches as fallbacks
+                 **************/
+                else if (selLower.includes("ko") || selLower.includes("tko") || selLower.includes("sub") || selLower.includes("submission") || selLower.includes("decision")) {
+                  legBetType = "Method of Victory";
+                } else if (/\b[+-][0-5]\.5\b/.test(leg.selection)) {
+                  legBetType = "Point Spread";
+                } else if (selLower !== fight.fighterA.toLowerCase() && selLower !== fight.fighterB.toLowerCase()) {
+                  legBetType = "Other";
+                }
               }
             }
 
@@ -6295,7 +6322,15 @@
       // Automatically classify bet type based on selection text keywords
       if (betType !== "Moneyline" && betType !== "Parlay" && selection) {
         const selLower = selection.toLowerCase();
-        if (selLower.includes("finish only") || selLower.includes("decision no action") || selLower.includes("if decision")) {
+        
+        // FanDuel market name label overrides
+        if (lowerText.includes("method of victory")) {
+          betType = "Method of Victory";
+        } else if (lowerText.includes("moneyline")) {
+          betType = "Moneyline";
+        } else if (lowerText.includes("round betting") || lowerText.includes("round prop")) {
+          betType = "Round Prop";
+        } else if (selLower.includes("finish only") || selLower.includes("decision no action") || selLower.includes("if decision")) {
           betType = "Other";
         } else if (selLower.includes("over") || selLower.includes("under")) {
           betType = "Over/Under";
