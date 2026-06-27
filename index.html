@@ -6247,7 +6247,7 @@
     }
 
     function saveOcrImportedBet() {
-      const isMultiMode = document.getElementById('ocr-multi-bets-form').style.display === 'block';
+      const isMultiMode = document.getElementById('ocr-multi-bets-form').style.display !== 'none';
       const book = isMultiMode ? document.getElementById('ocr-multi-input-book').value : document.getElementById('ocr-input-book').value;
       const betType = document.getElementById('ocr-input-bettype').value;
       const oddsText = document.getElementById('ocr-input-odds').value.trim();
