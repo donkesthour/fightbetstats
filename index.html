@@ -7787,7 +7787,7 @@
         const fight = activeFights[fightIdx];
 
         if (fight) {
-          const fighterSelect = document.getElementById(isSingle ? 'method-fighter-select' : 'parlay-method-fighter-select');
+          const fighterSelect = document.getElementById(isSingle ? 'method-fighter-select' : isOcr ? 'ocr-method-fighter-select' : 'parlay-method-fighter-select');
           fighterSelect.innerHTML = `
             <option value="">-- Any / Fight Ends By --</option>
             <option value="${fight.fighterA}">${fight.fighterA}</option>
@@ -7802,7 +7802,7 @@
 
           // Try to parse existing selection to pre-fill dropdowns
           const currentText = textInput.value.trim();
-          const methodTypeEl = document.getElementById(isSingle ? 'method-type-select' : 'parlay-method-type-select');
+          const methodTypeEl = document.getElementById(isSingle ? 'method-type-select' : isOcr ? 'ocr-method-type-select' : 'parlay-method-type-select');
 
           if (currentText.startsWith(fight.fighterA)) {
             fighterSelect.value = fight.fighterA;
@@ -7830,7 +7830,7 @@
           }
 
           if (isSingle) {
-            handleMethodOfVictoryChange();
+            if (isOcr) { handleOcrMethodOfVictoryChange(); } else { handleMethodOfVictoryChange(type); }
           } else {
             handleParlayMethodOfVictoryChange();
           }
