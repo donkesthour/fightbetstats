@@ -1163,18 +1163,45 @@
     @keyframes ocr-spin {
       to { transform: rotate(360deg); }
     }
+    #ocr-modal {
+      max-width: 1150px;
+      width: 95%;
+      max-height: 95vh;
+      max-height: calc(100vh - 40px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 20px;
+      gap: 12px;
+    }
+    #ocr-modal input,
+    #ocr-modal select {
+      width: 100%;
+      min-width: 0;
+    }
     .ocr-split-container {
       display: grid;
       grid-template-columns: 1fr 1.2fr;
       gap: 20px;
       overflow: hidden;
-      max-height: 60vh;
+      flex: 1;
+      min-height: 0;
+      margin-top: 8px;
+      margin-bottom: 8px;
     }
     @media (max-width: 768px) {
+      #ocr-modal {
+        max-height: 95vh;
+        max-height: calc(100vh - 20px);
+        padding: 16px;
+        gap: 10px;
+      }
       .ocr-split-container {
         grid-template-columns: 1fr;
-        max-height: none;
+        grid-template-rows: auto 1fr;
         overflow-y: auto;
+        margin-top: 4px;
+        margin-bottom: 4px;
       }
     }
     .ocr-preview-panel {
@@ -1186,7 +1213,14 @@
       justify-content: center;
       align-items: center;
       padding: 8px;
-      max-height: 50vh;
+      height: 100%;
+      max-height: 100%;
+    }
+    @media (max-width: 768px) {
+      .ocr-preview-panel {
+        max-height: 25vh;
+        margin-bottom: 8px;
+      }
     }
     .ocr-preview-img {
       max-width: 100%;
@@ -1198,7 +1232,15 @@
       flex-direction: column;
       gap: 12px;
       overflow-y: auto;
-      padding-right: 4px;
+      max-height: 100%;
+      padding-right: 8px;
+    }
+    @media (max-width: 768px) {
+      .ocr-form-panel {
+        overflow-y: visible;
+        max-height: none;
+        padding-right: 0;
+      }
     }
     
     /* Fullscreen drag-over overlay visual cue */
@@ -2202,7 +2244,7 @@
 
   <!-- OCR Edit / Confirmation Modal -->
   <div class="modal-overlay" id="ocr-modal-overlay">
-    <div class="modal" id="ocr-modal" style="max-width: 850px; width: 95%; max-height: 90vh; display: flex; flex-direction: column;">
+    <div class="modal" id="ocr-modal">
       <div class="modal-header">
         <h3 class="panel-title" style="display: flex; align-items: center; gap: 8px;">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -2210,7 +2252,7 @@
         </h3>
         <button class="modal-close" onclick="closeOcrModal()">Ã—</button>
       </div>
-      <div class="ocr-split-container" style="flex: 1; overflow: hidden; margin-top: 12px; margin-bottom: 12px;">
+      <div class="ocr-split-container">
         <!-- Left panel: image preview -->
         <div class="ocr-preview-panel">
           <img id="ocr-preview-img" class="ocr-preview-img" src="" alt="Bet Slip Preview">
@@ -2245,7 +2287,7 @@
               + Add Leg
             </button>
           </div>
-          <div class="form-row" style="margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-row" style="margin-top: 8px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
             <div class="form-group">
               <label for="ocr-input-book">Book</label>
               <select id="ocr-input-book">
@@ -2270,7 +2312,7 @@
               </select>
             </div>
           </div>
-          <div class="form-row" style="margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+          <div class="form-row" style="margin-top: 8px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; max-width: 400px;">
             <div class="form-group">
               <label for="ocr-input-odds">Odds</label>
               <input type="text" id="ocr-input-odds" placeholder="e.g. -135 or +2500" required="" oninput="updateOcrPayoutPreview()">
