@@ -2883,8 +2883,8 @@
                                                      }
                                                  ]
               },
-    "activeEventId":  "event_mcgregor_vs_holloway",
-    "lastUpdated":  1782529343908
+    "activeEventId":  "event_fiziev_vs_torres",
+    "lastUpdated":  1782531117775
 };
     }
     // DATABASE_END
@@ -4663,8 +4663,8 @@
                                                      }
                                                  ]
               },
-    "activeEventId":  "event_mcgregor_vs_holloway",
-    "lastUpdated":  1782529343908
+    "activeEventId":  "event_fiziev_vs_torres",
+    "lastUpdated":  1782531117775
 };
     }
     // DATABASE_END`;
@@ -5743,13 +5743,17 @@
         if (/\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\b/i.test(lLine) || 
             /\b202[4-9]\b/.test(lLine) || 
             /^\d{1,2}:\d{2}/.test(line) ||
+            /\b\d{1,2}:\d{2}\s*(?:AM|PM)?\b/i.test(lLine) ||
             /\b\d{1,2}:\d{2}:\d{2}\b/.test(line)) {
           return true;
         }
-        if (lLine.includes("wager:") || lLine.includes("to pay:") || lLine.includes("to win:") || lLine.includes("payout:") || lLine.includes("to pay")) {
+        if (lLine.includes("wager:") || lLine.includes("to pay:") || lLine.includes("to win:") || lLine.includes("payout:") || lLine.includes("to pay") || lLine.includes("total wager") || lLine.includes("total payout")) {
           return true;
         }
-        if (lLine.includes("open") || lLine.includes("settled") || lLine.includes("live")) {
+        if (lLine.includes("open") || lLine.includes("settled") || lLine.includes("live") || lLine.includes("bet id") || lLine.includes("placed:") || lLine.includes("reuse") || lLine.includes("share") || lLine.includes("cash out")) {
+          return true;
+        }
+        if (/^\$?\s*\d+(?:[.,]\d{2})?$/.test(line.trim())) {
           return true;
         }
         return false;
@@ -5799,17 +5803,17 @@
 
       // 3. Detect Wager (no \b prefix for resilience against spacing)
       let wager = "";
-      const wagerMatch = text.match(/Wager[^\d]*?\$?\s*([\d,]+(?:\.\d{2})?)/i);
+      const wagerMatch = text.match(/(?:Wager[^\d]*?\$?\s*([\d,]+(?:\.\d{2})?)|([\d,]+(?:\.\d{2})?)\s*(?:TOTAL\s*)?WAGER)/i);
       if (wagerMatch) {
-        wager = wagerMatch[1].replace(/,/g, '');
+        wager = (wagerMatch[1] || wagerMatch[2]).replace(/,/g, '');
       }
       document.getElementById('ocr-input-wager').value = wager;
 
       // 4. Detect Payout (no \b prefix, flexible spacing for keywords)
       let payout = "";
-      const payoutMatch = text.match(/(?:To\s*Pay|Payout|To\s*Win|Collect)[^\d]*?\$?\s*([\d,]+(?:\.\d{2})?)/i);
+      const payoutMatch = text.match(/(?:(?:To\s*Pay|Payout|To\s*Win|Collect)[^\d]*?\$?\s*([\d,]+(?:\.\d{2})?)|([\d,]+(?:\.\d{2})?)\s*(?:TOTAL\s*)?(?:PAYOUT|TO\s*WIN|TO\s*PAY|COLLECT))/i);
       if (payoutMatch) {
-        payout = payoutMatch[1].replace(/,/g, '');
+        payout = (payoutMatch[1] || payoutMatch[2]).replace(/,/g, '');
       }
       document.getElementById('ocr-input-payout').value = payout;
 
