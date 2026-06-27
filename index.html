@@ -5817,6 +5817,38 @@
       }
       document.getElementById('ocr-input-payout').value = payout;
 
+      // Fallback & Sanity Check: Extract and sort all dollar amounts to correct/override wager and payout
+      const allAmounts = [];
+      lines.forEach(line => {
+        if (line.toLowerCase().includes("bet id") || line.toLowerCase().includes("placed:")) return;
+        const matches = line.match(/\$?(\d{1,5}\.\d{2})\b|\$?(\b\d{1,5}\b)/g);
+        if (matches) {
+          matches.forEach(m => {
+            const val = parseFloat(m.replace(/[$,]/g, ''));
+            if (!isNaN(val) && val > 0 && !allAmounts.includes(val)) {
+              if (m.includes('$') || m.includes('.')) {
+                allAmounts.push(val);
+              }
+            }
+          });
+        }
+      });
+
+      if (allAmounts.length >= 2) {
+        allAmounts.sort((a, b) => a - b);
+        const smallest = allAmounts[0].toFixed(2);
+        const largest = allAmounts[allAmounts.length - 1].toFixed(2);
+        
+        const wNum = parseFloat(wager);
+        const pNum = parseFloat(payout);
+        if (!wager || !payout || isNaN(wNum) || isNaN(pNum) || wNum >= pNum) {
+          wager = smallest;
+          payout = largest;
+          document.getElementById('ocr-input-wager').value = wager;
+          document.getElementById('ocr-input-payout').value = payout;
+        }
+      }
+
       // Fallback: Infer global odds if they couldn't be parsed but we have wager & payout
       if (!odds && wager && payout) {
         odds = inferOddsFromWagerPayout(wager, payout);
