@@ -5670,6 +5670,16 @@
         // Require at least 2 matching words and 50% ratio
         if (maxOverlap >= 2 && ratio >= 0.5) {
           let score = maxOverlap * 10 + ratio;
+
+          // Penalize if the parsed selection contains prop keywords but the historical one doesn't
+          const propKeywords = ["ko", "tko", "sub", "submission", "decision", "dec", "round", "rd", "over", "under", "by", "finish", "action", "starts"];
+          const parsedHasProp = parsedWords.some(w => propKeywords.includes(w));
+          const histHasProp = histWords.some(w => propKeywords.includes(w));
+
+          if (parsedHasProp && !histHasProp) {
+            score -= 500; // massive penalty to prevent stripping prop bet details
+          }
+
           if (staticSelections.includes(hist)) {
             score += 100; // Prefer static database selections to override localStorage typos
           }
