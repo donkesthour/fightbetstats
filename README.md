@@ -2,7 +2,6 @@
 
 A beautiful, premium, privacy-first web application to track, analyze, and manage your UFC wagers. This app runs entirely in your browser, saving all data locally to ensure complete privacy.
 
-![Dashboard Preview](preview.png)
 
 ---
 
@@ -41,13 +40,6 @@ To host your own version publicly:
 
 ---
 
-## 📂 Project Structure
-
-- [index.html](index.html) - Core application structure, styling, and client-side logic.
-- [ufc-db.js](ufc-db.js) - Script defining database structures for cards, fight listings, and events.
-- [.gitignore](.gitignore) - Ignores local wagers, database files, and private workspace scripts.
-
----
 
 ## 🔒 Privacy & Security
 
