@@ -2,11 +2,13 @@
 
 A beautiful, premium, privacy-first web application to track, analyze, and manage your UFC wagers. This app runs entirely in your browser, saving all data locally to ensure complete privacy.
 
+![Dashboard Preview](preview.png)
+
 ---
 
 ## ✨ Features
 
-- **📸 OCR Screenshot Import**: Drag-and-drop or upload screenshots of your bet slips (DraftKings, FanDuel, etc.). The embedded **Tesseract.js** OCR engine scans the image and automatically fills out matchup, selection, odds, book, wager, and payout details.
+- **📸 OCR Screenshot Import**: Drag-and-drop or upload screenshots of your bet slips (Currently only supported for DraftKings and FanDuel). The embedded **Tesseract.js** OCR engine scans the image and automatically fills out matchup, selection, odds, book, wager, and payout details.
 - **📊 Interactive Dashboard**: View real-time statistics including total profit/loss, ROI (Return on Investment), win/loss records, average odds, and custom charts.
 - **🔗 Multi-Leg Parlay Support**: Easily log complex parlays with individual legs, matching each leg to specific events/fights.
 - **🔒 Privacy First**: Built using static HTML5 and browser-based `localStorage`. Your bets never leave your device, requiring no backend databases, user registrations, or trackers.
