@@ -1,23 +1,29 @@
 # 🥊 UFC Bet Tracker
 
-A beautiful, premium, privacy-first web application to track, analyze, and manage your UFC wagers. This app runs entirely in your browser, saving all data locally to ensure complete privacy.
+A premium, privacy-first web application to track, analyze, and manage UFC wagers. The app runs entirely in your browser, with wager data stored locally on your device.
 
 
 ---
 
 ## ✨ Features
 
-- **📸 OCR Screenshot Import**: Drag-and-drop or upload screenshots of your bet slips (Currently only supported for DraftKings and FanDuel). The embedded **Tesseract.js** OCR engine scans the image and automatically fills out matchup, selection, odds, book, wager, and payout details.
-- **📊 Interactive Dashboard**: View real-time statistics including total profit/loss, ROI (Return on Investment), win/loss records, average odds, and custom charts.
-- **🔗 Multi-Leg Parlay Support**: Easily log complex parlays with individual legs, matching each leg to specific events/fights.
-- **🔒 Privacy First**: Built using static HTML5 and browser-based `localStorage`. Your bets never leave your device, requiring no backend databases, user registrations, or trackers.
-- **💾 Data Portability**: Export your entire database of wagers as a `.json` backup file or import existing data with a single click.
+- **📊 Interactive Dashboard**: View profit/loss, ROI, win/loss records, average odds, **Pending Exposure**, **Unit Size** totals, and event-scoped performance.
+- **🥊 UFC Event & Fight Card Tracking**: Manage UFC events, fight cards, matchup ordering, odds, methods, rounds, and active-event views.
+- **⚡ Quick Bet Entry**: Add common fight-card bets quickly, including moneylines, props, method/round markets, and parlay legs.
+- **🔗 Multi-Leg Parlay Support**: Log parlays with individual legs, match legs to specific events/fights, and calculate parlay odds/returns.
+- **📸 OCR Screenshot Import**: Drag-and-drop or upload bet-slip screenshots. OCR is powered by **Tesseract.js** and is currently focused on DraftKings and FanDuel slips.
+- **✅ ESPN Validation Preview**: Compare logged bets against ESPN fight results, preview proposed settlement changes, and apply only the updates you choose.
+- **📈 Fighter & Bet-Type Analysis**: Break down performance by bet type, fighter, sportsbook, event, and status.
+- **💾 Backup / Restore Center**: Create local snapshots, export JSON backups, and import saved tracker data.
+- **📝 Obsidian Export**: Generate Markdown summaries and notes for your UFC betting records.
+- **🔒 Privacy First**: Built as a static browser app using `localStorage` plus a local `ufc-db.js` data file. No backend database, account, or tracker is required.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Vanilla HTML5, CSS3, and JavaScript (ES6+).
+- **Frontend**: Vanilla HTML5, CSS3, and JavaScript (ES6+) split between `index.html` and helper modules in `js/`.
+- **Data File**: `ufc-db.js` provides embedded tracker data for local/static use.
 - **OCR Parsing**: [Tesseract.js](https://tesseract.projectnaptha.com/) (loaded via CDN for scanning screenshots).
 - **Charts & UI**: Dynamic CSS variables, SVG icons, and smooth micro-animations.
 
@@ -25,18 +31,10 @@ A beautiful, premium, privacy-first web application to track, analyze, and manag
 
 ## 🚀 Getting Started
 
-### 1. Run Locally
 Because this application is serverless, you can run it directly on your computer:
 1. Clone or download this repository.
-2. Double-click `index.html` to open it in any web browser.
-
-### 2. Deploying to GitHub Pages
-To host your own version publicly:
-1. Initialize a Git repository in this folder.
-2. Push the files to your GitHub account.
-3. In your GitHub repository settings, navigate to **Pages**.
-4. Set the Source to **Deploy from a branch** and select `main` (root) as the branch.
-5. Your dashboard will be live at `https://<your-username>.github.io/<your-repo-name>/`.
+2. Keep `index.html`, `ufc-db.js`, and the `js/` folder together in the same directory.
+3. Double-click `index.html` to open it in any modern web browser.
 
 ---
 
@@ -46,4 +44,4 @@ To host your own version publicly:
 Under the browser-based architecture:
 - Any wagers you enter or import are stored inside your browser's private `localStorage` sandbox.
 - When you use the static page, the server serving the HTML cannot read or store your wagers.
-- Your personal bet data is never committed to Git or pushed to public repositories.
+- `publish-to-github.ps1` strips private wagers before publishing public files.
