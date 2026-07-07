@@ -45,3 +45,7 @@ Under the browser-based architecture:
 - Any wagers you enter or import are stored inside your browser's private `localStorage` sandbox.
 - When you use the static page, the server serving the HTML cannot read or store your wagers.
 - `publish-to-github.ps1` strips private wagers before publishing public files.
+
+## ⚠️ Disclaimer
+
+This project is an independent fan-made tracking tool. It is not affiliated with, endorsed by, sponsored by, or officially connected to UFC, ESPN, FanDuel, DraftKings, or any of their parent companies, subsidiaries, or affiliates. All trademarks and brand names belong to their respective owners.
