@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1596,7 +1596,7 @@
       opacity: 1;
     }
 
-    /* â”€â”€ Bet Duplication Button â”€â”€ */
+    /* ── Bet Duplication Button ── */
     .btn-duplicate {
       background: transparent;
       border: none;
@@ -1614,7 +1614,7 @@
       color: #06b6d4;
     }
 
-    /* â”€â”€ Notes / Reasoning Field â”€â”€ */
+    /* ── Notes / Reasoning Field ── */
     .notes-toggle-btn {
       display: inline-flex;
       align-items: center;
@@ -1672,7 +1672,7 @@
       word-break: break-word;
     }
 
-    /* â”€â”€ Quick Settle Modal â”€â”€ */
+    /* ── Quick Settle Modal ── */
     #quick-settle-modal {
       max-width: 680px;
       width: 92%;
@@ -1712,7 +1712,7 @@
       font-weight: 600;
     }
 
-    /* â”€â”€ Event Summary Modal â”€â”€ */
+    /* ── Event Summary Modal ── */
     #event-summary-modal {
       max-width: 860px;
       width: 95%;
@@ -1793,7 +1793,7 @@
       letter-spacing: 0.04em;
     }
 
-    /* â”€â”€ Monthly/Yearly Rollup Panel â”€â”€ */
+    /* ── Monthly/Yearly Rollup Panel ── */
     #rollup-panel { display: none; }
     .rollup-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .rollup-year-row {
@@ -2017,7 +2017,7 @@
           </div>
           <div style="grid-column: 1 / -1; background-color: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 10px; padding: 12px;">
             <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Biggest Selection</div>
-            <div id="pending-exposure-biggest" style="font-size: 14px; font-weight: 800; margin-top: 4px; color: var(--text-main);">â€”</div>
+            <div id="pending-exposure-biggest" style="font-size: 14px; font-weight: 800; margin-top: 4px; color: var(--text-main);">—</div>
           </div>
         </div>
 
@@ -2645,12 +2645,12 @@
             <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;" id="analysis-table">
               <thead>
                 <tr style="border-bottom: 1px solid var(--card-border); color: var(--text-muted); font-weight: 600; font-size: 12px;">
-                  <th class="sortable" onclick="handleAnalysisSort('category')" style="padding: 8px 4px;"><span id="analysis-primary-label">Bet Type</span><span class="sort-indicator" id="sort-indicator-analysis-category" style="color: rgb(75, 85, 99);"> â†•</span></th>
-                  <th class="sortable" onclick="handleAnalysisSort('total')" style="padding: 8px 4px; text-align: center;">Bets<span class="sort-indicator" id="sort-indicator-analysis-total" style="color: rgb(75, 85, 99);"> â†•</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('category')" style="padding: 8px 4px;"><span id="analysis-primary-label">Bet Type</span><span class="sort-indicator" id="sort-indicator-analysis-category" style="color: rgb(75, 85, 99);"> ↕</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('total')" style="padding: 8px 4px; text-align: center;">Bets<span class="sort-indicator" id="sort-indicator-analysis-total" style="color: rgb(75, 85, 99);"> ↕</span></th>
                   <th style="padding: 8px 4px; text-align: center; color: var(--text-muted);">Record (W-L-V)</th>
-                  <th class="sortable" onclick="handleAnalysisSort('winRate')" style="padding: 8px 4px; text-align: center;">Win %<span class="sort-indicator" id="sort-indicator-analysis-winRate" style="color: rgb(75, 85, 99);"> â†•</span></th>
-                  <th class="sortable" onclick="handleAnalysisSort('profit')" style="padding: 8px 4px; text-align: right;">Net P/L<span class="sort-indicator" id="sort-indicator-analysis-profit" style="color: rgb(75, 85, 99);"> â†•</span></th>
-                  <th class="sortable" onclick="handleAnalysisSort('roi')" style="padding: 8px 4px; text-align: right;">ROI<span class="sort-indicator" id="sort-indicator-analysis-roi" style="color: rgb(75, 85, 99);"> â†•</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('winRate')" style="padding: 8px 4px; text-align: center;">Win %<span class="sort-indicator" id="sort-indicator-analysis-winRate" style="color: rgb(75, 85, 99);"> ↕</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('profit')" style="padding: 8px 4px; text-align: right;">Net P/L<span class="sort-indicator" id="sort-indicator-analysis-profit" style="color: rgb(75, 85, 99);"> ↕</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('roi')" style="padding: 8px 4px; text-align: right;">ROI<span class="sort-indicator" id="sort-indicator-analysis-roi" style="color: rgb(75, 85, 99);"> ↕</span></th>
                 </tr>
               </thead>
               <tbody id="analysis-table-body">
@@ -2741,14 +2741,14 @@
           <table id="bets-table">
             <thead>
               <tr>
-                <th class="sortable" width="85" onclick="handleSort('result')">Status<span class="sort-indicator" id="sort-indicator-result" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
-                <th class="sortable" onclick="handleSort('selection')">Selection<span class="sort-indicator" id="sort-indicator-selection" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
-                <th class="sortable" onclick="handleSort('fightName')">Fight Matchup<span class="sort-indicator" id="sort-indicator-fightName" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
-                <th class="sortable" onclick="handleSort('book')">Book<span class="sort-indicator" id="sort-indicator-book" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
-                <th class="sortable" onclick="handleSort('betType')">Bet Type<span class="sort-indicator" id="sort-indicator-betType" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
-                <th class="sortable" onclick="handleSort('wager')">Wager<span class="sort-indicator" id="sort-indicator-wager" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
-                <th class="sortable" onclick="handleSort('odds')">Odds<span class="sort-indicator" id="sort-indicator-odds" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
-                <th class="sortable" onclick="handleSort('payout')">Est. Payout<span class="sort-indicator" id="sort-indicator-payout" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> â†•</span></th>
+                <th class="sortable" width="85" onclick="handleSort('result')">Status<span class="sort-indicator" id="sort-indicator-result" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
+                <th class="sortable" onclick="handleSort('selection')">Selection<span class="sort-indicator" id="sort-indicator-selection" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
+                <th class="sortable" onclick="handleSort('fightName')">Fight Matchup<span class="sort-indicator" id="sort-indicator-fightName" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
+                <th class="sortable" onclick="handleSort('book')">Book<span class="sort-indicator" id="sort-indicator-book" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
+                <th class="sortable" onclick="handleSort('betType')">Bet Type<span class="sort-indicator" id="sort-indicator-betType" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
+                <th class="sortable" onclick="handleSort('wager')">Wager<span class="sort-indicator" id="sort-indicator-wager" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
+                <th class="sortable" onclick="handleSort('odds')">Odds<span class="sort-indicator" id="sort-indicator-odds" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
+                <th class="sortable" onclick="handleSort('payout')">Est. Payout<span class="sort-indicator" id="sort-indicator-payout" style="color: rgb(75, 85, 99); --darkreader-inline-color: var(--darkreader-text-4b5563, #b1aaa0);" data-darkreader-inline-color=""> ↕</span></th>
                 <th>Settle Result</th>
                 <th width="80">Actions</th>
               </tr>
@@ -2895,7 +2895,7 @@
     <div class="modal" onclick="event.stopPropagation()" style="max-width: 800px; width: 90%; max-height: 90vh; display: flex; flex-direction: column;">
       <div class="modal-header">
         <h3 class="panel-title">Validate Bets with ESPN</h3>
-        <button class="modal-close" onclick="closeValidationModal()">Ã—</button>
+        <button class="modal-close" onclick="closeValidationModal()">×</button>
       </div>
       
       <div style="overflow-y: auto; flex-grow: 1; padding: 16px 4px; display: flex; flex-direction: column; gap: 16px;">
@@ -2950,7 +2950,7 @@
     <div class="modal" onclick="event.stopPropagation()" style="max-width: 760px; width: 90%; max-height: 90vh; display: flex; flex-direction: column;">
       <div class="modal-header">
         <h3 class="panel-title">Backup / Restore Center</h3>
-        <button class="modal-close" onclick="closeBackupCenterModal()">Ã—</button>
+        <button class="modal-close" onclick="closeBackupCenterModal()">×</button>
       </div>
       <div style="overflow-y: auto; flex-grow: 1; padding: 16px 4px; display: flex; flex-direction: column; gap: 16px;">
         <div style="background-color: #1a1a24; border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--text-muted);">
@@ -2975,7 +2975,7 @@
     <div class="modal" onclick="event.stopPropagation()">
       <div class="modal-header">
         <h3 class="panel-title">Obsidian Markdown Code</h3>
-        <button class="modal-close" onclick="toggleObsidianModal(false)">Ã—</button>
+        <button class="modal-close" onclick="toggleObsidianModal(false)">×</button>
       </div>
       <p style="font-size: 13px; color: var(--text-muted); --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">
         Copy the table and metrics block below and paste them into your Obsidian note: <br>
@@ -3014,7 +3014,7 @@
     <div class="modal" onclick="event.stopPropagation()" style="max-width: 500px;">
       <div class="modal-header">
         <h3 class="panel-title">Manage UFC Events</h3>
-        <button class="modal-close" onclick="closeEventsModal()">Ã—</button>
+        <button class="modal-close" onclick="closeEventsModal()">×</button>
       </div>
       
       <!-- List of current events -->
@@ -3065,7 +3065,7 @@
     <div class="modal" onclick="event.stopPropagation()" style="max-width: 600px; max-height: 90vh; display: flex; flex-direction: column;">
       <div class="modal-header">
         <h3 class="panel-title">Edit Event Fight Card</h3>
-        <button class="modal-close" onclick="closeFightCardModal()">Ã—</button>
+        <button class="modal-close" onclick="closeFightCardModal()">×</button>
       </div>
       
       <div style="overflow-y: auto; flex-grow: 1; padding-right: 4px; display: flex; flex-direction: column; gap: 16px;">
@@ -3171,13 +3171,13 @@
           Quick Settle
           <span id="qs-pending-count" style="font-size: 12px; font-weight: 600; background: rgba(255,0,51,0.15); color: var(--ufc-red); border: 1px solid rgba(255,0,51,0.3); padding: 2px 8px; border-radius: 20px; margin-left: 4px;">3 pending</span>
         </h3>
-        <button class="modal-close" onclick="closeQuickSettleModal(null)">âœ•</button>
+        <button class="modal-close" onclick="closeQuickSettleModal(null)">✕</button>
       </div>
       <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Settle all pending bets without scrolling the table.</p>
       <div class="qs-list" id="qs-list-container"><div class="qs-row">
           <div class="qs-info">
-            <div class="qs-selection" title="Parlay (2 Legs) â€” Luke Riley, Max Holloway">Parlay (2 Legs) â€” Luke Riley, Max Holloway</div>
-            <div class="qs-sub">2 legs Â· DK Â· -116 Â· $20.00</div>
+            <div class="qs-selection" title="Parlay (2 Legs) — Luke Riley, Max Holloway">Parlay (2 Legs) — Luke Riley, Max Holloway</div>
+            <div class="qs-sub">2 legs · DK · -116 · $20.00</div>
           </div>
           <div class="qs-btns">
             <button class="btn-result active-win" onclick="quickSettleBet('1782846154973', 'Win')">Win</button>
@@ -3187,7 +3187,7 @@
         </div><div class="qs-row">
           <div class="qs-info">
             <div class="qs-selection" title="Mario Bautista">Mario Bautista</div>
-            <div class="qs-sub">Cory Sandhagen vs. Mario Bautista Â· FD Â· +128 Â· $10.00</div>
+            <div class="qs-sub">Cory Sandhagen vs. Mario Bautista · FD · +128 · $10.00</div>
           </div>
           <div class="qs-btns">
             <button class="btn-result active-win" onclick="quickSettleBet('1782531434441', 'Win')">Win</button>
@@ -3197,7 +3197,7 @@
         </div><div class="qs-row">
           <div class="qs-info">
             <div class="qs-selection" title="Finish in last 10 seconds of any round">Finish in last 10 seconds of any round</div>
-            <div class="qs-sub">Conor McGregor vs. Max Holloway Â· DK Â· +9 Â· $1.00</div>
+            <div class="qs-sub">Conor McGregor vs. Max Holloway · DK · +9 · $1.00</div>
           </div>
           <div class="qs-btns">
             <button class="btn-result active-win" onclick="quickSettleBet('1782531407641', 'Win')">Win</button>
@@ -3224,7 +3224,7 @@
             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
             Print
           </button>
-          <button class="modal-close" onclick="closeEventSummaryModal(null)">âœ•</button>
+          <button class="modal-close" onclick="closeEventSummaryModal(null)">✕</button>
         </div>
       </div>
       <div id="event-summary-body" style="flex: 1; min-height: 0;">
@@ -3241,7 +3241,7 @@
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
           Confirm Imported Bet
         </h3>
-        <button class="modal-close" onclick="closeOcrModal()">Ã—</button>
+        <button class="modal-close" onclick="closeOcrModal()">×</button>
       </div>
       <div class="ocr-split-container">
         <!-- Left panel: image preview -->
@@ -3349,7 +3349,7 @@
             </div>
             <div style="margin-top: 10px; border: 1px solid var(--card-border); border-radius: 8px; padding: 10px; background: var(--bg-card);">
               <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px;">
-                <div id="ocr-confidence-summary" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">OCR Confidence: â€”</div>
+                <div id="ocr-confidence-summary" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">OCR Confidence: —</div>
                 <button class="btn btn-outline-dk" type="button" onclick="toggleRawOcrView()" style="padding: 4px 8px; font-size: 11px; height: auto;">Raw OCR</button>
               </div>
               <pre id="ocr-raw-text" style="display: none; white-space: pre-wrap; max-height: 150px; overflow-y: auto; margin: 0; font-size: 12px; color: var(--text-muted);"></pre>
@@ -3412,88 +3412,35 @@
                        "name":  "UFC Fight Night: Muhammad vs. Bonfim",
                        "date":  "2026-06-06",
                        "prelimsStart":  "6:00 PM ET",
-                       "mainStart":  "10:00 PM ET",
-                       "espnId":  "600058949"
+                       "mainStart":  "10:00 PM ET"
                    },
                    {
                        "id":  "event_ufc_250",
                        "name":  "UFC Freedom 250: Topuria vs. Gaethje",
                        "date":  "2026-06-14",
                        "prelimsStart":  "6:00 PM ET",
-                       "mainStart":  "10:00 PM ET",
-                       "espnId":  "600058854"
+                       "mainStart":  "10:00 PM ET"
                    },
                    {
                        "id":  "event_kape_vs_horiguchi",
                        "name":  "UFC Fight Night: Kape vs. Horiguchi",
                        "date":  "2026-06-20",
                        "prelimsStart":  "6:00 PM ET",
-                       "mainStart":  "10:00 PM ET",
-                       "espnId":  "600059467"
+                       "mainStart":  "10:00 PM ET"
                    },
                    {
                        "id":  "event_fiziev_vs_torres",
                        "name":  "UFC Fight Night: Fiziev vs. Torres",
                        "date":  "2026-06-27",
                        "prelimsStart":  "6:00 PM ET",
-                       "mainStart":  "10:00 PM ET",
-                       "espnId":  "600059254"
+                       "mainStart":  "10:00 PM ET"
                    },
                    {
                        "id":  "event_mcgregor_vs_holloway",
                        "name":  "UFC 329: McGregor vs. Holloway 2",
                        "date":  "2026-07-11",
-                       "prelimsStart":  "5:00 PM ET",
-                       "mainStart":  "9:00 PM ET",
-                       "espnId":  "600059148"
-                   },
-                   {
-                       "id":  "event_ufc_fight_night_du_plessis_vs_usman",
-                       "name":  "UFC Fight Night: Du Plessis vs. Usman",
-                       "date":  "2026-07-18",
-                       "prelimsStart":  "5:00 PM ET",
-                       "mainStart":  "8:00 PM ET",
-                       "espnId":  "600059599"
-                   },
-                   {
-                       "id":  "event_ufc_fight_night_ankalaev_vs_rountree_jr",
-                       "name":  "UFC Fight Night: Ankalaev vs. Rountree Jr.",
-                       "date":  "2026-07-25",
-                       "prelimsStart":  "9:00 AM ET",
-                       "mainStart":  "12:00 PM ET",
-                       "espnId":  "600059667"
-                   },
-                   {
-                       "id":  "event_ufc_fight_night_medi_vs_rodriguez",
-                       "name":  "UFC Fight Night: MediÄ‡ vs. Rodriguez",
-                       "date":  "2026-08-01",
-                       "prelimsStart":  "10:00 AM ET",
-                       "mainStart":  "1:00 PM ET",
-                       "espnId":  "600059339"
-                   },
-                   {
-                       "id":  "event_ufc_330_makhachev_vs_machado_garry",
-                       "name":  "UFC 330: Makhachev vs. Machado Garry",
-                       "date":  "2026-08-15",
                        "prelimsStart":  "7:00 PM ET",
-                       "mainStart":  "9:00 PM ET",
-                       "espnId":  "600059185"
-                   },
-                   {
-                       "id":  "event_ufc_fight_night_hernandez_vs_rodrigues",
-                       "name":  "UFC Fight Night: Hernandez vs. Rodrigues",
-                       "date":  "2026-08-22",
-                       "prelimsStart":  "5:00 PM ET",
-                       "mainStart":  "8:00 PM ET",
-                       "espnId":  "600060493"
-                   },
-                   {
-                       "id":  "event_ufc_fight_night_paris",
-                       "name":  "UFC Fight Night: Paris",
-                       "date":  "2026-09-05",
-                       "prelimsStart":  "",
-                       "mainStart":  "",
-                       "espnId":  "600059993"
+                       "mainStart":  "9:00 PM ET"
                    }
                ],
     "cards":  {
@@ -3629,7 +3576,7 @@
                                         },
                                         {
                                             "main":  true,
-                                            "fighterA":  "Sean O\u0027Malley",
+                                            "fighterA":  "Sean O'Malley",
                                             "fighterB":  "Aiemann Zahabi",
                                             "weight":  "Bantamweight",
                                             "oddsA":  -425,
@@ -3875,114 +3822,21 @@
                                              ],
                   "event_mcgregor_vs_holloway":  [
                                                      {
-                                                         "main":  false,
-                                                         "fighterA":  "Cody Durden",
-                                                         "fighterB":  "Alessandro Costa",
-                                                         "weight":  "Flyweight",
-                                                         "oddsA":  -110,
-                                                         "oddsB":  -110,
-                                                         "ouLine":  2.5,
-                                                         "time":  "5:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Zachary Reese",
-                                                         "fighterB":  "Ryan Gandra",
-                                                         "weight":  "Middleweight",
-                                                         "oddsA":  220,
-                                                         "oddsB":  -270,
-                                                         "ouLine":  2.5,
-                                                         "time":  "5:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Ethyn Ewing",
-                                                         "fighterB":  "Farid Basharat",
-                                                         "weight":  "Bantamweight",
-                                                         "oddsA":  -110,
-                                                         "oddsB":  -110,
-                                                         "ouLine":  2.5,
-                                                         "time":  "5:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Cesar Almeida",
-                                                         "fighterB":  "Damian Pinas",
-                                                         "weight":  "Middleweight",
-                                                         "oddsA":  -110,
-                                                         "oddsB":  -110,
-                                                         "ouLine":  2.5,
-                                                         "time":  "5:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Wang Cong",
-                                                         "fighterB":  "Tracy Cortez",
-                                                         "weight":  "W Flyweight",
-                                                         "oddsA":  120,
-                                                         "oddsB":  -140,
-                                                         "ouLine":  2.5,
-                                                         "time":  "5:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Kai Kamaka III",
-                                                         "fighterB":  "Luke Riley",
-                                                         "weight":  "Featherweight",
-                                                         "oddsA":  -200,
-                                                         "oddsB":  170,
-                                                         "ouLine":  2.5,
-                                                         "time":  "7:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Cody Garbrandt",
-                                                         "fighterB":  "Adrian Yanez",
-                                                         "weight":  "Bantamweight",
-                                                         "oddsA":  -110,
-                                                         "oddsB":  -110,
-                                                         "ouLine":  2.5,
-                                                         "time":  "7:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Gable Steveson",
-                                                         "fighterB":  "Elisha Ellison",
-                                                         "weight":  "Heavyweight",
-                                                         "oddsA":  -250,
-                                                         "oddsB":  200,
-                                                         "ouLine":  2.5,
-                                                         "time":  "7:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Robert Whittaker",
-                                                         "fighterB":  "Nikita Krylov",
-                                                         "weight":  "Light Heavyweight",
-                                                         "oddsA":  -140,
-                                                         "oddsB":  120,
-                                                         "ouLine":  2.5,
-                                                         "time":  "7:00 PM ET"
+                                                         "main":  true,
+                                                         "fighterA":  "Conor McGregor",
+                                                         "fighterB":  "Max Holloway",
+                                                         "weight":  "Welterweight",
+                                                         "oddsA":  150,
+                                                         "oddsB":  -180,
+                                                         "rounds":  5
                                                      },
                                                      {
                                                          "main":  true,
-                                                         "fighterA":  "King Green",
-                                                         "fighterB":  "Terrance McKinney",
+                                                         "fighterA":  "Benoît Saint Denis",
+                                                         "fighterB":  "Paddy Pimblett",
                                                          "weight":  "Lightweight",
-                                                         "oddsA":  -110,
-                                                         "oddsB":  -110,
-                                                         "ouLine":  2.5,
-                                                         "time":  "9:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  true,
-                                                         "fighterA":  "Brandon Royval",
-                                                         "fighterB":  "Lone\u0027er Kavanagh",
-                                                         "weight":  "Flyweight",
-                                                         "oddsA":  -160,
-                                                         "oddsB":  135,
-                                                         "ouLine":  2.5,
-                                                         "time":  "9:00 PM ET"
+                                                         "oddsA":  -130,
+                                                         "oddsB":  110
                                                      },
                                                      {
                                                          "main":  true,
@@ -3990,584 +3844,84 @@
                                                          "fighterB":  "Mario Bautista",
                                                          "weight":  "Bantamweight",
                                                          "oddsA":  -115,
-                                                         "oddsB":  -105,
-                                                         "ouLine":  2.5,
-                                                         "time":  "9:00 PM ET"
+                                                         "oddsB":  -105
                                                      },
                                                      {
                                                          "main":  true,
-                                                         "fighterA":  "Paddy Pimblett",
-                                                         "fighterB":  "BenoÃ®t Saint Denis",
-                                                         "weight":  "Lightweight",
-                                                         "oddsA":  -130,
-                                                         "oddsB":  110,
-                                                         "ouLine":  2.5,
-                                                         "time":  "9:00 PM ET"
+                                                         "fighterA":  "Brandon Royval",
+                                                         "fighterB":  "Lone'er Kavanagh",
+                                                         "weight":  "Flyweight",
+                                                         "oddsA":  -160,
+                                                         "oddsB":  135
                                                      },
                                                      {
                                                          "main":  true,
-                                                         "fighterA":  "Max Holloway",
-                                                         "fighterB":  "Conor McGregor",
-                                                         "weight":  "Welterweight",
+                                                         "fighterA":  "Robert Whittaker",
+                                                         "fighterB":  "Nikita Krylov",
+                                                         "weight":  "Light Heavyweight",
+                                                         "oddsA":  -140,
+                                                         "oddsB":  120
+                                                     },
+                                                     {
+                                                         "main":  true,
+                                                         "fighterA":  "Cody Garbrandt",
+                                                         "fighterB":  "Adrian Yañez",
+                                                         "weight":  "Bantamweight",
+                                                         "oddsA":  160,
+                                                         "oddsB":  -190
+                                                     },
+                                                     {
+                                                         "main":  false,
+                                                         "fighterA":  "Gable Steveson",
+                                                         "fighterB":  "Elisha Ellison",
+                                                         "weight":  "Heavyweight",
+                                                         "oddsA":  -250,
+                                                         "oddsB":  200
+                                                     },
+                                                     {
+                                                         "main":  false,
+                                                         "fighterA":  "Tracy Cortez",
+                                                         "fighterB":  "Wang Cong",
+                                                         "weight":  "Flyweight",
+                                                         "oddsA":  120,
+                                                         "oddsB":  -140
+                                                     },
+                                                     {
+                                                         "main":  false,
+                                                         "fighterA":  "Damian Pinas",
+                                                         "fighterB":  "César Almeida",
+                                                         "weight":  "Middleweight",
                                                          "oddsA":  150,
-                                                         "oddsB":  -180,
-                                                         "ouLine":  2.5,
-                                                         "time":  "9:00 PM ET"
+                                                         "oddsB":  -180
+                                                     },
+                                                     {
+                                                         "main":  false,
+                                                         "fighterA":  "Luke Riley",
+                                                         "fighterB":  "Kai Kamaka III",
+                                                         "weight":  "Featherweight",
+                                                         "oddsA":  -200,
+                                                         "oddsB":  170
+                                                     },
+                                                     {
+                                                         "main":  false,
+                                                         "fighterA":  "Ryan Gandra",
+                                                         "fighterB":  "Zachary Reese",
+                                                         "weight":  "Middleweight",
+                                                         "oddsA":  220,
+                                                         "oddsB":  -270
+                                                     },
+                                                     {
+                                                         "main":  false,
+                                                         "fighterA":  "Ode' Osbourne",
+                                                         "fighterB":  "Cody Durden",
+                                                         "weight":  "Flyweight",
+                                                         "oddsA":  130,
+                                                         "oddsB":  -160
                                                      }
-                                                 ],
-                  "event_ufc_fight_night_ankalaev_vs_rountree_jr":  [
-                                                                        {
-                                                                            "main":  false,
-                                                                            "fighterA":  "David Martinez",
-                                                                            "fighterB":  "Umar Nurmagomedov",
-                                                                            "weight":  "Bantamweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "9:00 AM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  false,
-                                                                            "fighterA":  "Brendson Ribeiro",
-                                                                            "fighterB":  "Magomed Tuchalov",
-                                                                            "weight":  "Light Heavyweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "9:00 AM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  false,
-                                                                            "fighterA":  "Dustin Jacoby",
-                                                                            "fighterB":  "Uran Satybaldiev",
-                                                                            "weight":  "Light Heavyweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "9:00 AM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  true,
-                                                                            "fighterA":  "Thomas Petersen",
-                                                                            "fighterB":  "Valter Walker",
-                                                                            "weight":  "Heavyweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "12:00 PM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  true,
-                                                                            "fighterA":  "Ismael Bonfim",
-                                                                            "fighterB":  "Axel Sola",
-                                                                            "weight":  "Lightweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "12:00 PM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  true,
-                                                                            "fighterA":  "Wellington Turman",
-                                                                            "fighterB":  "Islam Dulatov",
-                                                                            "weight":  "Welterweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "12:00 PM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  true,
-                                                                            "fighterA":  "Rizvan Kuniev",
-                                                                            "fighterB":  "Tyrell Fortune",
-                                                                            "weight":  "Heavyweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "12:00 PM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  true,
-                                                                            "fighterA":  "Ramazan Temirov",
-                                                                            "fighterB":  "Steve Erceg",
-                                                                            "weight":  "Flyweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "12:00 PM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  true,
-                                                                            "fighterA":  "Khalil Rountree Jr.",
-                                                                            "fighterB":  "Magomed Ankalaev",
-                                                                            "weight":  "Light Heavyweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "12:00 PM ET"
-                                                                        }
-                                                                    ],
-                  "event_ufc_330_makhachev_vs_machado_garry":  [
-                                                                   {
-                                                                       "main":  false,
-                                                                       "fighterA":  "Dustin Stoltzfus",
-                                                                       "fighterB":  "Mansur Abdul-Malik",
-                                                                       "weight":  "Middleweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "7:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  false,
-                                                                       "fighterA":  "Jeremiah Wells",
-                                                                       "fighterB":  "Myktybek Orolbai",
-                                                                       "weight":  "Welterweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "5:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  false,
-                                                                       "fighterA":  "Vicente Luque",
-                                                                       "fighterB":  "Tresean Gore",
-                                                                       "weight":  "Middleweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "5:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  true,
-                                                                       "fighterA":  "Chidi Njokuani",
-                                                                       "fighterB":  "Geoff Neal",
-                                                                       "weight":  "Welterweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "7:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  true,
-                                                                       "fighterA":  "Erin Blanchfield",
-                                                                       "fighterB":  "Jasmine Jasudavicius",
-                                                                       "weight":  "W Flyweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "9:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  true,
-                                                                       "fighterA":  "Edson Barboza",
-                                                                       "fighterB":  "Esteban Ribovics",
-                                                                       "weight":  "Lightweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "9:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  true,
-                                                                       "fighterA":  "Mackenzie Dern",
-                                                                       "fighterB":  "Gillian Robertson",
-                                                                       "weight":  "W Strawweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "9:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  true,
-                                                                       "fighterA":  "Islam Makhachev",
-                                                                       "fighterB":  "Ian Machado Garry",
-                                                                       "weight":  "Welterweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "9:00 PM ET"
-                                                                   }
-                                                               ],
-                  "event_ufc_fight_night_hernandez_vs_rodrigues":  [
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Cody Durden",
-                                                                           "fighterB":  "Alessandro Costa",
-                                                                           "weight":  "Flyweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "5:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Zachary Reese",
-                                                                           "fighterB":  "Ryan Gandra",
-                                                                           "weight":  "Middleweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "5:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Ethyn Ewing",
-                                                                           "fighterB":  "Farid Basharat",
-                                                                           "weight":  "Bantamweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "5:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Cesar Almeida",
-                                                                           "fighterB":  "Damian Pinas",
-                                                                           "weight":  "Middleweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "5:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Wang Cong",
-                                                                           "fighterB":  "Tracy Cortez",
-                                                                           "weight":  "W Flyweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "5:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Kai Kamaka III",
-                                                                           "fighterB":  "Luke Riley",
-                                                                           "weight":  "Featherweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "7:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Cody Garbrandt",
-                                                                           "fighterB":  "Adrian Yanez",
-                                                                           "weight":  "Bantamweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "7:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Gable Steveson",
-                                                                           "fighterB":  "Elisha Ellison",
-                                                                           "weight":  "Heavyweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "7:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Robert Whittaker",
-                                                                           "fighterB":  "Nikita Krylov",
-                                                                           "weight":  "Light Heavyweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "7:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  true,
-                                                                           "fighterA":  "King Green",
-                                                                           "fighterB":  "Terrance McKinney",
-                                                                           "weight":  "Lightweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "9:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  true,
-                                                                           "fighterA":  "Brandon Royval",
-                                                                           "fighterB":  "Lone\u0027er Kavanagh",
-                                                                           "weight":  "Flyweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "9:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  true,
-                                                                           "fighterA":  "Cory Sandhagen",
-                                                                           "fighterB":  "Mario Bautista",
-                                                                           "weight":  "Bantamweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "9:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  true,
-                                                                           "fighterA":  "Paddy Pimblett",
-                                                                           "fighterB":  "BenoÃ®t Saint Denis",
-                                                                           "weight":  "Lightweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "9:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  true,
-                                                                           "fighterA":  "Max Holloway",
-                                                                           "fighterB":  "Conor McGregor",
-                                                                           "weight":  "Welterweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "9:00 PM ET"
-                                                                       }
-                                                                   ],
-                  "event_ufc_fight_night_medi_vs_rodriguez":  [
-                                                                  {
-                                                                      "main":  false,
-                                                                      "fighterA":  "Hailey Cowan",
-                                                                      "fighterB":  "Nina MiloÅ¡eviÄ‡",
-                                                                      "weight":  "W Bantamweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "10:00 AM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  false,
-                                                                      "fighterA":  "Oban Elliott",
-                                                                      "fighterB":  "Michael Oliveira",
-                                                                      "weight":  "Welterweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "10:00 AM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  false,
-                                                                      "fighterA":  "Dennis Buzukja",
-                                                                      "fighterB":  "Bogdan Grad",
-                                                                      "weight":  "Featherweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "10:00 AM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  false,
-                                                                      "fighterA":  "Josias Musasa",
-                                                                      "fighterB":  "Mark Vologdin",
-                                                                      "weight":  "Bantamweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "10:00 AM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  false,
-                                                                      "fighterA":  "Ludovit Klein",
-                                                                      "fighterB":  "Tofiq Musayev",
-                                                                      "weight":  "Lightweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "10:00 AM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  false,
-                                                                      "fighterA":  "Jovan Leka",
-                                                                      "fighterB":  "Max Gimenis",
-                                                                      "weight":  "Heavyweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "10:00 AM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  true,
-                                                                      "fighterA":  "Jan Blachowicz",
-                                                                      "fighterB":  "Bogdan Guskov",
-                                                                      "weight":  "Light Heavyweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "1:00 PM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  true,
-                                                                      "fighterA":  "Gilbert Urbina",
-                                                                      "fighterB":  "Vlasto ÄŒepo",
-                                                                      "weight":  "Middleweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "1:00 PM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  true,
-                                                                      "fighterA":  "DuÅ¡ko TodoroviÄ‡",
-                                                                      "fighterB":  "Robert Valentin",
-                                                                      "weight":  "Middleweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "1:00 PM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  true,
-                                                                      "fighterA":  "Marcin Tybura",
-                                                                      "fighterB":  "Aleksandar Rakic",
-                                                                      "weight":  "Heavyweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "1:00 PM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  true,
-                                                                      "fighterA":  "Ante Delija",
-                                                                      "fighterB":  "Johnny Walker",
-                                                                      "weight":  "Heavyweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "1:00 PM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  true,
-                                                                      "fighterA":  "Daniel Rodriguez",
-                                                                      "fighterB":  "UroÅ¡ MediÄ‡",
-                                                                      "weight":  "Welterweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "1:00 PM ET"
-                                                                  }
-                                                              ],
-                  "event_ufc_fight_night_du_plessis_vs_usman":  [
-                                                                    {
-                                                                        "main":  false,
-                                                                        "fighterA":  "Alden Coria",
-                                                                        "fighterB":  "Stewart Nicoll",
-                                                                        "weight":  "Flyweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "5:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  false,
-                                                                        "fighterA":  "Felipe Franco",
-                                                                        "fighterB":  "Levi Rodrigues Jr.",
-                                                                        "weight":  "Light Heavyweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "5:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  false,
-                                                                        "fighterA":  "Alvin Hines",
-                                                                        "fighterB":  "Allen Frye Jr.",
-                                                                        "weight":  "Heavyweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "5:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  false,
-                                                                        "fighterA":  "Austin Bashi",
-                                                                        "fighterB":  "Jose Miguel Delgado",
-                                                                        "weight":  "Featherweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "5:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  false,
-                                                                        "fighterA":  "Veronica Hardy",
-                                                                        "fighterB":  "Dione Barbosa",
-                                                                        "weight":  "W Flyweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "5:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  true,
-                                                                        "fighterA":  "Alberto Montes",
-                                                                        "fighterB":  "Tommy McMillen",
-                                                                        "weight":  "Featherweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "8:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  true,
-                                                                        "fighterA":  "Tabatha Ricci",
-                                                                        "fighterB":  "Fatima Kline",
-                                                                        "weight":  "W Strawweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "8:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  true,
-                                                                        "fighterA":  "Chase Hooper",
-                                                                        "fighterB":  "Mitch Ramirez",
-                                                                        "weight":  "Lightweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "8:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  true,
-                                                                        "fighterA":  "Kevin Holland",
-                                                                        "fighterB":  "Jacobe Smith",
-                                                                        "weight":  "Welterweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "8:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  true,
-                                                                        "fighterA":  "Jared Cannonier",
-                                                                        "fighterB":  "Christian Leroy Duncan",
-                                                                        "weight":  "Middleweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "8:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  true,
-                                                                        "fighterA":  "Kamaru Usman",
-                                                                        "fighterB":  "Dricus Du Plessis",
-                                                                        "weight":  "Middleweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "8:00 PM ET"
-                                                                    }
-                                                                ]
+                                                 ]
               },
-    "activeEventId":  "event_ufc_fight_night_du_plessis_vs_usman",
-    "lastUpdated":  1783138438357
+    "activeEventId":  "event_fiziev_vs_torres",
+    "lastUpdated":  1782531117775
 };
     }
     // DATABASE_END
@@ -5109,7 +4463,7 @@
       const details = document.getElementById('mobile-header-event-details');
       const event = events.find(e => e.id === activeEventId);
       if (title) title.textContent = activeEventId === 'all' ? 'All UFC Events' : (event ? event.name : 'Fight Night');
-      if (details) details.textContent = activeEventId === 'all' ? `${bets.length} total wager${bets.length === 1 ? '' : 's'}` : (event ? `${event.date || ''}${event.mainStart ? ` â€¢ Main ${event.mainStart}` : ''}` : 'Mobile view');
+      if (details) details.textContent = activeEventId === 'all' ? `${bets.length} total wager${bets.length === 1 ? '' : 's'}` : (event ? `${event.date || ''}${event.mainStart ? ` - Main ${event.mainStart}` : ''}` : 'Mobile view');
     }
 
     function renderMobileDashboard() {
@@ -5147,7 +4501,7 @@
       setText('mobile-net-profit', formatSignedMoney(netProfit));
       setText('mobile-record', `${wins} - ${losses} - ${voids}`);
       setText('mobile-dashboard-count', `${eventBets.length} wager${eventBets.length === 1 ? '' : 's'}`);
-      setText('mobile-pending-summary', pending > 0 ? `${pending} pending wager${pending === 1 ? '' : 's'} â€¢ ${formatAmountWithUnits(totalWagered, unitSize)} total staked` : 'No pending wagers.');
+      setText('mobile-pending-summary', pending > 0 ? `${pending} pending wager${pending === 1 ? '' : 's'} - ${formatAmountWithUnits(totalWagered, unitSize)} total staked` : 'No pending wagers.');
       const profitEl = document.getElementById('mobile-net-profit');
       if (profitEl) profitEl.style.color = netProfit >= 0 ? 'var(--win-color)' : 'var(--loss-color)';
     }
@@ -5169,7 +4523,7 @@
         const oddsB = fight.oddsB > 0 ? `+${fight.oddsB}` : fight.oddsB;
         return `
           <div class="mobile-fight-card">
-            <div class="mobile-small-muted" style="margin-bottom: 8px;">${escapeHtml(fight.weight || 'Matchup')} â€¢ ${fight.main ? 'Main Card' : 'Prelims'}</div>
+            <div class="mobile-small-muted" style="margin-bottom: 8px;">${escapeHtml(fight.weight || 'Matchup')} - ${fight.main ? 'Main Card' : 'Prelims'}</div>
             <div class="mobile-fighter-row"><strong>${escapeHtml(fight.fighterA)}</strong><button class="mobile-odds-pill" type="button" onclick="prefillMobileBet(${idx}, 'A')">${oddsA}</button></div>
             <div class="mobile-fighter-row"><strong>${escapeHtml(fight.fighterB)}</strong><button class="mobile-odds-pill" type="button" onclick="prefillMobileBet(${idx}, 'B')">${oddsB}</button></div>
           </div>
@@ -5191,7 +4545,7 @@
     function renderMobileBetCard(bet) {
       const odds = bet.odds > 0 ? `+${bet.odds}` : bet.odds;
       const selection = bet.isParlay ? `Parlay (${(bet.legs || []).length} Legs)` : bet.selection;
-      const matchup = bet.isParlay ? (bet.legs || []).map(leg => leg.fightName).join(' â€¢ ') : bet.fightName;
+      const matchup = bet.isParlay ? (bet.legs || []).map(leg => leg.fightName).join(' - ') : bet.fightName;
       const statusClass = String(bet.result || 'Pending').toLowerCase();
       const bonus = bet.isBonusBet ? '<span class="mobile-book-pill" style="color: var(--win-color); background: var(--win-glow);">Bonus</span>' : '';
       const live = bet.isLiveStream ? '<span class="mobile-book-pill" style="color: var(--ufc-red); background: rgba(255,0,51,0.16);">Live</span>' : '';
@@ -5323,7 +4677,7 @@
         
         let detailsText = `UFC Fight Night | ${activeEvent.date} | Sportsbook Bet Tracker`;
         if (activeEvent.prelimsStart || activeEvent.mainStart) {
-          detailsText += ` | Prelims: ${activeEvent.prelimsStart || 'â€”'} | Main: ${activeEvent.mainStart || 'â€”'}`;
+          detailsText += ` | Prelims: ${activeEvent.prelimsStart || '—'} | Main: ${activeEvent.mainStart || '—'}`;
         }
         headerDetails.textContent = detailsText;
         
@@ -5388,7 +4742,7 @@
         const row = document.createElement('div');
         row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background-color: #1a1a24; border: 1px solid var(--input-border); border-radius: 8px; padding: 10px;';
         
-        const startTimes = (evt.prelimsStart || evt.mainStart) ? ` | Prelims: ${evt.prelimsStart || 'â€”'} | Main: ${evt.mainStart || 'â€”'}` : '';
+        const startTimes = (evt.prelimsStart || evt.mainStart) ? ` | Prelims: ${evt.prelimsStart || '—'} | Main: ${evt.mainStart || '—'}` : '';
         row.innerHTML = `
           <div style="display: flex; flex-direction: column; gap: 2px;">
             <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">${evt.name}</div>
@@ -5742,7 +5096,7 @@
             <span class="weight-class">${fight.weight}</span>
             <span class="card-type ${fight.main ? 'main' : 'prelims'}">${fight.main ? 'MAIN CARD' : 'PRELIMS'}</span>
             ${hasPendingAction ? `
-            <span class="event-day-fight-badge" onclick="event.stopPropagation(); filterBetsForFightByIndex(${fight.originalIndex})" style="font-size: 10px; font-weight: 800; color: var(--pending-color); background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.45); border-radius: 999px; padding: 2px 7px; margin-left: 4px; cursor: pointer; display: inline-flex; gap: 4px;">${pendingSummary.count} pending â€¢ ${formatMoney(pendingSummary.cashStake)}</span>` : ''}
+            <span class="event-day-fight-badge" onclick="event.stopPropagation(); filterBetsForFightByIndex(${fight.originalIndex})" style="font-size: 10px; font-weight: 800; color: var(--pending-color); background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.45); border-radius: 999px; padding: 2px 7px; margin-left: 4px; cursor: pointer; display: inline-flex; gap: 4px;">${pendingSummary.count} pending - ${formatMoney(pendingSummary.cashStake)}</span>` : ''}
             ${fight.time ? `
             <span class="fight-time" style="font-size: 11px; font-weight: 600; color: #f59e0b; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px;">
               <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -6324,88 +5678,35 @@
                        "name":  "UFC Fight Night: Muhammad vs. Bonfim",
                        "date":  "2026-06-06",
                        "prelimsStart":  "6:00 PM ET",
-                       "mainStart":  "10:00 PM ET",
-                       "espnId":  "600058949"
+                       "mainStart":  "10:00 PM ET"
                    },
                    {
                        "id":  "event_ufc_250",
                        "name":  "UFC Freedom 250: Topuria vs. Gaethje",
                        "date":  "2026-06-14",
                        "prelimsStart":  "6:00 PM ET",
-                       "mainStart":  "10:00 PM ET",
-                       "espnId":  "600058854"
+                       "mainStart":  "10:00 PM ET"
                    },
                    {
                        "id":  "event_kape_vs_horiguchi",
                        "name":  "UFC Fight Night: Kape vs. Horiguchi",
                        "date":  "2026-06-20",
                        "prelimsStart":  "6:00 PM ET",
-                       "mainStart":  "10:00 PM ET",
-                       "espnId":  "600059467"
+                       "mainStart":  "10:00 PM ET"
                    },
                    {
                        "id":  "event_fiziev_vs_torres",
                        "name":  "UFC Fight Night: Fiziev vs. Torres",
                        "date":  "2026-06-27",
                        "prelimsStart":  "6:00 PM ET",
-                       "mainStart":  "10:00 PM ET",
-                       "espnId":  "600059254"
+                       "mainStart":  "10:00 PM ET"
                    },
                    {
                        "id":  "event_mcgregor_vs_holloway",
                        "name":  "UFC 329: McGregor vs. Holloway 2",
                        "date":  "2026-07-11",
-                       "prelimsStart":  "5:00 PM ET",
-                       "mainStart":  "9:00 PM ET",
-                       "espnId":  "600059148"
-                   },
-                   {
-                       "id":  "event_ufc_fight_night_du_plessis_vs_usman",
-                       "name":  "UFC Fight Night: Du Plessis vs. Usman",
-                       "date":  "2026-07-18",
-                       "prelimsStart":  "5:00 PM ET",
-                       "mainStart":  "8:00 PM ET",
-                       "espnId":  "600059599"
-                   },
-                   {
-                       "id":  "event_ufc_fight_night_ankalaev_vs_rountree_jr",
-                       "name":  "UFC Fight Night: Ankalaev vs. Rountree Jr.",
-                       "date":  "2026-07-25",
-                       "prelimsStart":  "9:00 AM ET",
-                       "mainStart":  "12:00 PM ET",
-                       "espnId":  "600059667"
-                   },
-                   {
-                       "id":  "event_ufc_fight_night_medi_vs_rodriguez",
-                       "name":  "UFC Fight Night: MediÄ‡ vs. Rodriguez",
-                       "date":  "2026-08-01",
-                       "prelimsStart":  "10:00 AM ET",
-                       "mainStart":  "1:00 PM ET",
-                       "espnId":  "600059339"
-                   },
-                   {
-                       "id":  "event_ufc_330_makhachev_vs_machado_garry",
-                       "name":  "UFC 330: Makhachev vs. Machado Garry",
-                       "date":  "2026-08-15",
                        "prelimsStart":  "7:00 PM ET",
-                       "mainStart":  "9:00 PM ET",
-                       "espnId":  "600059185"
-                   },
-                   {
-                       "id":  "event_ufc_fight_night_hernandez_vs_rodrigues",
-                       "name":  "UFC Fight Night: Hernandez vs. Rodrigues",
-                       "date":  "2026-08-22",
-                       "prelimsStart":  "5:00 PM ET",
-                       "mainStart":  "8:00 PM ET",
-                       "espnId":  "600060493"
-                   },
-                   {
-                       "id":  "event_ufc_fight_night_paris",
-                       "name":  "UFC Fight Night: Paris",
-                       "date":  "2026-09-05",
-                       "prelimsStart":  "",
-                       "mainStart":  "",
-                       "espnId":  "600059993"
+                       "mainStart":  "9:00 PM ET"
                    }
                ],
     "cards":  {
@@ -6787,114 +6088,21 @@
                                              ],
                   "event_mcgregor_vs_holloway":  [
                                                      {
-                                                         "main":  false,
-                                                         "fighterA":  "Cody Durden",
-                                                         "fighterB":  "Alessandro Costa",
-                                                         "weight":  "Flyweight",
-                                                         "oddsA":  -110,
-                                                         "oddsB":  -110,
-                                                         "ouLine":  2.5,
-                                                         "time":  "5:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Zachary Reese",
-                                                         "fighterB":  "Ryan Gandra",
-                                                         "weight":  "Middleweight",
-                                                         "oddsA":  220,
-                                                         "oddsB":  -270,
-                                                         "ouLine":  2.5,
-                                                         "time":  "5:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Ethyn Ewing",
-                                                         "fighterB":  "Farid Basharat",
-                                                         "weight":  "Bantamweight",
-                                                         "oddsA":  -110,
-                                                         "oddsB":  -110,
-                                                         "ouLine":  2.5,
-                                                         "time":  "5:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Cesar Almeida",
-                                                         "fighterB":  "Damian Pinas",
-                                                         "weight":  "Middleweight",
-                                                         "oddsA":  -110,
-                                                         "oddsB":  -110,
-                                                         "ouLine":  2.5,
-                                                         "time":  "5:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Wang Cong",
-                                                         "fighterB":  "Tracy Cortez",
-                                                         "weight":  "W Flyweight",
-                                                         "oddsA":  120,
-                                                         "oddsB":  -140,
-                                                         "ouLine":  2.5,
-                                                         "time":  "5:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Kai Kamaka III",
-                                                         "fighterB":  "Luke Riley",
-                                                         "weight":  "Featherweight",
-                                                         "oddsA":  -200,
-                                                         "oddsB":  170,
-                                                         "ouLine":  2.5,
-                                                         "time":  "7:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Cody Garbrandt",
-                                                         "fighterB":  "Adrian Yanez",
-                                                         "weight":  "Bantamweight",
-                                                         "oddsA":  -110,
-                                                         "oddsB":  -110,
-                                                         "ouLine":  2.5,
-                                                         "time":  "7:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Gable Steveson",
-                                                         "fighterB":  "Elisha Ellison",
-                                                         "weight":  "Heavyweight",
-                                                         "oddsA":  -250,
-                                                         "oddsB":  200,
-                                                         "ouLine":  2.5,
-                                                         "time":  "7:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  false,
-                                                         "fighterA":  "Robert Whittaker",
-                                                         "fighterB":  "Nikita Krylov",
-                                                         "weight":  "Light Heavyweight",
-                                                         "oddsA":  -140,
-                                                         "oddsB":  120,
-                                                         "ouLine":  2.5,
-                                                         "time":  "7:00 PM ET"
+                                                         "main":  true,
+                                                         "fighterA":  "Conor McGregor",
+                                                         "fighterB":  "Max Holloway",
+                                                         "weight":  "Welterweight",
+                                                         "oddsA":  150,
+                                                         "oddsB":  -180,
+                                                         "rounds":  5
                                                      },
                                                      {
                                                          "main":  true,
-                                                         "fighterA":  "King Green",
-                                                         "fighterB":  "Terrance McKinney",
+                                                         "fighterA":  "Benoît Saint Denis",
+                                                         "fighterB":  "Paddy Pimblett",
                                                          "weight":  "Lightweight",
-                                                         "oddsA":  -110,
-                                                         "oddsB":  -110,
-                                                         "ouLine":  2.5,
-                                                         "time":  "9:00 PM ET"
-                                                     },
-                                                     {
-                                                         "main":  true,
-                                                         "fighterA":  "Brandon Royval",
-                                                         "fighterB":  "Lone\u0027er Kavanagh",
-                                                         "weight":  "Flyweight",
-                                                         "oddsA":  -160,
-                                                         "oddsB":  135,
-                                                         "ouLine":  2.5,
-                                                         "time":  "9:00 PM ET"
+                                                         "oddsA":  -130,
+                                                         "oddsB":  110
                                                      },
                                                      {
                                                          "main":  true,
@@ -6902,584 +6110,84 @@
                                                          "fighterB":  "Mario Bautista",
                                                          "weight":  "Bantamweight",
                                                          "oddsA":  -115,
-                                                         "oddsB":  -105,
-                                                         "ouLine":  2.5,
-                                                         "time":  "9:00 PM ET"
+                                                         "oddsB":  -105
                                                      },
                                                      {
                                                          "main":  true,
-                                                         "fighterA":  "Paddy Pimblett",
-                                                         "fighterB":  "BenoÃ®t Saint Denis",
-                                                         "weight":  "Lightweight",
-                                                         "oddsA":  -130,
-                                                         "oddsB":  110,
-                                                         "ouLine":  2.5,
-                                                         "time":  "9:00 PM ET"
+                                                         "fighterA":  "Brandon Royval",
+                                                         "fighterB":  "Lone\u0027er Kavanagh",
+                                                         "weight":  "Flyweight",
+                                                         "oddsA":  -160,
+                                                         "oddsB":  135
                                                      },
                                                      {
                                                          "main":  true,
-                                                         "fighterA":  "Max Holloway",
-                                                         "fighterB":  "Conor McGregor",
-                                                         "weight":  "Welterweight",
+                                                         "fighterA":  "Robert Whittaker",
+                                                         "fighterB":  "Nikita Krylov",
+                                                         "weight":  "Light Heavyweight",
+                                                         "oddsA":  -140,
+                                                         "oddsB":  120
+                                                     },
+                                                     {
+                                                         "main":  true,
+                                                         "fighterA":  "Cody Garbrandt",
+                                                         "fighterB":  "Adrian Yañez",
+                                                         "weight":  "Bantamweight",
+                                                         "oddsA":  160,
+                                                         "oddsB":  -190
+                                                     },
+                                                     {
+                                                         "main":  false,
+                                                         "fighterA":  "Gable Steveson",
+                                                         "fighterB":  "Elisha Ellison",
+                                                         "weight":  "Heavyweight",
+                                                         "oddsA":  -250,
+                                                         "oddsB":  200
+                                                     },
+                                                     {
+                                                         "main":  false,
+                                                         "fighterA":  "Tracy Cortez",
+                                                         "fighterB":  "Wang Cong",
+                                                         "weight":  "Flyweight",
+                                                         "oddsA":  120,
+                                                         "oddsB":  -140
+                                                     },
+                                                     {
+                                                         "main":  false,
+                                                         "fighterA":  "Damian Pinas",
+                                                         "fighterB":  "César Almeida",
+                                                         "weight":  "Middleweight",
                                                          "oddsA":  150,
-                                                         "oddsB":  -180,
-                                                         "ouLine":  2.5,
-                                                         "time":  "9:00 PM ET"
+                                                         "oddsB":  -180
+                                                     },
+                                                     {
+                                                         "main":  false,
+                                                         "fighterA":  "Luke Riley",
+                                                         "fighterB":  "Kai Kamaka III",
+                                                         "weight":  "Featherweight",
+                                                         "oddsA":  -200,
+                                                         "oddsB":  170
+                                                     },
+                                                     {
+                                                         "main":  false,
+                                                         "fighterA":  "Ryan Gandra",
+                                                         "fighterB":  "Zachary Reese",
+                                                         "weight":  "Middleweight",
+                                                         "oddsA":  220,
+                                                         "oddsB":  -270
+                                                     },
+                                                     {
+                                                         "main":  false,
+                                                         "fighterA":  "Ode\u0027 Osbourne",
+                                                         "fighterB":  "Cody Durden",
+                                                         "weight":  "Flyweight",
+                                                         "oddsA":  130,
+                                                         "oddsB":  -160
                                                      }
-                                                 ],
-                  "event_ufc_fight_night_ankalaev_vs_rountree_jr":  [
-                                                                        {
-                                                                            "main":  false,
-                                                                            "fighterA":  "David Martinez",
-                                                                            "fighterB":  "Umar Nurmagomedov",
-                                                                            "weight":  "Bantamweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "9:00 AM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  false,
-                                                                            "fighterA":  "Brendson Ribeiro",
-                                                                            "fighterB":  "Magomed Tuchalov",
-                                                                            "weight":  "Light Heavyweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "9:00 AM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  false,
-                                                                            "fighterA":  "Dustin Jacoby",
-                                                                            "fighterB":  "Uran Satybaldiev",
-                                                                            "weight":  "Light Heavyweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "9:00 AM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  true,
-                                                                            "fighterA":  "Thomas Petersen",
-                                                                            "fighterB":  "Valter Walker",
-                                                                            "weight":  "Heavyweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "12:00 PM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  true,
-                                                                            "fighterA":  "Ismael Bonfim",
-                                                                            "fighterB":  "Axel Sola",
-                                                                            "weight":  "Lightweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "12:00 PM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  true,
-                                                                            "fighterA":  "Wellington Turman",
-                                                                            "fighterB":  "Islam Dulatov",
-                                                                            "weight":  "Welterweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "12:00 PM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  true,
-                                                                            "fighterA":  "Rizvan Kuniev",
-                                                                            "fighterB":  "Tyrell Fortune",
-                                                                            "weight":  "Heavyweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "12:00 PM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  true,
-                                                                            "fighterA":  "Ramazan Temirov",
-                                                                            "fighterB":  "Steve Erceg",
-                                                                            "weight":  "Flyweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "12:00 PM ET"
-                                                                        },
-                                                                        {
-                                                                            "main":  true,
-                                                                            "fighterA":  "Khalil Rountree Jr.",
-                                                                            "fighterB":  "Magomed Ankalaev",
-                                                                            "weight":  "Light Heavyweight",
-                                                                            "oddsA":  -110,
-                                                                            "oddsB":  -110,
-                                                                            "ouLine":  2.5,
-                                                                            "time":  "12:00 PM ET"
-                                                                        }
-                                                                    ],
-                  "event_ufc_330_makhachev_vs_machado_garry":  [
-                                                                   {
-                                                                       "main":  false,
-                                                                       "fighterA":  "Dustin Stoltzfus",
-                                                                       "fighterB":  "Mansur Abdul-Malik",
-                                                                       "weight":  "Middleweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "7:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  false,
-                                                                       "fighterA":  "Jeremiah Wells",
-                                                                       "fighterB":  "Myktybek Orolbai",
-                                                                       "weight":  "Welterweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "5:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  false,
-                                                                       "fighterA":  "Vicente Luque",
-                                                                       "fighterB":  "Tresean Gore",
-                                                                       "weight":  "Middleweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "5:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  true,
-                                                                       "fighterA":  "Chidi Njokuani",
-                                                                       "fighterB":  "Geoff Neal",
-                                                                       "weight":  "Welterweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "7:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  true,
-                                                                       "fighterA":  "Erin Blanchfield",
-                                                                       "fighterB":  "Jasmine Jasudavicius",
-                                                                       "weight":  "W Flyweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "9:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  true,
-                                                                       "fighterA":  "Edson Barboza",
-                                                                       "fighterB":  "Esteban Ribovics",
-                                                                       "weight":  "Lightweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "9:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  true,
-                                                                       "fighterA":  "Mackenzie Dern",
-                                                                       "fighterB":  "Gillian Robertson",
-                                                                       "weight":  "W Strawweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "9:00 PM ET"
-                                                                   },
-                                                                   {
-                                                                       "main":  true,
-                                                                       "fighterA":  "Islam Makhachev",
-                                                                       "fighterB":  "Ian Machado Garry",
-                                                                       "weight":  "Welterweight",
-                                                                       "oddsA":  -110,
-                                                                       "oddsB":  -110,
-                                                                       "ouLine":  2.5,
-                                                                       "time":  "9:00 PM ET"
-                                                                   }
-                                                               ],
-                  "event_ufc_fight_night_hernandez_vs_rodrigues":  [
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Cody Durden",
-                                                                           "fighterB":  "Alessandro Costa",
-                                                                           "weight":  "Flyweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "5:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Zachary Reese",
-                                                                           "fighterB":  "Ryan Gandra",
-                                                                           "weight":  "Middleweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "5:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Ethyn Ewing",
-                                                                           "fighterB":  "Farid Basharat",
-                                                                           "weight":  "Bantamweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "5:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Cesar Almeida",
-                                                                           "fighterB":  "Damian Pinas",
-                                                                           "weight":  "Middleweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "5:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Wang Cong",
-                                                                           "fighterB":  "Tracy Cortez",
-                                                                           "weight":  "W Flyweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "5:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Kai Kamaka III",
-                                                                           "fighterB":  "Luke Riley",
-                                                                           "weight":  "Featherweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "7:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Cody Garbrandt",
-                                                                           "fighterB":  "Adrian Yanez",
-                                                                           "weight":  "Bantamweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "7:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Gable Steveson",
-                                                                           "fighterB":  "Elisha Ellison",
-                                                                           "weight":  "Heavyweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "7:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  false,
-                                                                           "fighterA":  "Robert Whittaker",
-                                                                           "fighterB":  "Nikita Krylov",
-                                                                           "weight":  "Light Heavyweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "7:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  true,
-                                                                           "fighterA":  "King Green",
-                                                                           "fighterB":  "Terrance McKinney",
-                                                                           "weight":  "Lightweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "9:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  true,
-                                                                           "fighterA":  "Brandon Royval",
-                                                                           "fighterB":  "Lone\u0027er Kavanagh",
-                                                                           "weight":  "Flyweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "9:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  true,
-                                                                           "fighterA":  "Cory Sandhagen",
-                                                                           "fighterB":  "Mario Bautista",
-                                                                           "weight":  "Bantamweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "9:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  true,
-                                                                           "fighterA":  "Paddy Pimblett",
-                                                                           "fighterB":  "BenoÃ®t Saint Denis",
-                                                                           "weight":  "Lightweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "9:00 PM ET"
-                                                                       },
-                                                                       {
-                                                                           "main":  true,
-                                                                           "fighterA":  "Max Holloway",
-                                                                           "fighterB":  "Conor McGregor",
-                                                                           "weight":  "Welterweight",
-                                                                           "oddsA":  -110,
-                                                                           "oddsB":  -110,
-                                                                           "ouLine":  2.5,
-                                                                           "time":  "9:00 PM ET"
-                                                                       }
-                                                                   ],
-                  "event_ufc_fight_night_medi_vs_rodriguez":  [
-                                                                  {
-                                                                      "main":  false,
-                                                                      "fighterA":  "Hailey Cowan",
-                                                                      "fighterB":  "Nina MiloÅ¡eviÄ‡",
-                                                                      "weight":  "W Bantamweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "10:00 AM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  false,
-                                                                      "fighterA":  "Oban Elliott",
-                                                                      "fighterB":  "Michael Oliveira",
-                                                                      "weight":  "Welterweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "10:00 AM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  false,
-                                                                      "fighterA":  "Dennis Buzukja",
-                                                                      "fighterB":  "Bogdan Grad",
-                                                                      "weight":  "Featherweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "10:00 AM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  false,
-                                                                      "fighterA":  "Josias Musasa",
-                                                                      "fighterB":  "Mark Vologdin",
-                                                                      "weight":  "Bantamweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "10:00 AM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  false,
-                                                                      "fighterA":  "Ludovit Klein",
-                                                                      "fighterB":  "Tofiq Musayev",
-                                                                      "weight":  "Lightweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "10:00 AM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  false,
-                                                                      "fighterA":  "Jovan Leka",
-                                                                      "fighterB":  "Max Gimenis",
-                                                                      "weight":  "Heavyweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "10:00 AM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  true,
-                                                                      "fighterA":  "Jan Blachowicz",
-                                                                      "fighterB":  "Bogdan Guskov",
-                                                                      "weight":  "Light Heavyweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "1:00 PM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  true,
-                                                                      "fighterA":  "Gilbert Urbina",
-                                                                      "fighterB":  "Vlasto ÄŒepo",
-                                                                      "weight":  "Middleweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "1:00 PM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  true,
-                                                                      "fighterA":  "DuÅ¡ko TodoroviÄ‡",
-                                                                      "fighterB":  "Robert Valentin",
-                                                                      "weight":  "Middleweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "1:00 PM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  true,
-                                                                      "fighterA":  "Marcin Tybura",
-                                                                      "fighterB":  "Aleksandar Rakic",
-                                                                      "weight":  "Heavyweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "1:00 PM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  true,
-                                                                      "fighterA":  "Ante Delija",
-                                                                      "fighterB":  "Johnny Walker",
-                                                                      "weight":  "Heavyweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "1:00 PM ET"
-                                                                  },
-                                                                  {
-                                                                      "main":  true,
-                                                                      "fighterA":  "Daniel Rodriguez",
-                                                                      "fighterB":  "UroÅ¡ MediÄ‡",
-                                                                      "weight":  "Welterweight",
-                                                                      "oddsA":  -110,
-                                                                      "oddsB":  -110,
-                                                                      "ouLine":  2.5,
-                                                                      "time":  "1:00 PM ET"
-                                                                  }
-                                                              ],
-                  "event_ufc_fight_night_du_plessis_vs_usman":  [
-                                                                    {
-                                                                        "main":  false,
-                                                                        "fighterA":  "Alden Coria",
-                                                                        "fighterB":  "Stewart Nicoll",
-                                                                        "weight":  "Flyweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "5:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  false,
-                                                                        "fighterA":  "Felipe Franco",
-                                                                        "fighterB":  "Levi Rodrigues Jr.",
-                                                                        "weight":  "Light Heavyweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "5:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  false,
-                                                                        "fighterA":  "Alvin Hines",
-                                                                        "fighterB":  "Allen Frye Jr.",
-                                                                        "weight":  "Heavyweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "5:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  false,
-                                                                        "fighterA":  "Austin Bashi",
-                                                                        "fighterB":  "Jose Miguel Delgado",
-                                                                        "weight":  "Featherweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "5:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  false,
-                                                                        "fighterA":  "Veronica Hardy",
-                                                                        "fighterB":  "Dione Barbosa",
-                                                                        "weight":  "W Flyweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "5:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  true,
-                                                                        "fighterA":  "Alberto Montes",
-                                                                        "fighterB":  "Tommy McMillen",
-                                                                        "weight":  "Featherweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "8:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  true,
-                                                                        "fighterA":  "Tabatha Ricci",
-                                                                        "fighterB":  "Fatima Kline",
-                                                                        "weight":  "W Strawweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "8:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  true,
-                                                                        "fighterA":  "Chase Hooper",
-                                                                        "fighterB":  "Mitch Ramirez",
-                                                                        "weight":  "Lightweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "8:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  true,
-                                                                        "fighterA":  "Kevin Holland",
-                                                                        "fighterB":  "Jacobe Smith",
-                                                                        "weight":  "Welterweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "8:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  true,
-                                                                        "fighterA":  "Jared Cannonier",
-                                                                        "fighterB":  "Christian Leroy Duncan",
-                                                                        "weight":  "Middleweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "8:00 PM ET"
-                                                                    },
-                                                                    {
-                                                                        "main":  true,
-                                                                        "fighterA":  "Kamaru Usman",
-                                                                        "fighterB":  "Dricus Du Plessis",
-                                                                        "weight":  "Middleweight",
-                                                                        "oddsA":  -110,
-                                                                        "oddsB":  -110,
-                                                                        "ouLine":  2.5,
-                                                                        "time":  "8:00 PM ET"
-                                                                    }
-                                                                ]
+                                                 ]
               },
-    "activeEventId":  "event_ufc_fight_night_du_plessis_vs_usman",
-    "lastUpdated":  1783138438357
+    "activeEventId":  "event_fiziev_vs_torres",
+    "lastUpdated":  1782531117775
 };
     }
     // DATABASE_END`;
@@ -7698,9 +6406,9 @@
       }
     }
 
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════
     // FEATURE: Notes Toggle
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════
     function toggleNotes(textareaId, btnEl) {
       const ta = document.getElementById(textareaId);
       if (!ta) return;
@@ -7709,9 +6417,9 @@
       if (isVisible) ta.focus();
     }
 
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════
     // FEATURE: Bet Duplication
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════
     function duplicateBet(id) {
       const original = bets.find(b => b.id === id);
       if (!original) return;
@@ -7729,9 +6437,9 @@
       updateDashboard();
     }
 
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════
     // FEATURE: Quick Settle Modal
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════
     function openQuickSettleModal() {
       renderQuickSettleList();
       document.getElementById('quick-settle-modal-overlay').classList.add('active');
@@ -7752,7 +6460,7 @@
       if (countBadge) countBadge.textContent = `${pending.length} pending`;
 
       if (pending.length === 0) {
-        container.innerHTML = '<div class="qs-empty">âœ“ All bets are settled!</div>';
+        container.innerHTML = '<div class="qs-empty">✓ All bets are settled!</div>';
         return;
       }
 
@@ -7761,11 +6469,11 @@
         const row = document.createElement('div');
         row.className = 'qs-row';
         const label = bet.isParlay
-          ? `Parlay (${bet.legs.length} Legs) â€” ${bet.legs.map(l => l.selection).join(', ')}`
+          ? `Parlay (${bet.legs.length} Legs) — ${bet.legs.map(l => l.selection).join(', ')}`
           : bet.selection;
         const sub = bet.isParlay
-          ? `${bet.legs.length} legs Â· ${bet.book} Â· ${bet.odds > 0 ? '+' : ''}${bet.odds} Â· $${parseFloat(bet.wager).toFixed(2)}`
-          : `${bet.fightName} Â· ${bet.book} Â· ${bet.odds > 0 ? '+' : ''}${bet.odds} Â· $${parseFloat(bet.wager).toFixed(2)}`;
+          ? `${bet.legs.length} legs · ${bet.book} · ${bet.odds > 0 ? '+' : ''}${bet.odds} · $${parseFloat(bet.wager).toFixed(2)}`
+          : `${bet.fightName} · ${bet.book} · ${bet.odds > 0 ? '+' : ''}${bet.odds} · $${parseFloat(bet.wager).toFixed(2)}`;
 
         row.innerHTML = `
           <div class="qs-info">
@@ -7795,9 +6503,9 @@
       }
     }
 
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════
     // FEATURE: Event Summary Card Modal
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════
     function openEventSummaryModal() {
       if (activeEventId === 'all') return;
       const evt = events.find(e => e.id === activeEventId);
@@ -7875,7 +6583,7 @@
                 <div style="flex:1; min-width:0;">
                   <div style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${selLabel}</div>
                   ${notesLine}
-                  <div style="font-size: 10px; color: var(--text-muted);">${b.betType} Â· ${b.book} Â· ${b.odds > 0 ? '+' : ''}${b.odds}</div>
+                  <div style="font-size: 10px; color: var(--text-muted);">${b.betType} · ${b.book} · ${b.odds > 0 ? '+' : ''}${b.odds}</div>
                 </div>
                 <div style="text-align: right; flex-shrink: 0;">
                   <div style="font-weight: 700; color: ${rColor};">${b.result}</div>
@@ -7891,7 +6599,7 @@
       }
 
       document.getElementById('event-summary-body').innerHTML = `
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">${evt.date} Â· Settled bets only</p>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">${evt.date} · Settled bets only</p>
         <div class="summary-metrics-grid">
           <div class="summary-metric-card">
             <div class="s-label">Wagered</div>
@@ -7907,7 +6615,7 @@
           </div>
           <div class="summary-metric-card">
             <div class="s-label">Record (W-L-V)</div>
-            <div class="s-val" style="font-size: 17px;">${wins}â€“${losses}â€“${voids}</div>
+            <div class="s-val" style="font-size: 17px;">${wins}–${losses}–${voids}</div>
           </div>
         </div>
         <div class="summary-section-title">Fight Card</div>
@@ -7927,9 +6635,9 @@
       }
     }
 
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════
     // FEATURE: Monthly / Yearly Rollup
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════
     const rollupCollapsed = {}; // track collapsed years
 
     function renderRollup() {
@@ -7944,7 +6652,7 @@
       const formatPL = v => v >= 0 ? `+$${v.toFixed(2)}` : `-$${Math.abs(v).toFixed(2)}`;
       const plStyle = v => `color: ${v >= 0 ? 'var(--win-color)' : 'var(--loss-color)'}; font-weight: 600;`;
 
-      // Parse each event's date â†’ group by year/month
+      // Parse each event's date → group by year/month
       const yearMap = {}; // { '2026': { '2026-01': { events: [], bets: [] }, ... }, ... }
 
       events.forEach(evt => {
@@ -7987,7 +6695,7 @@
         rows.push(`
           <tr class="rollup-year-row" onclick="toggleRollupYear('${year}')">
             <td style="padding-left: 12px;">
-              <span style="margin-right: 6px;">${isCollapsed ? 'â–¶' : 'â–¼'}</span>
+              <span style="margin-right: 6px;">${isCollapsed ? '▶' : '▼'}</span>
               ${year}
             </td>
             <td class="rollup-td-right">${yEvts}</td>
@@ -8037,9 +6745,9 @@
       renderRollup();
     }
 
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════
     // Settle Bet (original)
-    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ═══════════════════════════════════════════════════════
     // Settle Bet
     function settleBet(id, result) {
       const bet = bets.find(b => b.id === id);
@@ -8203,7 +6911,7 @@
         const item = document.createElement('div');
         item.style.cssText = 'background-color: #1a1a24; border: 1px solid var(--input-border); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center;';
         
-        const formattedOdds = (leg.odds !== null && leg.odds !== undefined) ? (leg.odds > 0 ? `+${leg.odds}` : leg.odds) : 'â€”';
+        const formattedOdds = (leg.odds !== null && leg.odds !== undefined) ? (leg.odds > 0 ? `+${leg.odds}` : leg.odds) : '—';
 
         item.innerHTML = `
           <div style="display: flex; flex-direction: column; gap: 2px;">
@@ -8375,7 +7083,7 @@
 
     function formatOcrConfidence(value) {
       const num = Number(value);
-      if (!Number.isFinite(num)) return 'â€”';
+      if (!Number.isFinite(num)) return '—';
       return `${Math.round((num <= 1 ? num * 100 : num))}%`;
     }
 
@@ -8393,7 +7101,7 @@
       const avg = confidenceValues.length
         ? confidenceValues.reduce((sum, val) => sum + val, 0) / confidenceValues.length
         : undefined;
-      summaryEl.textContent = `OCR Confidence: ${formatOcrConfidence(avg)} â€¢ ${result.rawText ? result.rawText.split(/\r?\n/).filter(Boolean).length : 0} lines`;
+      summaryEl.textContent = `OCR Confidence: ${formatOcrConfidence(avg)} - ${result.rawText ? result.rawText.split(/\r?\n/).filter(Boolean).length : 0} lines`;
       rawEl.textContent = result.rawText || 'No OCR text captured yet.';
     }
 
@@ -8572,7 +7280,7 @@
           <label style="font-size: 11px; font-weight: 600; color: var(--text-muted);">Payout ($)</label>
           <input type="number" step="0.01" class="multi-payout" placeholder="20" style="background: var(--bg-input); color: var(--text-main); border: 1px solid var(--card-border); border-radius: 4px; padding: 6px; width: 100%;">
         </div>
-        <button type="button" class="btn btn-outline-dk" onclick="removeOcrMultiBetRow(this)" style="padding: 6px 10px; color: var(--ufc-red); border-color: rgba(229, 9, 20, 0.3); background: none; border-radius: 4px; cursor: pointer; margin-top: 15px;">âœ•</button>
+        <button type="button" class="btn btn-outline-dk" onclick="removeOcrMultiBetRow(this)" style="padding: 6px 10px; color: var(--ufc-red); border-color: rgba(229, 9, 20, 0.3); background: none; border-radius: 4px; cursor: pointer; margin-top: 15px;">✕</button>
       `;
       
       container.appendChild(row);
@@ -8656,7 +7364,7 @@
           <select class="ocr-leg-matchup" style="flex: 2; min-width: 150px; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--card-border); border-radius: 4px; padding: 6px;" onchange="handleOcrLegMatchupChange(this)"></select>
           <input type="text" class="ocr-leg-selection" placeholder="Selection" style="flex: 2; min-width: 100px; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--card-border); border-radius: 4px; padding: 6px;">
           <input type="text" class="ocr-leg-odds" placeholder="Odds" style="flex: 1; min-width: 60px; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--card-border); border-radius: 4px; padding: 6px;">
-          <button type="button" class="btn btn-outline-dk" onclick="removeOcrLegRow(this)" style="padding: 6px 10px; color: var(--ufc-red); border-color: rgba(229, 9, 20, 0.3); background: none; border-radius: 4px; cursor: pointer;">âœ•</button>
+          <button type="button" class="btn btn-outline-dk" onclick="removeOcrLegRow(this)" style="padding: 6px 10px; color: var(--ufc-red); border-color: rgba(229, 9, 20, 0.3); background: none; border-radius: 4px; cursor: pointer;">✕</button>
         </div>
         <input type="text" class="ocr-leg-custom-matchup" placeholder="Custom Matchup Name (e.g. Fighter A vs Fighter B)" style="display: none; width: 100%; margin-top: 4px; padding: 6px; border: 1px solid var(--card-border); border-radius: 4px; background: var(--bg-input); color: var(--text-main);">
       `;
@@ -8989,7 +7697,7 @@
           if (lines[i].toLowerCase().includes("parlay")) {
             // Search this line and the line below for 3-5 digit odds
             for (let j = i; j <= Math.min(lines.length - 1, i + 1); j++) {
-              const match = lines[j].match(/([+-~â€”â€“]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
+              const match = lines[j].match(/([+-~—–]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
               if (match) {
                 odds = cleanOcrOdds(match[0]);
                 break;
@@ -9004,7 +7712,7 @@
       if (!odds) {
         for (const line of lines) {
           if (isExcludedLine(line)) continue;
-          const match = line.match(/([+-~â€”â€“]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
+          const match = line.match(/([+-~—–]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
           if (match) {
             odds = cleanOcrOdds(match[0]);
             break;
@@ -9074,7 +7782,7 @@
           continue;
         }
         // Clean odds out and strip garbage/weird OCR symbols
-        let cleanedLine = line.replace(/[+-~â€”â€“]?\s*\d{2,5}\b/g, '')
+        let cleanedLine = line.replace(/[+-~—–]?\s*\d{2,5}\b/g, '')
                               .replace(/[^a-zA-Z0-9\s\-\.\'\(\)\:\,]/g, '')
                               .trim();
         if (cleanedLine) {
@@ -9259,7 +7967,7 @@
               const line = lines[i];
               if (isExcludedLine(line)) continue;
               
-              const oddsMatch = line.match(/([+-~â€”â€“]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
+              const oddsMatch = line.match(/([+-~—–]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
               if (oddsMatch) {
                 legOdds = cleanOcrOdds(oddsMatch[0]);
                 break;
@@ -9273,7 +7981,7 @@
               if (isExcludedLine(line)) continue;
               if (line.toLowerCase().includes(fight.fighterA.toLowerCase()) && line.toLowerCase().includes(fight.fighterB.toLowerCase())) continue;
               
-              let cleaned = line.replace(/[+-~â€”â€“]?\s*\d{2,5}\b/g, '')
+              let cleaned = line.replace(/[+-~—–]?\s*\d{2,5}\b/g, '')
                                 .replace(/[^a-zA-Z0-9\s\-\.\'\(\)\:\,]/g, '')
                                 .trim();
               if (cleaned.length < 2) continue;
@@ -10207,7 +8915,7 @@
 
         // Format win rate
         const settledCount = s.wins + s.losses;
-        const winRateText = settledCount > 0 ? `${s.winRate.toFixed(1)}%` : 'â€”';
+        const winRateText = settledCount > 0 ? `${s.winRate.toFixed(1)}%` : '—';
 
         // Format record text
         let recordText = `${s.wins}-${s.losses}-${s.voids}`;
@@ -10277,7 +8985,7 @@
         const plColor = row.profit > 0 ? 'var(--win-color)' : (row.profit < 0 ? 'var(--loss-color)' : 'var(--text-muted)');
         const roiColor = row.roi > 0 ? 'var(--win-color)' : (row.roi < 0 ? 'var(--loss-color)' : 'var(--text-muted)');
         const settledCount = row.wins + row.losses;
-        const winRateText = settledCount > 0 ? `${row.winRate.toFixed(1)}%` : 'â€”';
+        const winRateText = settledCount > 0 ? `${row.winRate.toFixed(1)}%` : '—';
         let recordText = `${row.wins}-${row.losses}-${row.voids}`;
         if (row.pending > 0) recordText += ` (${row.pending} pending)`;
 
@@ -10304,10 +9012,10 @@
         const ind = document.getElementById(`sort-indicator-analysis-${k}`);
         if (ind) {
           if (analysisSortKey === k) {
-            ind.textContent = analysisSortDesc ? ' â–¼' : ' â–²';
+            ind.textContent = analysisSortDesc ? ' ▼' : ' ▲';
             ind.style.color = 'var(--ufc-red)';
           } else {
-            ind.textContent = ' â†•';
+            ind.textContent = ' ↕';
             ind.style.color = 'rgb(75, 85, 99)';
           }
         }
@@ -10356,10 +9064,10 @@
         const span = document.getElementById(`sort-indicator-${key}`);
         if (span) {
           if (sortKey === key) {
-            span.innerHTML = sortAsc ? ' â–²' : ' â–¼';
+            span.innerHTML = sortAsc ? ' ▲' : ' ▼';
             span.style.color = 'var(--ufc-red)';
           } else {
-            span.innerHTML = ' â†•';
+            span.innerHTML = ' ↕';
             span.style.color = '#4b5563';
           }
         }
@@ -10525,7 +9233,7 @@
       const countEl = document.getElementById('pending-exposure-count');
 
       if (panelEl) panelEl.style.display = exposure.count === 0 ? 'none' : 'block';
-      if (countEl) countEl.textContent = `${exposure.count} pending â€¢ ${exposure.singles} singles / ${exposure.parlays} parlays`;
+      if (countEl) countEl.textContent = `${exposure.count} pending - ${exposure.singles} singles / ${exposure.parlays} parlays`;
       if (emptyEl) emptyEl.style.display = 'none';
       if (contentEl) contentEl.style.display = exposure.count === 0 ? 'none' : 'grid';
 
@@ -10544,8 +9252,8 @@
       const biggestEl = document.getElementById('pending-exposure-biggest');
       if (biggestEl) {
         biggestEl.textContent = exposure.biggestSelection
-          ? `${exposure.biggestSelection.key} â€¢ ${formatMoney(exposure.biggestSelection.cashStake)} at risk`
-          : 'â€”';
+          ? `${exposure.biggestSelection.key} - ${formatMoney(exposure.biggestSelection.cashStake)} at risk`
+          : '—';
       }
 
       renderExposureRows('pending-exposure-books', exposure.byBook, 'No books exposed.');
@@ -10572,12 +9280,12 @@
       if (statusEl) statusEl.textContent = summary.status;
 
       const titleEl = document.getElementById('event-day-title');
-      if (titleEl) titleEl.textContent = `${summary.eventName}${summary.eventDate ? ` â€¢ ${summary.eventDate}` : ''}`;
+      if (titleEl) titleEl.textContent = `${summary.eventName}${summary.eventDate ? ` - ${summary.eventDate}` : ''}`;
 
       const pendingEl = document.getElementById('event-day-pending-summary');
       if (pendingEl) {
         pendingEl.textContent = summary.pendingCount > 0
-          ? `${summary.pendingCount} pending across ${summary.fightCount} fight${summary.fightCount === 1 ? '' : 's'} â€¢ ${formatMoney(summary.cashStake)} at risk â€¢ ${formatSignedMoney(summary.possibleProfit)} max profit`
+          ? `${summary.pendingCount} pending across ${summary.fightCount} fight${summary.fightCount === 1 ? '' : 's'} - ${formatMoney(summary.cashStake)} at risk - ${formatSignedMoney(summary.possibleProfit)} max profit`
           : 'No pending action for this event.';
       }
 
@@ -10887,7 +9595,7 @@
       const list = document.getElementById('backup-snapshot-list');
       if (!status || !list) return;
 
-      status.textContent = `Schema v${CURRENT_SCHEMA_VERSION} â€¢ ${bets.length} bets â€¢ ${events.length} events â€¢ ${snapshots.length}/10 snapshots`;
+      status.textContent = `Schema v${CURRENT_SCHEMA_VERSION} - ${bets.length} bets - ${events.length} events - ${snapshots.length}/10 snapshots`;
       list.innerHTML = '';
 
       if (snapshots.length === 0) {
@@ -10911,7 +9619,7 @@
         detail.style.cssText = 'font-size: 12px; color: var(--text-muted);';
         const created = new Date(snapshot.createdAt);
         const state = migrateTrackerState(snapshot.state || {});
-        detail.textContent = `${isNaN(created) ? 'Unknown date' : created.toLocaleString()} â€¢ ${state.bets.length} bets â€¢ ${state.events.length} events â€¢ ${snapshot.reason || 'manual'}`;
+        detail.textContent = `${isNaN(created) ? 'Unknown date' : created.toLocaleString()} - ${state.bets.length} bets - ${state.events.length} events - ${snapshot.reason || 'manual'}`;
         meta.appendChild(title);
         meta.appendChild(detail);
 
@@ -11177,7 +9885,7 @@
         return;
       }
 
-      let md = `## ðŸ“Š Betting Summary Dashboard - ${titleName}\n\n`;
+      let md = `## 📊 Betting Summary Dashboard - ${titleName}\n\n`;
       md += `| Metric | Value |\n`;
       md += `| :--- | :--- |\n`;
       md += `| **Total Bets** | \`${relevantBets.length}\` |\n`;
@@ -11187,12 +9895,12 @@
       md += `| **Total ROI** | \`${roi.toFixed(1)}%\` |\n`;
       md += `| **Record (W-L-V)** | \`${wins}-${losses}-${voids}\` |\n\n`;
       
-      md += `### ðŸ’³ Sportsbook Exposure\n`;
+      md += `### 💳 Sportsbook Exposure\n`;
       md += `* **DraftKings:** \`$${dkSpent.toFixed(2)}\` wagered | Net Profit: \`${formatCurrency(dkPL)}\`\n`;
       md += `* **FanDuel:** \`$${fdSpent.toFixed(2)}\` wagered | Net Profit: \`${formatCurrency(fdPL)}\`\n\n`;
       
       md += `---\n\n`;
-      md += `## ðŸ“ Active Wagers\n\n`;
+      md += `## 📝 Active Wagers\n\n`;
       md += `| Status | Selection | Fight Matchup | Book | Bet Type | Wager | Odds | Est. Payout | Result | Net P/L | Notes |\n`;
       md += `| :---: | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |\n`;
 
@@ -11201,7 +9909,7 @@
       } else {
         relevantBets.forEach(bet => {
           const status = bet.result === 'Pending' ? '[ ]' : '[x]';
-          const formatOdds = (bet.odds !== null && bet.odds !== undefined && bet.odds !== '') ? (bet.odds > 0 ? `+${bet.odds}` : bet.odds) : 'â€”';
+          const formatOdds = (bet.odds !== null && bet.odds !== undefined && bet.odds !== '') ? (bet.odds > 0 ? `+${bet.odds}` : bet.odds) : '—';
           
           let wagerVal = parseFloat(bet.wager) || 0;
           let payoutVal = parseFloat(bet.payout) || 0;
@@ -11214,7 +9922,7 @@
           if (bet.isParlay) {
             selectionCell = `**Parlay (${bet.legs.length} Legs)**<br>` + bet.legs.map(l => {
               const formattedLegOdds = (l.odds !== null && l.odds !== undefined) ? ` (${l.odds > 0 ? '+' : ''}${l.odds})` : '';
-              return `â€¢ ${l.selection}${formattedLegOdds} [${l.result}]`;
+              return `- ${l.selection}${formattedLegOdds} [${l.result}]`;
             }).join('<br>');
             matchupCell = bet.legs.map(l => `*${l.fightName}*`).join('<br>');
           } else {
@@ -12492,8 +11200,8 @@
           .join(' / ');
         summaryEl.style.display = 'block';
         summaryEl.innerHTML = `
-          <div style="font-weight: 800; margin-bottom: 4px; color: var(--pending-color);">Preview only â€” no bets change until you click Apply Confirmed Updates.</div>
-          <div>${summary.total} proposed update${summary.total === 1 ? '' : 's'}: ${summary.singles} single bet${summary.singles === 1 ? '' : 's'}, ${summary.parlayLegs} parlay leg${summary.parlayLegs === 1 ? '' : 's'}${resultParts ? ` â€¢ ${resultParts}` : ''}.</div>
+          <div style="font-weight: 800; margin-bottom: 4px; color: var(--pending-color);">Preview only — no bets change until you click Apply Confirmed Updates.</div>
+          <div>${summary.total} proposed update${summary.total === 1 ? '' : 's'}: ${summary.singles} single bet${summary.singles === 1 ? '' : 's'}, ${summary.parlayLegs} parlay leg${summary.parlayLegs === 1 ? '' : 's'}${resultParts ? ` - ${resultParts}` : ''}.</div>
           ${summary.hasSettledConflicts ? `<div style="margin-top: 4px; color: var(--loss-color);">${summary.settledConflicts} already-settled wager${summary.settledConflicts === 1 ? '' : 's'} need review before applying.</div>` : ''}
         `;
       }
