@@ -1871,7 +1871,7 @@
             </svg>
             Settings
           </button>
-          <div class="settings-dropdown show" id="settings-dropdown">
+          <div class="settings-dropdown" id="settings-dropdown">
             <button class="settings-item" id="btn-save-db" onclick="saveDatabaseToFile()">
               <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
               Save to ufc-db.js
@@ -2800,7 +2800,7 @@
 
       <section class="mobile-screen" id="mobile-screen-add" data-mobile-screen="add">
         <div class="mobile-card">
-          <div class="mobile-section-title">Quick Log Single Bet</div>
+          <div class="mobile-section-title" id="mobile-add-title">Quick Log Single Bet</div>
           <form class="mobile-add-form" id="mobile-add-bet-form" onsubmit="handleMobileSubmitBet(event)">
             <div class="form-group">
               <label for="mobile-fight-select">Fight Matchup</label>
@@ -2850,7 +2850,8 @@
               <span class="value" id="mobile-payout-preview-val">$0.00</span>
             </div>
             <textarea id="mobile-notes-input" class="notes-textarea visible" placeholder="Notes / reasoning (optional)"></textarea>
-            <button class="btn btn-primary mobile-submit" type="submit">Log Bet Slip</button>
+            <button class="btn btn-primary mobile-submit" id="mobile-submit-bet" type="submit">Log Bet Slip</button>
+            <button class="btn mobile-submit" id="mobile-cancel-edit" type="button" onclick="cancelMobileEdit()" style="display: none;">Cancel Edit</button>
           </form>
         </div>
       </section>
@@ -4410,8 +4411,8 @@
         fightName = fight ? `${fight.fighterA} vs. ${fight.fighterB}` : 'Custom Matchup';
       }
 
-      const newBet = {
-        id: Date.now().toString(),
+      const mobileBetData = {
+        id: editingBetId !== null ? editingBetId : Date.now().toString(),
         eventId: activeEventId,
         fightName,
         selection,
@@ -4426,8 +4427,18 @@
         isBonusBet,
         notes: notesVal
       };
-      if (!confirmNoDuplicateBet(newBet)) return;
-      bets.push(newBet);
+      if (editingBetId !== null) {
+        const bet = bets.find(b => b.id === editingBetId);
+        if (!bet) return;
+        const updatedBet = { ...bet, ...mobileBetData, result: bet.result || 'Pending', isParlay: false };
+        delete updatedBet.legs;
+        if (!confirmNoDuplicateBet(updatedBet, { ignoreId: editingBetId })) return;
+        Object.assign(bet, updatedBet);
+        editingBetId = null;
+      } else {
+        if (!confirmNoDuplicateBet(mobileBetData)) return;
+        bets.push(mobileBetData);
+      }
       saveToStorage();
       populateFilterDropdowns();
       applySortAndRender();
@@ -4445,7 +4456,75 @@
       document.getElementById('mobile-bonus-toggle')?.classList.remove('active');
       selectMobileBook('DK');
       populateMobileFightSelect();
+      setMobileEditState(false);
       updateMobilePayoutPreview();
+    }
+
+    function setMobileEditState(isEditing) {
+      const title = document.getElementById('mobile-add-title');
+      const submit = document.getElementById('mobile-submit-bet');
+      const cancel = document.getElementById('mobile-cancel-edit');
+      if (title) title.textContent = isEditing ? 'Edit Single Bet' : 'Quick Log Single Bet';
+      if (submit) submit.textContent = isEditing ? 'Update Bet Slip' : 'Log Bet Slip';
+      if (cancel) cancel.style.display = isEditing ? 'block' : 'none';
+    }
+
+    function cancelMobileEdit() {
+      editingBetId = null;
+      resetMobileAddForm();
+    }
+
+    function editMobileBet(id) {
+      const bet = bets.find(b => b.id === id);
+      if (!bet) return;
+      if (bet.isParlay) {
+        alert('Parlay editing is only available in desktop view right now. Single bets can be edited directly in mobile view.');
+        return;
+      }
+
+      editingBetId = id;
+      if (bet.eventId && activeEventId !== bet.eventId) {
+        activeEventId = bet.eventId;
+        const desktopSelect = document.getElementById('event-select');
+        if (desktopSelect) desktopSelect.value = activeEventId;
+        syncEventView();
+      }
+
+      switchMobileScreen('add');
+      const fightSelect = document.getElementById('mobile-fight-select');
+      const customRow = document.getElementById('mobile-custom-matchup-row');
+      const customInput = document.getElementById('mobile-custom-matchup-input');
+      let foundIdx = -1;
+      const activeFights = cards[activeEventId] || [];
+      for (let i = 0; i < activeFights.length; i++) {
+        const fName = `${activeFights[i].fighterA} vs. ${activeFights[i].fighterB}`;
+        if (fName === bet.fightName) {
+          foundIdx = i;
+          break;
+        }
+      }
+
+      if (fightSelect) fightSelect.value = foundIdx === -1 ? 'custom' : foundIdx.toString();
+      if (customRow) customRow.style.display = foundIdx === -1 ? 'flex' : 'none';
+      if (customInput) customInput.value = foundIdx === -1 ? (bet.fightName || '') : '';
+      document.getElementById('mobile-selection-input').value = bet.selection || '';
+      document.getElementById('mobile-bet-type').value = bet.betType || 'Moneyline';
+      document.getElementById('mobile-wager-input').value = bet.wager ?? '';
+      document.getElementById('mobile-odds-input').value = bet.odds ?? '';
+      document.getElementById('mobile-notes-input').value = bet.notes || '';
+      selectMobileBook(bet.book || 'DK');
+      document.getElementById('mobile-live-toggle')?.classList.toggle('active', !!bet.isLiveStream);
+      document.getElementById('mobile-bonus-toggle')?.classList.toggle('active', !!bet.isBonusBet);
+      setMobileEditState(true);
+      updateMobilePayoutPreview();
+    }
+
+    function deleteMobileBet(id) {
+      if (!confirm('Delete this bet? This cannot be undone.')) return;
+      if (editingBetId === id) editingBetId = null;
+      deleteBet(id);
+      resetMobileAddForm();
+      renderMobileShell();
     }
 
     function renderMobileShell() {
@@ -4570,8 +4649,9 @@
             <button class="mobile-settle-btn ${bet.result === 'Void' ? 'active-void' : ''}" type="button" onclick="settleBet('${bet.id}', 'Void')">Void</button>
           </div>
           <div class="mobile-action-row" style="margin-top: 10px;">
-            <button class="btn" type="button" onclick="toggleMobileView(); editBet('${bet.id}')">Edit</button>
+            <button class="btn" type="button" onclick="editMobileBet('${bet.id}')">Edit</button>
             <button class="btn" type="button" onclick="duplicateBet('${bet.id}')">Duplicate</button>
+            <button class="btn" type="button" onclick="deleteMobileBet('${bet.id}')">Delete</button>
           </div>
         </article>
       `;
