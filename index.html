@@ -1556,6 +1556,10 @@
               Import Data
             </button>
             <input type="file" id="db-file-input" style="display: none;" accept=".js,.json" onchange="importDatabaseFromFile(event)">
+            <button class="settings-item" id="btn-backup-center" onclick="openBackupCenterModal()">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"></path></svg>
+              Backup / Restore Center
+            </button>
             <button class="settings-item" id="btn-save-file" onclick="saveTrackerToFile()">
               <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
               Save HTML File
@@ -1587,6 +1591,8 @@
       <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
         <label for="event-select" style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">Active Event View:</label>
         <select id="event-select" onchange="handleEventSelectChange()" style="padding: 10px 16px; font-size: 14px; background-color: var(--input-bg); border-color: var(--input-border); border-radius: 8px; color: var(--text-main); font-weight: 700; min-width: 320px; --darkreader-inline-border: var(--darkreader-border--input-border); --darkreader-inline-bgcolor: var(--darkreader-bg--input-bg, var(--darkreader-background-ffffff, #181a1b)); --darkreader-inline-color: var(--darkreader-text--text-main, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-border="" data-darkreader-inline-bgcolor="" data-darkreader-inline-color=""><option value="all">Overall / All Events</option></select>
+        <label for="unit-size-input" style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-left: 8px;">Unit Size:</label>
+        <input type="number" id="unit-size-input" step="0.01" min="0.01" value="10" oninput="handleUnitSizeChange()" style="width: 90px; padding: 10px 12px; font-size: 14px; background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: 8px; color: var(--text-main); font-weight: 700;">
       </div>
       <div style="display: flex; gap: 12px;">
         <button class="btn" id="btn-sync-events" onclick="syncUfcEvents()">
@@ -1602,11 +1608,34 @@
       </div>
     </div>
 
+    <!-- Event-Day Mode Banner -->
+    <div id="event-day-banner" style="display: none; background: linear-gradient(135deg, rgba(220, 38, 38, 0.18), rgba(245, 158, 11, 0.08)); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 14px; padding: 12px 16px; margin-bottom: 4px; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; box-shadow: rgba(0, 0, 0, 0.18) 0px 4px 18px;">
+      <div style="display: flex; flex-direction: column; gap: 4px; min-width: 220px;">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span id="event-day-status" style="font-size: 11px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pending-color);">Event day</span>
+          <span id="event-day-title" style="font-size: 14px; font-weight: 800; color: var(--text-main);">Selected event</span>
+        </div>
+        <div id="event-day-pending-summary" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">No pending action.</div>
+      </div>
+      <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+        <select id="event-day-toggle" onchange="handleEventDayModeChange()" style="font-size: 12px; padding: 6px 10px; border-radius: 8px; background-color: var(--input-bg); color: var(--text-main); border: 1px solid var(--input-border); font-weight: 700;">
+          <option value="auto">Auto</option>
+          <option value="on">On</option>
+          <option value="off">Off</option>
+        </select>
+        <button class="btn btn-outline-dk" id="event-day-pending-filter" onclick="toggleEventDayPendingFilter()" style="font-size: 11px; padding: 6px 10px; height: auto; display: inline-flex; align-items: center; gap: 6px;">Show Pending Only</button>
+      </div>
+    </div>
+
     <!-- Metrics Row -->
     <div class="metrics-row">
       <div class="metric-card wagered">
         <span class="title">Total Wagered</span>
         <span class="value" id="val-total-wagered">$0.00</span>
+      </div>
+      <div class="metric-card wagered">
+        <span class="title">Total Units</span>
+        <span class="value" id="val-total-units">0u</span>
       </div>
       <div class="metric-card payout">
         <span class="title">Potential Returns</span>
@@ -1623,6 +1652,60 @@
       <div class="metric-card record">
         <span class="title">Record (W-L-V)</span>
         <span class="value" id="val-record">0 - 0 - 0</span>
+      </div>
+    </div>
+
+    <!-- Pending Exposure Panel -->
+    <div class="panel" id="pending-exposure-panel" style="margin-bottom: 24px; display: block;">
+      <div class="panel-header" style="align-items: flex-start; gap: 12px;">
+        <div>
+          <h3 class="panel-title" style="margin-bottom: 4px;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Pending Exposure
+          </h3>
+          <div style="font-size: 12px; color: var(--text-muted); font-weight: 500;">Open risk for pending wagers in the active event view.</div>
+        </div>
+        <span id="pending-exposure-count" style="font-size: 12px; font-weight: 700; color: var(--pending-color); background-color: var(--pending-glow); border: 1px solid rgba(245,158,11,0.3); padding: 4px 10px; border-radius: 999px; white-space: nowrap;">0 pending</span>
+      </div>
+
+      <div id="pending-exposure-empty" style="display: none; text-align: center; color: var(--text-muted); padding: 18px; border: 1px dashed var(--input-border); border-radius: 10px; font-size: 13px;">
+        No pending exposure in this view.
+      </div>
+
+      <div id="pending-exposure-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+          <div style="background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: 10px; padding: 12px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Cash at Risk</div>
+            <div id="pending-exposure-stake" style="font-size: 22px; font-weight: 800; margin-top: 4px; color: var(--pending-color);">$0.00</div>
+          </div>
+          <div style="background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: 10px; padding: 12px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Units at Risk</div>
+            <div id="pending-exposure-units" style="font-size: 22px; font-weight: 800; margin-top: 4px;">0u</div>
+          </div>
+          <div style="background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: 10px; padding: 12px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Max Return</div>
+            <div id="pending-exposure-return" style="font-size: 20px; font-weight: 800; margin-top: 4px; color: var(--win-color);">$0.00</div>
+          </div>
+          <div style="background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: 10px; padding: 12px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Max Profit</div>
+            <div id="pending-exposure-profit" style="font-size: 20px; font-weight: 800; margin-top: 4px; color: var(--win-color);">+$0.00</div>
+          </div>
+          <div style="grid-column: 1 / -1; background-color: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 10px; padding: 12px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">Biggest Selection</div>
+            <div id="pending-exposure-biggest" style="font-size: 14px; font-weight: 800; margin-top: 4px; color: var(--text-main);">—</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; min-width: 0;">
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; margin-bottom: 8px;">By Book</div>
+            <div id="pending-exposure-books" style="display: flex; flex-direction: column; gap: 6px;"></div>
+          </div>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; margin-bottom: 8px;">Top Matchups</div>
+            <div id="pending-exposure-fights" style="display: flex; flex-direction: column; gap: 6px;"></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -2182,6 +2265,7 @@
             <div style="display: flex; gap: 8px; align-items: center;">
               <select id="fight-card-sort" onchange="renderFightCard()" style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background-color: var(--input-bg); color: var(--text-main); border: 1px solid var(--input-border); cursor: pointer; font-weight: 600;">
                 <option value="main-first">Main Event first</option>
+                <option value="event-day">Event-day / pending first</option>
                 <option value="match-order">Match Order</option>
               </select>
               <button class="btn btn-outline-dk" id="btn-edit-card" onclick="openFightCardModal()" style="font-size: 11px; padding: 4px 8px; height: auto; display: inline-block;">Edit Card</button>
@@ -2221,6 +2305,10 @@
                 <option value="live">Live Stream Only</option>
                 <option value="prematch">Pre-Match Only</option>
               </select>
+              <select id="analysis-mode-filter" onchange="renderBetTypeAnalysis()" style="padding: 4px 8px; font-size: 11px; background-color: var(--input-bg); border-color: var(--input-border); border-radius: 6px; color: var(--text-main); font-weight: 600;">
+                <option value="betType">By Bet Type</option>
+                <option value="fighter">By Fighter</option>
+              </select>
             </div>
           </div>
           
@@ -2232,7 +2320,7 @@
             <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;" id="analysis-table">
               <thead>
                 <tr style="border-bottom: 1px solid var(--card-border); color: var(--text-muted); font-weight: 600; font-size: 12px;">
-                  <th class="sortable" onclick="handleAnalysisSort('category')" style="padding: 8px 4px;">Bet Type<span class="sort-indicator" id="sort-indicator-analysis-category" style="color: rgb(75, 85, 99);"> ↕</span></th>
+                  <th class="sortable" onclick="handleAnalysisSort('category')" style="padding: 8px 4px;"><span id="analysis-primary-label">Bet Type</span><span class="sort-indicator" id="sort-indicator-analysis-category" style="color: rgb(75, 85, 99);"> ↕</span></th>
                   <th class="sortable" onclick="handleAnalysisSort('total')" style="padding: 8px 4px; text-align: center;">Bets<span class="sort-indicator" id="sort-indicator-analysis-total" style="color: rgb(75, 85, 99);"> ↕</span></th>
                   <th style="padding: 8px 4px; text-align: center; color: var(--text-muted);">Record (W-L-V)</th>
                   <th class="sortable" onclick="handleAnalysisSort('winRate')" style="padding: 8px 4px; text-align: center;">Win %<span class="sort-indicator" id="sort-indicator-analysis-winRate" style="color: rgb(75, 85, 99);"> ↕</span></th>
@@ -2316,6 +2404,10 @@
               <input type="checkbox" id="filter-live-stream-only" onchange="applyFilters()" style="width: 16px; height: 16px; padding: 0; margin: 0; cursor: pointer; accent-color: var(--ufc-red);">
               <label for="filter-live-stream-only" style="font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; white-space: nowrap; --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">Live Stream Only</label>
             </div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-left: 12px;">
+              <input type="checkbox" id="filter-event-day-pending" onchange="applyFilters()" style="width: 16px; height: 16px; padding: 0; margin: 0; cursor: pointer; accent-color: var(--pending-color);">
+              <label for="filter-event-day-pending" style="font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; white-space: nowrap;">Pending Only</label>
+            </div>
           </div>
           <div style="font-size: 12px; color: var(--text-muted); font-weight: 500; --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" id="filter-summary-text" data-darkreader-inline-color=""></div>
         </div>
@@ -2350,7 +2442,7 @@
     <div class="modal" onclick="event.stopPropagation()" style="max-width: 800px; width: 90%; max-height: 90vh; display: flex; flex-direction: column;">
       <div class="modal-header">
         <h3 class="panel-title">Validate Bets with ESPN</h3>
-        <button class="modal-close" onclick="closeValidationModal()">Ãƒâ€”</button>
+        <button class="modal-close" onclick="closeValidationModal()">×</button>
       </div>
       
       <div style="overflow-y: auto; flex-grow: 1; padding: 16px 4px; display: flex; flex-direction: column; gap: 16px;">
@@ -2360,9 +2452,10 @@
         </div>
         
         <div id="validation-results-container" style="display: none; flex-direction: column; gap: 16px;">
+          <div id="validation-preview-summary" style="display: none; background-color: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 8px; padding: 12px; font-size: 12px; color: var(--text-main); line-height: 1.5;"></div>
           <div style="background-color: #1a1a24; border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center;">
             <div>
-              Detected card results on ESPN. Below are bets with conflicts or pending bets that have finished.
+              ESPN validation preview: review each proposed change below, then apply only the checked updates.
             </div>
             <button class="btn btn-outline-dk" id="btn-val-toggle-all" onclick="toggleAllValidationCheckboxes()" style="font-size: 11px; padding: 4px 8px;">Deselect All</button>
           </div>
@@ -2399,17 +2492,60 @@
     </div>
   </div>
 
+  <!-- Backup / Restore Modal -->
+  <div class="modal-overlay" id="backup-center-modal-overlay" onclick="closeBackupCenterModal(event)">
+    <div class="modal" onclick="event.stopPropagation()" style="max-width: 760px; width: 90%; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <h3 class="panel-title">Backup / Restore Center</h3>
+        <button class="modal-close" onclick="closeBackupCenterModal()">×</button>
+      </div>
+      <div style="overflow-y: auto; flex-grow: 1; padding: 16px 4px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="background-color: #1a1a24; border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--text-muted);">
+          <div id="backup-center-status" style="font-weight: 600; color: var(--text-main); margin-bottom: 4px;"></div>
+          <div>Snapshots are local browser backups. They rotate automatically and are useful before imports, resets, or bulk updates.</div>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="createManualBackupSnapshot()">Create Snapshot Now</button>
+          <button class="btn" onclick="exportBackupJson()">Export JSON Backup</button>
+          <button class="btn" onclick="triggerImport()">Import Backup</button>
+        </div>
+        <div id="backup-snapshot-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+      </div>
+      <div class="modal-footer" style="padding-top: 12px; border-top: 1px solid var(--card-border); display: flex; justify-content: flex-end; gap: 12px;">
+        <button class="btn" onclick="closeBackupCenterModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Obsidian Export Modal -->
   <div class="modal-overlay" id="obsidian-modal-overlay" onclick="closeObsidianModal(event)">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="modal-header">
         <h3 class="panel-title">Obsidian Markdown Code</h3>
-        <button class="modal-close" onclick="toggleObsidianModal(false)">Ãƒâ€”</button>
+        <button class="modal-close" onclick="toggleObsidianModal(false)">×</button>
       </div>
       <p style="font-size: 13px; color: var(--text-muted); --darkreader-inline-color: var(--darkreader-text--text-muted, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">
         Copy the table and metrics block below and paste them into your Obsidian note: <br>
         <code id="obsidian-filename-suggestion">05 Interests/UFC/2026-06-06 - UFC Fight Night Muhammad vs Bonfim.md</code>
       </p>
+      <div class="form-row" style="margin: 12px 0;">
+        <div class="form-group">
+          <label for="obsidian-template-select">Template</label>
+          <select id="obsidian-template-select" onchange="generateMarkdownCode()">
+            <option value="event_day">Event Day Report</option>
+            <option value="note">Custom Note</option>
+            <option value="ocr_summary">Last OCR Summary</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="obsidian-note-title">Note Title</label>
+          <input type="text" id="obsidian-note-title" placeholder="e.g. Tape Study Notes" oninput="generateMarkdownCode()">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom: 12px;">
+        <label for="obsidian-note-content">Custom Note Content</label>
+        <textarea id="obsidian-note-content" class="notes-textarea visible" placeholder="Write notes, angles, OCR observations, or prep items..." oninput="generateMarkdownCode()"></textarea>
+      </div>
       
       <div class="markdown-box" id="markdown-code-box"></div>
       
@@ -2425,7 +2561,7 @@
     <div class="modal" onclick="event.stopPropagation()" style="max-width: 500px;">
       <div class="modal-header">
         <h3 class="panel-title">Manage UFC Events</h3>
-        <button class="modal-close" onclick="closeEventsModal()">Ãƒâ€”</button>
+        <button class="modal-close" onclick="closeEventsModal()">×</button>
       </div>
       
       <!-- List of current events -->
@@ -2476,7 +2612,7 @@
     <div class="modal" onclick="event.stopPropagation()" style="max-width: 600px; max-height: 90vh; display: flex; flex-direction: column;">
       <div class="modal-header">
         <h3 class="panel-title">Edit Event Fight Card</h3>
-        <button class="modal-close" onclick="closeFightCardModal()">Ãƒâ€”</button>
+        <button class="modal-close" onclick="closeFightCardModal()">×</button>
       </div>
       
       <div style="overflow-y: auto; flex-grow: 1; padding-right: 4px; display: flex; flex-direction: column; gap: 16px;">
@@ -2652,7 +2788,7 @@
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
           Confirm Imported Bet
         </h3>
-        <button class="modal-close" onclick="closeOcrModal()">Ãƒâ€”</button>
+        <button class="modal-close" onclick="closeOcrModal()">×</button>
       </div>
       <div class="ocr-split-container">
         <!-- Left panel: image preview -->
@@ -2758,6 +2894,13 @@
                 <input type="number" id="ocr-input-payout" step="0.01" min="0.01" placeholder="e.g. 26.00" required="">
               </div>
             </div>
+            <div style="margin-top: 10px; border: 1px solid var(--card-border); border-radius: 8px; padding: 10px; background: var(--bg-card);">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <div id="ocr-confidence-summary" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">OCR Confidence: —</div>
+                <button class="btn btn-outline-dk" type="button" onclick="toggleRawOcrView()" style="padding: 4px 8px; font-size: 11px; height: auto;">Raw OCR</button>
+              </div>
+              <pre id="ocr-raw-text" style="display: none; white-space: pre-wrap; max-height: 150px; overflow-y: auto; margin: 0; font-size: 12px; color: var(--text-muted);"></pre>
+            </div>
           </div>
 
           <!-- Multiple Single Bets Section -->
@@ -2792,6 +2935,17 @@
   <!-- Externalized Database file loaded via script tag to bypass CORS on local file:/// -->
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="ufc-db.js"></script>
+  <script src="js/calculations.js"></script>
+  <script src="js/events.js"></script>
+  <script src="js/quick-add.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/ocr.js"></script>
+  <script src="js/units.js"></script>
+  <script src="js/bets.js"></script>
+  <script src="js/exposure.js"></script>
+  <script src="js/templates.js"></script>
+  <script src="js/validation-preview.js"></script>
+  <script src="js/fighter-performance.js"></script>
   <script>
     // DATABASE_START
     if (typeof window.EMBEDDED_DATA === 'undefined') {
@@ -3964,23 +4118,7 @@
     // DATABASE_END
 
     // Safe localStorage wrapper to prevent crashes in sandboxed or local file environments
-    const safeLocalStorage = {
-      getItem(key) {
-        try {
-          return window.localStorage.getItem(key);
-        } catch (e) {
-          console.warn("Storage getItem failed: ", e);
-          return null;
-        }
-      },
-      setItem(key, value) {
-        try {
-          window.localStorage.setItem(key, value);
-        } catch (e) {
-          console.warn("Storage setItem failed: ", e);
-        }
-      }
-    };
+    const safeLocalStorage = createSafeLocalStorage(window.localStorage);
 
     // Fight Card Data
     const fights = [
@@ -4003,6 +4141,7 @@
     let events = [];
     let activeEventId = '';
     let cards = {};
+    let lastOcrResult = null;
     let hasUnsavedChanges = false;
     let selectedBook = 'DK';
     let selectedParlayBook = 'DK';
@@ -4015,68 +4154,21 @@
     let filterBook = 'all';
     let filterBetType = 'all';
     let filterLiveStreamOnly = false;
+    let filterEventDayPendingOnly = false;
+    let eventDayModePreference = 'auto';
     let analysisSortKey = 'profit';
     let analysisSortDesc = true;
     let selectedAnalysisCategory = 'all';
-
-    function getDefaultActiveEventId(eventList) {
-      if (!Array.isArray(eventList) || eventList.length === 0) {
-        return 'event_mcgregor_vs_holloway';
-      }
-
-      const now = new Date();
-
-      function getEventEndTime(evt) {
-        if (!evt.date) return new Date(0);
-        const [yr, mo, dy] = evt.date.split('-').map(Number);
-        let hour = 22;
-        let minute = 0;
-        
-        const startStr = evt.mainStart || evt.prelimsStart;
-        if (startStr) {
-          const match = startStr.match(/(\d+):?(\d*)\s*(AM|PM)/i);
-          if (match) {
-            let h = parseInt(match[1]);
-            const m = parseInt(match[2] || "0");
-            const ampm = match[3].toUpperCase();
-            if (ampm === 'PM' && h < 12) h += 12;
-            if (ampm === 'AM' && h === 12) h = 0;
-            hour = h;
-            minute = m;
-          }
-        }
-        
-        // Months in JS Date are 0-indexed. End time is 6 hours after start time.
-        const startTime = new Date(yr, mo - 1, dy, hour, minute, 0);
-        return new Date(startTime.getTime() + 6 * 60 * 60 * 1000);
-      }
-
-      const futureEvents = [];
-      const pastEvents = [];
-
-      eventList.forEach(evt => {
-        const endTime = getEventEndTime(evt);
-        if (endTime > now) {
-          futureEvents.push({ event: evt, endTime });
-        } else {
-          pastEvents.push({ event: evt, endTime });
-        }
-      });
-
-      if (futureEvents.length > 0) {
-        futureEvents.sort((a, b) => a.endTime - b.endTime);
-        return futureEvents[0].event.id;
-      } else if (pastEvents.length > 0) {
-        pastEvents.sort((a, b) => b.endTime - a.endTime);
-        return pastEvents[0].event.id;
-      }
-
-      return eventList[0].id;
-    }
+    let unitSize = DEFAULT_UNIT_SIZE;
 
     function initTracker() {
       try {
         const savedLayout = safeLocalStorage.getItem('ufc_bet_tracker_layout_mode');
+        const savedEventDayMode = safeLocalStorage.getItem('ufc_bet_tracker_event_day_mode');
+        if (['auto', 'on', 'off'].includes(savedEventDayMode)) {
+          eventDayModePreference = savedEventDayMode;
+        }
+
         if (savedLayout === 'mobile') {
           document.body.classList.add('mobile-view');
           setTimeout(() => {
@@ -4096,38 +4188,27 @@
 
         // Try loading EMBEDDED_DATA
         if (typeof EMBEDDED_DATA !== 'undefined' && EMBEDDED_DATA !== null) {
-          loadedEvents = EMBEDDED_DATA.events;
-          loadedCards = EMBEDDED_DATA.cards;
-          loadedBets = EMBEDDED_DATA.bets;
-          loadedActiveEventId = EMBEDDED_DATA.activeEventId;
-          loadedLastUpdated = EMBEDDED_DATA.lastUpdated || 0;
+          const embeddedState = migrateTrackerState(EMBEDDED_DATA);
+          loadedEvents = embeddedState.events;
+          loadedCards = embeddedState.cards;
+          loadedBets = embeddedState.bets;
+          loadedActiveEventId = embeddedState.activeEventId;
+          loadedLastUpdated = embeddedState.lastUpdated || 0;
+          if (embeddedState.unitSize !== undefined && embeddedState.unitSize !== null) {
+            unitSize = parseUnitSize(embeddedState.unitSize, unitSize);
+          }
         }
 
         // Try loading localStorage data
-        let localEvents = null;
-        let localCards = null;
-        let localBets = null;
-        let localActiveEventId = null;
-        let localLastUpdated = 0;
-
-        const savedEvents = safeLocalStorage.getItem('ufc_bet_tracker_events');
-        if (savedEvents) {
-          try { localEvents = JSON.parse(savedEvents); } catch (e) {}
-        }
-        const savedCards = safeLocalStorage.getItem('ufc_bet_tracker_cards');
-        if (savedCards) {
-          try { localCards = JSON.parse(savedCards); } catch (e) {}
-        }
-        const savedBets = safeLocalStorage.getItem('ufc_bet_tracker_bets');
-        if (savedBets) {
-          try { localBets = JSON.parse(savedBets); } catch (e) {}
-        }
-        localActiveEventId = safeLocalStorage.getItem('ufc_bet_tracker_active_event');
-        
-        const savedLastUpdated = safeLocalStorage.getItem('ufc_bet_tracker_last_updated');
-        if (savedLastUpdated) {
-          localLastUpdated = parseInt(savedLastUpdated) || 0;
-        }
+        const localState = readTrackerStorage(safeLocalStorage);
+        const localEvents = localState.events;
+        const localCards = localState.cards;
+        const localBets = localState.bets;
+        const localActiveEventId = localState.activeEventId;
+        const localLastUpdated = localState.lastUpdated;
+        unitSize = parseUnitSize(localState.unitSize, unitSize);
+        const unitSizeInput = document.getElementById('unit-size-input');
+        if (unitSizeInput) unitSizeInput.value = unitSize;
 
         // Robust Timestamp-Based Load/Merge Strategy:
         // If the browser local storage has newer edits, load them.
@@ -4203,13 +4284,10 @@
         bets = bets.filter(b => !b.eventId || b.eventId === 'all' || events.some(e => e.id === b.eventId));
 
         // Update local storage cache to match merged state
-        safeLocalStorage.setItem('ufc_bet_tracker_events', JSON.stringify(events));
-        safeLocalStorage.setItem('ufc_bet_tracker_cards', JSON.stringify(cards));
-        safeLocalStorage.setItem('ufc_bet_tracker_bets', JSON.stringify(bets));
-        if (activeEventId) {
-          safeLocalStorage.setItem('ufc_bet_tracker_active_event', activeEventId);
-        }
-        safeLocalStorage.setItem('ufc_bet_tracker_last_updated', Math.max(loadedLastUpdated, localLastUpdated).toString());
+        writeTrackerStorage(createCurrentTrackerState(), {
+          storage: safeLocalStorage,
+          lastUpdated: Math.max(loadedLastUpdated, localLastUpdated)
+        });
 
         // Ensure default events exist
         const defaultEvents = [
@@ -4243,33 +4321,8 @@
         // Default to the most recent upcoming fight. After it ends, default to the next one.
         const calculatedDefaultEventId = getDefaultActiveEventId(events);
         
-        function isEventEnded(evtId) {
-          const evt = events.find(e => e.id === evtId);
-          if (!evt) return true;
-          const [yr, mo, dy] = evt.date.split('-').map(Number);
-          let hour = 22;
-          let minute = 0;
-          const startStr = evt.mainStart || evt.prelimsStart;
-          if (startStr) {
-            const match = startStr.match(/(\d+):?(\d*)\s*(AM|PM)/i);
-            if (match) {
-              let h = parseInt(match[1]);
-              const m = parseInt(match[2] || "0");
-              const ampm = match[3].toUpperCase();
-              if (ampm === 'PM' && h < 12) h += 12;
-              if (ampm === 'AM' && h === 12) h = 0;
-              hour = h;
-              minute = m;
-            }
-          }
-          const endTime = new Date(yr, mo - 1, dy, hour, minute, 0).getTime() + 6 * 60 * 60 * 1000;
-          return Date.now() > endTime;
-        }
-
-        // If the current activeEventId has ended or isn't set, default to the upcoming one.
-        if (!activeEventId || isEventEnded(activeEventId)) {
-          activeEventId = calculatedDefaultEventId;
-        }
+        // Always default the active event view to the next upcoming event on load.
+        activeEventId = calculatedDefaultEventId;
 
         // Ensure default cards exist
         let cardsUpdated = false;
@@ -4314,11 +4367,10 @@
 
         // Write default states if updated during load
         if (eventsUpdated || cardsUpdated || updatedBets) {
-          const now = Date.now();
-          safeLocalStorage.setItem('ufc_bet_tracker_events', JSON.stringify(events));
-          safeLocalStorage.setItem('ufc_bet_tracker_cards', JSON.stringify(cards));
-          safeLocalStorage.setItem('ufc_bet_tracker_bets', JSON.stringify(bets));
-          safeLocalStorage.setItem('ufc_bet_tracker_last_updated', now.toString());
+          writeTrackerStorage(createCurrentTrackerState(), {
+            storage: safeLocalStorage,
+            lastUpdated: Date.now()
+          });
         }
 
         // Initialize status indicator based on whether there are unsaved local edits
@@ -4352,6 +4404,21 @@
       window.addEventListener('DOMContentLoaded', initTracker);
     } else {
       initTracker();
+    }
+
+    function handleUnitSizeChange() {
+      const input = document.getElementById('unit-size-input');
+      unitSize = parseUnitSize(input ? input.value : unitSize, unitSize);
+      if (input) input.value = unitSize;
+      safeLocalStorage.setItem(TRACKER_STORAGE_KEYS.unitSize, unitSize.toString());
+      updateUnitDisplays();
+    }
+
+    function updateUnitDisplays() {
+      calculatePreview();
+      updateParlayPreview();
+      updateDashboard();
+      renderBets();
     }
 
     // Toggle Mobile/Desktop View Layout
@@ -4537,7 +4604,7 @@
         const row = document.createElement('div');
         row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background-color: #1a1a24; border: 1px solid var(--input-border); border-radius: 8px; padding: 10px;';
         
-        const startTimes = (evt.prelimsStart || evt.mainStart) ? ` | Prelims: ${evt.prelimsStart || 'Ã¢â‚¬â€'} | Main: ${evt.mainStart || 'Ã¢â‚¬â€'}` : '';
+        const startTimes = (evt.prelimsStart || evt.mainStart) ? ` | Prelims: ${evt.prelimsStart || '—'} | Main: ${evt.mainStart || '—'}` : '';
         row.innerHTML = `
           <div style="display: flex; flex-direction: column; gap: 2px;">
             <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">${evt.name}</div>
@@ -4760,6 +4827,54 @@
       selectParlay.appendChild(customOptionParlay);
     }
 
+    function getActiveEvent() {
+      return events.find(e => e.id === activeEventId) || null;
+    }
+
+    function isEventDayModeActive() {
+      if (activeEventId === 'all') return false;
+      if (eventDayModePreference === 'on') return true;
+      if (eventDayModePreference === 'off') return false;
+      return isEventDay(getActiveEvent());
+    }
+
+    function getEventDayFightSummaryMap() {
+      const summary = summarizeEventDayPendingBets(bets, { eventId: activeEventId });
+      return new Map(summary.byFight.map(row => [row.fightName, row]));
+    }
+
+    function handleEventDayModeChange() {
+      const select = document.getElementById('event-day-toggle');
+      eventDayModePreference = select ? select.value : 'auto';
+      safeLocalStorage.setItem('ufc_bet_tracker_event_day_mode', eventDayModePreference);
+      renderEventDayBanner();
+      renderFightCard();
+    }
+
+    function toggleEventDayPendingFilter() {
+      filterEventDayPendingOnly = !filterEventDayPendingOnly;
+      const checkbox = document.getElementById('filter-event-day-pending');
+      if (checkbox) checkbox.checked = filterEventDayPendingOnly;
+      renderBets();
+      updateDashboard();
+    }
+
+    function filterBetsForFightByIndex(idx) {
+      const fight = (cards[activeEventId] || [])[idx];
+      if (!fight) return;
+      filterBetsForFight(`${fight.fighterA} vs. ${fight.fighterB}`);
+    }
+
+    function filterBetsForFight(fightName) {
+      const select = document.getElementById('filter-fight-select');
+      if (select) select.value = fightName;
+      filterFight = fightName;
+      filterEventDayPendingOnly = true;
+      const checkbox = document.getElementById('filter-event-day-pending');
+      if (checkbox) checkbox.checked = true;
+      applyFilters();
+    }
+
     // Render interactive fight card on right
     function renderFightCard() {
       const container = document.getElementById('fight-card-container');
@@ -4779,7 +4894,18 @@
       const mappedFights = activeFights.map((fight, idx) => ({ ...fight, originalIndex: idx }));
 
       const sortVal = document.getElementById('fight-card-sort') ? document.getElementById('fight-card-sort').value : 'main-first';
-      if (sortVal === 'main-first') {
+      const fightSummary = getEventDayFightSummaryMap();
+      if (sortVal === 'event-day') {
+        mappedFights.sort((a, b) => {
+          const aName = `${a.fighterA} vs. ${a.fighterB}`;
+          const bName = `${b.fighterA} vs. ${b.fighterB}`;
+          const aSummary = fightSummary.get(aName);
+          const bSummary = fightSummary.get(bName);
+          const aRisk = aSummary ? aSummary.cashStake : 0;
+          const bRisk = bSummary ? bSummary.cashStake : 0;
+          return bRisk - aRisk || b.originalIndex - a.originalIndex;
+        });
+      } else if (sortVal === 'main-first') {
         mappedFights.sort((a, b) => {
           if (a.main && !b.main) return -1;
           if (!a.main && b.main) return 1;
@@ -4792,26 +4918,47 @@
 
       mappedFights.forEach((fight) => {
         const card = document.createElement('div');
+        const fightName = `${fight.fighterA} vs. ${fight.fighterB}`;
+        const pendingSummary = fightSummary.get(fightName);
+        const hasPendingAction = !!(pendingSummary && pendingSummary.count > 0);
         card.className = `fight-row ${fight.main ? 'main-card-row' : ''}`;
+        if (hasPendingAction && isEventDayModeActive()) {
+          card.style.borderColor = 'rgba(245, 158, 11, 0.65)';
+          card.style.boxShadow = '0 0 0 1px rgba(245, 158, 11, 0.2)';
+        }
         card.setAttribute('onclick', `clickFightCard(${fight.originalIndex})`);
 
         const formattedOddsA = fight.oddsA > 0 ? `+${fight.oddsA}` : fight.oddsA;
         const formattedOddsB = fight.oddsB > 0 ? `+${fight.oddsB}` : fight.oddsB;
+        const quickAddOptions = getFightQuickAddOptions(fight, fight.originalIndex);
+        const quickAddButtons = quickAddOptions.map(option => `
+          <button type="button" class="btn btn-outline-dk" onclick="event.stopPropagation(); applyFightQuickAdd(${fight.originalIndex}, '${option.side}', { mode: 'single' })" style="font-size: 10px; padding: 3px 7px; height: auto; border-radius: 999px;">
+            + Single ${option.side}
+          </button>
+          <button type="button" class="btn btn-outline-fd" onclick="event.stopPropagation(); applyFightQuickAdd(${fight.originalIndex}, '${option.side}', { mode: 'parlay', addLeg: true })" style="font-size: 10px; padding: 3px 7px; height: auto; border-radius: 999px;">
+            + Parlay ${option.side}
+          </button>
+        `).join('');
 
         card.innerHTML = `
           <div class="fight-fighters">
             <div class="fighter-line">
               <span class="fighter-name">${fight.fighterA}</span>
-              <span class="odds" onclick="event.stopPropagation(); clickFighter(${fight.originalIndex}, '${fight.fighterA}', ${fight.oddsA})">${formattedOddsA}</span>
+              <span class="odds" onclick="event.stopPropagation(); clickFighterSide(${fight.originalIndex}, 'A')">${formattedOddsA}</span>
             </div>
             <div class="fighter-line">
               <span class="fighter-name">${fight.fighterB}</span>
-              <span class="odds" onclick="event.stopPropagation(); clickFighter(${fight.originalIndex}, '${fight.fighterB}', ${fight.oddsB})">${formattedOddsB}</span>
+              <span class="odds" onclick="event.stopPropagation(); clickFighterSide(${fight.originalIndex}, 'B')">${formattedOddsB}</span>
+            </div>
+            <div class="quick-add-actions" style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px;">
+              ${quickAddButtons}
             </div>
           </div>
           <div class="fight-details">
             <span class="weight-class">${fight.weight}</span>
             <span class="card-type ${fight.main ? 'main' : 'prelims'}">${fight.main ? 'MAIN CARD' : 'PRELIMS'}</span>
+            ${hasPendingAction ? `
+            <span class="event-day-fight-badge" onclick="event.stopPropagation(); filterBetsForFightByIndex(${fight.originalIndex})" style="font-size: 10px; font-weight: 800; color: var(--pending-color); background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.45); border-radius: 999px; padding: 2px 7px; margin-left: 4px; cursor: pointer; display: inline-flex; gap: 4px;">${pendingSummary.count} pending • ${formatMoney(pendingSummary.cashStake)}</span>` : ''}
             ${fight.time ? `
             <span class="fight-time" style="font-size: 11px; font-weight: 600; color: #f59e0b; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px;">
               <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -4856,6 +5003,11 @@
 
     // Click on a fight card general row
     function clickFightCard(idx) {
+      if (isEventDayModeActive()) {
+        filterBetsForFightByIndex(idx);
+        return;
+      }
+
       if (betMode === 'single') {
         const select = document.getElementById('fight-select');
         select.value = idx;
@@ -4865,6 +5017,42 @@
         select.value = idx;
         handleParlayFightChange();
       }
+    }
+
+    function clickFighterSide(fightIdx, side) {
+      applyFightQuickAdd(fightIdx, side, { mode: betMode });
+    }
+
+    function applyFightQuickAdd(fightIdx, side, options = {}) {
+      const activeFights = cards[activeEventId] || [];
+      const fight = activeFights[fightIdx];
+      const preset = buildQuickAddPreset(fight, fightIdx, side, options);
+      if (!preset) return;
+
+      if (preset.mode === 'parlay') {
+        switchBetMode('parlay');
+        const select = document.getElementById('parlay-fight-select');
+        document.getElementById('parlay-bet-type').value = preset.betType;
+        select.value = preset.fightIndex;
+        handleParlayFightChange();
+        document.getElementById('parlay-selection-input').value = preset.selection;
+        document.getElementById('parlay-odds-input').value = preset.odds;
+        syncSelectionDropdown('parlay');
+        if (preset.shouldAddParlayLeg) {
+          addParlayLeg();
+        }
+        return;
+      }
+
+      switchBetMode('single');
+      const select = document.getElementById('fight-select');
+      document.getElementById('bet-type').value = preset.betType;
+      select.value = preset.fightIndex;
+      handleFightChange();
+      document.getElementById('selection-input').value = preset.selection;
+      document.getElementById('odds-input').value = preset.odds;
+      syncSelectionDropdown('single');
+      calculatePreview();
     }
 
     // Click on specific fighter's odds badge
@@ -4896,27 +5084,31 @@
       document.getElementById('book-fd').classList.toggle('selected', book === 'FD');
     }
 
-    // Calculations
-    function calcPayout(wager, odds, isBonusBet = false) {
-      wager = parseFloat(wager);
-      odds = parseInt(odds);
-      if (isNaN(wager) || isNaN(odds) || wager <= 0) return 0;
-      
-      let payout = wager;
-      if (odds > 0) {
-        payout = wager + (wager * (odds / 100));
-      } else if (odds < 0) {
-        payout = wager + (wager * (100 / Math.abs(odds)));
-      }
-      return isBonusBet ? (payout - wager) : payout;
-    }
-
     function calculatePreview() {
       const wager = document.getElementById('wager-input').value;
       const odds = document.getElementById('odds-input').value;
       const isBonusBet = document.getElementById('is-bonus-bet') ? document.getElementById('is-bonus-bet').checked : false;
       const payoutVal = calcPayout(wager, odds, isBonusBet);
-      document.getElementById('payout-preview-val').textContent = `$${payoutVal.toFixed(2)}`;
+      document.getElementById('payout-preview-val').textContent = formatAmountWithUnits(payoutVal, unitSize);
+    }
+
+    function confirmNoDuplicateBet(candidateBet, options = {}) {
+      const comparisonBets = options.comparisonBets || bets;
+      const duplicates = findDuplicateBets(comparisonBets, candidateBet, { ignoreId: options.ignoreId });
+      if (duplicates.length === 0) return true;
+      return confirm(formatDuplicateBetWarning(duplicates));
+    }
+
+    function filterConfirmedNewBets(candidateBets) {
+      const accepted = [];
+      for (const candidate of candidateBets) {
+        const comparisonBets = bets.concat(accepted);
+        if (!confirmNoDuplicateBet(candidate, { comparisonBets })) {
+          continue;
+        }
+        accepted.push(candidate);
+      }
+      return accepted;
     }
 
     // Submit Bet (handles both add and update)
@@ -4951,21 +5143,28 @@
         // Update existing bet
         const bet = bets.find(b => b.id === editingBetId);
         if (bet) {
-          bet.fightName = fightName;
-          bet.selection = selection;
-          bet.betType = betType;
-          bet.book = selectedBook;
-          bet.wager = wagerVal;
-          bet.odds = oddsVal;
-          bet.payout = payout;
-          bet.isParlay = false;
-          bet.isLiveStream = isLiveStream;
-          bet.isBonusBet = isBonusBet;
-          bet.notes = notesVal;
-          delete bet.legs; // Remove parlay details if switching type
-          if (!bet.eventId) {
-            bet.eventId = activeEventId;
+          const updatedBet = {
+            ...bet,
+            fightName,
+            selection,
+            betType,
+            book: selectedBook,
+            wager: wagerVal,
+            odds: oddsVal,
+            payout: payout,
+            isParlay: false,
+            isLiveStream: isLiveStream,
+            isBonusBet: isBonusBet,
+            notes: notesVal,
+            eventId: bet.eventId || activeEventId,
+          };
+          delete updatedBet.legs; // Remove parlay details if switching type
+
+          if (!confirmNoDuplicateBet(updatedBet, { ignoreId: editingBetId })) {
+            return;
           }
+
+          Object.assign(bet, updatedBet);
         }
         editingBetId = null;
       } else {
@@ -4986,6 +5185,9 @@
           isBonusBet: isBonusBet,
           notes: notesVal
         };
+        if (!confirmNoDuplicateBet(newBet)) {
+          return;
+        }
         bets.push(newBet);
       }
 
@@ -5002,6 +5204,8 @@
       if (!bet) return;
 
       editingBetId = id;
+      const originalWager = bet.wager ?? '';
+      const originalOdds = bet.odds ?? '';
 
       // Auto-switch to the event that this bet belongs to
       if (bet.eventId && activeEventId !== bet.eventId) {
@@ -5014,8 +5218,8 @@
         switchBetMode('parlay');
         parlayLegs = [...bet.legs];
         renderParlayLegs();
-        document.getElementById('parlay-wager-input').value = bet.wager;
-        document.getElementById('parlay-combined-odds-input').value = bet.odds;
+        document.getElementById('parlay-wager-input').value = originalWager;
+        document.getElementById('parlay-combined-odds-input').value = originalOdds;
         selectParlayBook(bet.book);
         document.getElementById('parlay-is-live-stream').checked = !!bet.isLiveStream;
         document.getElementById('parlay-is-bonus-bet').checked = !!bet.isBonusBet;
@@ -5032,11 +5236,10 @@
           }
         }
 
-        // Auto check/uncheck Auto-calculate checkbox based on whether stored odds match calculated odds
-        const calculated = calculateParlayOdds(bet.legs);
+        // Keep the originally-entered combined odds visible while editing.
         const autoCalculateCheckbox = document.getElementById('parlay-auto-odds');
         if (autoCalculateCheckbox) {
-          autoCalculateCheckbox.checked = (parseInt(bet.odds) === parseInt(calculated));
+          autoCalculateCheckbox.checked = false;
         }
 
         updateParlayPreview();
@@ -5079,8 +5282,8 @@
 
         selectionInput.value = bet.selection;
         betType.value = bet.betType;
-        wagerInput.value = bet.wager;
-        oddsInput.value = bet.odds;
+        wagerInput.value = originalWager;
+        oddsInput.value = originalOdds;
         selectBook(bet.book);
         document.getElementById('is-live-stream').checked = !!bet.isLiveStream;
         document.getElementById('is-bonus-bet').checked = !!bet.isBonusBet;
@@ -5097,6 +5300,8 @@
           }
         }
         syncSelectionDropdown('single');
+        wagerInput.value = originalWager;
+        oddsInput.value = originalOdds;
         calculatePreview();
 
         // Update submit button visual state
@@ -5105,8 +5310,10 @@
         document.getElementById('btn-cancel-edit').style.display = 'block';
       }
 
-      // Scroll form into view
-      document.getElementById('single-bet-form').scrollIntoView({ behavior: 'smooth' });
+      // Move back to the top so the populated edit form is immediately visible.
+      window.requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     }
 
     function cancelEdit() {
@@ -5123,7 +5330,7 @@
     function resetForm() {
       document.getElementById('bet-form').reset();
       document.getElementById('custom-matchup-row').style.display = 'none';
-      document.getElementById('payout-preview-val').textContent = '$0.00';
+      document.getElementById('payout-preview-val').textContent = formatAmountWithUnits(0, unitSize);
       selectBook('DK');
       // Clear notes field
       const notesEl = document.getElementById('notes-input');
@@ -5139,12 +5346,10 @@
     }
 
     function saveState(isSilent = false) {
-      const now = Date.now();
-      safeLocalStorage.setItem('ufc_bet_tracker_bets', JSON.stringify(bets));
-      safeLocalStorage.setItem('ufc_bet_tracker_events', JSON.stringify(events));
-      safeLocalStorage.setItem('ufc_bet_tracker_cards', JSON.stringify(cards));
-      safeLocalStorage.setItem('ufc_bet_tracker_active_event', activeEventId);
-      safeLocalStorage.setItem('ufc_bet_tracker_last_updated', now.toString());
+      writeTrackerStorage(createCurrentTrackerState(), {
+        storage: safeLocalStorage,
+        lastUpdated: Date.now()
+      });
       
       if (!isSilent) {
         updateSaveStatus(true);
@@ -5153,6 +5358,19 @@
 
     function saveToStorage() {
       saveState();
+    }
+
+    function createCurrentTrackerState() {
+      return migrateTrackerState({ events, cards, bets, activeEventId, unitSize, schemaVersion: CURRENT_SCHEMA_VERSION });
+    }
+
+    function createBackupSnapshot(label, reason = 'manual') {
+      return addTrackerSnapshot(createCurrentTrackerState(), {
+        storage: safeLocalStorage,
+        label,
+        reason,
+        maxSnapshots: 10,
+      });
     }
 
     function updateSaveStatus(unsaved) {
@@ -5260,13 +5478,14 @@
         if (el) el.textContent = text;
       };
       resetText('#val-total-wagered', '$0.00');
+      resetText('#val-total-units', '0u');
       resetText('#val-total-payout', '$0.00');
       resetText('#val-net-profit', '+$0.00');
       resetText('#val-roi', '0.0%');
       resetText('#val-record', '0 - 0 - 0');
       resetText('#active-bets-count', '0 wagers logged');
-      resetText('#payout-preview-val', '$0.00');
-      resetText('#parlay-payout-preview-val', '$0.00');
+      resetText('#payout-preview-val', formatAmountWithUnits(0, unitSize));
+      resetText('#parlay-payout-preview-val', formatAmountWithUnits(0, unitSize));
 
       const profitCard = clone.querySelector('#card-profit');
       if (profitCard) profitCard.className = 'metric-card profit positive';
@@ -5303,6 +5522,7 @@
         events: events,
         cards: cards,
         activeEventId: activeEventId,
+        unitSize: unitSize,
         lastUpdated: Date.now()
       };
 
@@ -6483,13 +6703,7 @@
     }
 
     function getDbJsContent() {
-      const state = {
-        bets: bets,
-        events: events,
-        cards: cards,
-        activeEventId: activeEventId,
-        lastUpdated: Date.now()
-      };
+      const state = { ...createCurrentTrackerState(), lastUpdated: Date.now() };
       return `window.EMBEDDED_DATA = ${JSON.stringify(state, null, 2)};`;
     }
 
@@ -6534,6 +6748,8 @@
           const confirmMerge = confirm("Do you want to import and merge this database? This will update your fight cards and combine your bets.");
           if (!confirmMerge) return;
 
+          createBackupSnapshot('Before import', 'import');
+
           incomingEvents.forEach(evt => {
             if (evt && evt.id) {
               const existingIdx = events.findIndex(e => e.id === evt.id);
@@ -6573,6 +6789,9 @@
               if (existingIdx >= 0) {
                 bets[existingIdx] = bet;
               } else {
+                if (!confirmNoDuplicateBet(bet)) {
+                  return;
+                }
                 bets.push(bet);
               }
             }
@@ -6582,12 +6801,14 @@
             activeEventId = data.activeEventId;
           }
 
-          const now = Date.now();
-          safeLocalStorage.setItem('ufc_bet_tracker_events', JSON.stringify(events));
-          safeLocalStorage.setItem('ufc_bet_tracker_cards', JSON.stringify(cards));
-          safeLocalStorage.setItem('ufc_bet_tracker_bets', JSON.stringify(bets));
-          safeLocalStorage.setItem('ufc_bet_tracker_active_event', activeEventId);
-          safeLocalStorage.setItem('ufc_bet_tracker_last_updated', now.toString());
+          if (data.unitSize !== undefined && data.unitSize !== null) {
+            unitSize = parseUnitSize(data.unitSize, unitSize);
+          }
+
+          writeTrackerStorage(createCurrentTrackerState(), {
+            storage: safeLocalStorage,
+            lastUpdated: Date.now()
+          });
 
           alert("Database imported and merged successfully!");
           location.reload();
@@ -6783,6 +7004,7 @@
         saveToStorage();
         applySortAndRender();
         updateDashboard();
+        renderFightCard();
         renderQuickSettleList(); // refresh the modal list
       }
     }
@@ -7195,7 +7417,7 @@
         const item = document.createElement('div');
         item.style.cssText = 'background-color: #1a1a24; border: 1px solid var(--input-border); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center;';
         
-        const formattedOdds = (leg.odds !== null && leg.odds !== undefined) ? (leg.odds > 0 ? `+${leg.odds}` : leg.odds) : 'Ã¢â‚¬â€';
+        const formattedOdds = (leg.odds !== null && leg.odds !== undefined) ? (leg.odds > 0 ? `+${leg.odds}` : leg.odds) : '—';
 
         item.innerHTML = `
           <div style="display: flex; flex-direction: column; gap: 2px;">
@@ -7243,13 +7465,13 @@
       const combinedOdds = parseInt(oddsInput.value);
 
       if (isNaN(combinedOdds)) {
-        document.getElementById('parlay-payout-preview-val').textContent = '$0.00';
+        document.getElementById('parlay-payout-preview-val').textContent = formatAmountWithUnits(0, unitSize);
         return;
       }
 
       const isBonusBet = document.getElementById('parlay-is-bonus-bet') ? document.getElementById('parlay-is-bonus-bet').checked : false;
       const payout = calcPayout(isNaN(wagerVal) ? 0 : wagerVal, combinedOdds, isBonusBet);
-      document.getElementById('parlay-payout-preview-val').textContent = `$${payout.toFixed(2)}`;
+      document.getElementById('parlay-payout-preview-val').textContent = formatAmountWithUnits(payout, unitSize);
     }
 
     function handleSubmitParlay() {
@@ -7278,37 +7500,44 @@
       if (editingBetId !== null) {
         const bet = bets.find(b => b.id === editingBetId);
         if (bet) {
-          bet.isParlay = true;
-          bet.legs = [...parlayLegs];
-          bet.fightName = `${parlayLegs.length}-Leg Parlay`;
-          bet.selection = parlayLegs.map(l => l.selection).join(' + ');
-          bet.betType = 'Parlay';
-          bet.book = selectedParlayBook;
-          bet.wager = wagerVal;
-          bet.odds = combinedOdds;
-          bet.payout = payout;
-          bet.isLiveStream = isLiveStream;
-          bet.isBonusBet = isBonusBet;
-          bet.notes = parlayNotesVal;
-          if (!bet.eventId) {
-            bet.eventId = activeEventId;
-          }
+          const updatedBet = {
+            ...bet,
+            isParlay: true,
+            legs: [...parlayLegs],
+            fightName: `${parlayLegs.length}-Leg Parlay`,
+            selection: parlayLegs.map(l => l.selection).join(' + '),
+            betType: 'Parlay',
+            book: selectedParlayBook,
+            wager: wagerVal,
+            odds: combinedOdds,
+            payout: payout,
+            isLiveStream: isLiveStream,
+            isBonusBet: isBonusBet,
+            notes: parlayNotesVal,
+            eventId: bet.eventId || activeEventId,
+          };
           
           // Re-evaluate parlay result status in case legs were altered
           let hasLoss = false;
           let hasPending = false;
           let allVoid = true;
 
-          bet.legs.forEach(l => {
+          updatedBet.legs.forEach(l => {
             if (l.result === 'Loss') hasLoss = true;
             if (l.result === 'Pending') hasPending = true;
             if (l.result !== 'Void') allVoid = false;
           });
 
-          if (hasLoss) bet.result = 'Loss';
-          else if (hasPending) bet.result = 'Pending';
-          else if (allVoid) bet.result = 'Void';
-          else bet.result = 'Win';
+          if (hasLoss) updatedBet.result = 'Loss';
+          else if (hasPending) updatedBet.result = 'Pending';
+          else if (allVoid) updatedBet.result = 'Void';
+          else updatedBet.result = 'Win';
+
+          if (!confirmNoDuplicateBet(updatedBet, { ignoreId: editingBetId })) {
+            return;
+          }
+
+          Object.assign(bet, updatedBet);
         }
         editingBetId = null;
       } else {
@@ -7329,6 +7558,9 @@
           isBonusBet: isBonusBet,
           notes: parlayNotesVal
         };
+        if (!confirmNoDuplicateBet(newBet)) {
+          return;
+        }
         bets.push(newBet);
       }
 
@@ -7353,6 +7585,60 @@
     function closeOcrModal() {
       document.getElementById('ocr-modal-overlay').classList.remove('active');
       document.getElementById('screenshot-file-input').value = '';
+    }
+
+    function formatOcrConfidence(value) {
+      const num = Number(value);
+      if (!Number.isFinite(num)) return '—';
+      return `${Math.round((num <= 1 ? num * 100 : num))}%`;
+    }
+
+    function updateOcrReviewPanel() {
+      const summaryEl = document.getElementById('ocr-confidence-summary');
+      const rawEl = document.getElementById('ocr-raw-text');
+      if (!summaryEl || !rawEl) return;
+      const result = lastOcrResult || {};
+      const confidenceValues = (result.lines || [])
+        .map(line => Number(line.confidence))
+        .filter(Number.isFinite);
+      if (Number.isFinite(Number(result.confidence))) {
+        confidenceValues.unshift(Number(result.confidence));
+      }
+      const avg = confidenceValues.length
+        ? confidenceValues.reduce((sum, val) => sum + val, 0) / confidenceValues.length
+        : undefined;
+      summaryEl.textContent = `OCR Confidence: ${formatOcrConfidence(avg)} • ${result.rawText ? result.rawText.split(/\r?\n/).filter(Boolean).length : 0} lines`;
+      rawEl.textContent = result.rawText || 'No OCR text captured yet.';
+    }
+
+    function toggleRawOcrView() {
+      const rawEl = document.getElementById('ocr-raw-text');
+      if (!rawEl) return;
+      rawEl.style.display = rawEl.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function getCurrentTemplatePayload(templateType) {
+      const relevantBets = activeEventId === 'all' ? bets : bets.filter(b => b.eventId === activeEventId);
+      let titleName = 'All UFC Events';
+      if (activeEventId !== 'all') {
+        const evt = events.find(e => e.id === activeEventId);
+        if (evt) titleName = `${evt.name} (${evt.date})`;
+      }
+      if (templateType === 'note') {
+        return {
+          title: document.getElementById('obsidian-note-title')?.value || 'UFC Notes',
+          content: document.getElementById('obsidian-note-content')?.value || '',
+        };
+      }
+      if (templateType === 'ocr_summary') {
+        return lastOcrResult || { rawText: '', lines: [] };
+      }
+      return { title: `Betting Summary Dashboard - ${titleName}`, betData: relevantBets };
+    }
+
+    function renderMarkdownTemplate(templateType) {
+      if (!window.UFC_Templates) return null;
+      return window.UFC_Templates.generateTemplate(templateType, getCurrentTemplatePayload(templateType));
     }
 
     function updateOcrPayoutPreview() {
@@ -7500,7 +7786,7 @@
           <label style="font-size: 11px; font-weight: 600; color: var(--text-muted);">Payout ($)</label>
           <input type="number" step="0.01" class="multi-payout" placeholder="20" style="background: var(--bg-input); color: var(--text-main); border: 1px solid var(--card-border); border-radius: 4px; padding: 6px; width: 100%;">
         </div>
-        <button type="button" class="btn btn-outline-dk" onclick="removeOcrMultiBetRow(this)" style="padding: 6px 10px; color: var(--ufc-red); border-color: rgba(229, 9, 20, 0.3); background: none; border-radius: 4px; cursor: pointer; margin-top: 15px;">Ã¢Å“â€¢</button>
+        <button type="button" class="btn btn-outline-dk" onclick="removeOcrMultiBetRow(this)" style="padding: 6px 10px; color: var(--ufc-red); border-color: rgba(229, 9, 20, 0.3); background: none; border-radius: 4px; cursor: pointer; margin-top: 15px;">✕</button>
       `;
       
       container.appendChild(row);
@@ -7584,7 +7870,7 @@
           <select class="ocr-leg-matchup" style="flex: 2; min-width: 150px; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--card-border); border-radius: 4px; padding: 6px;" onchange="handleOcrLegMatchupChange(this)"></select>
           <input type="text" class="ocr-leg-selection" placeholder="Selection" style="flex: 2; min-width: 100px; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--card-border); border-radius: 4px; padding: 6px;">
           <input type="text" class="ocr-leg-odds" placeholder="Odds" style="flex: 1; min-width: 60px; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--card-border); border-radius: 4px; padding: 6px;">
-          <button type="button" class="btn btn-outline-dk" onclick="removeOcrLegRow(this)" style="padding: 6px 10px; color: var(--ufc-red); border-color: rgba(229, 9, 20, 0.3); background: none; border-radius: 4px; cursor: pointer;">Ã¢Å“â€¢</button>
+          <button type="button" class="btn btn-outline-dk" onclick="removeOcrLegRow(this)" style="padding: 6px 10px; color: var(--ufc-red); border-color: rgba(229, 9, 20, 0.3); background: none; border-radius: 4px; cursor: pointer;">✕</button>
         </div>
         <input type="text" class="ocr-leg-custom-matchup" placeholder="Custom Matchup Name (e.g. Fighter A vs Fighter B)" style="display: none; width: 100%; margin-top: 4px; padding: 6px; border: 1px solid var(--card-border); border-radius: 4px; background: var(--bg-input); color: var(--text-main);">
       `;
@@ -7709,8 +7995,16 @@
               }
             }
           }
-        ).then(({ data: { text } }) => {
+        ).then(({ data }) => {
           loadingOverlay.classList.remove('active');
+          const text = data && data.text ? data.text : '';
+          const lines = data && data.lines ? data.lines : [];
+          lastOcrResult = {
+            rawText: text,
+            confidence: data && data.confidence,
+            lines: lines.map(line => ({ text: line.text, confidence: line.confidence })),
+            source: file.name || 'Screenshot import'
+          };
           parseAndShowOCRResults(text);
         }).catch(err => {
           loadingOverlay.classList.remove('active');
@@ -7762,29 +8056,6 @@
         processScreenshotFile(file);
       }
     });
-
-    // Normalize letters followed by numbers by adding a space (e.g. under2.5 -> under 2.5)
-    const normalizeSpaces = (str) => str.replace(/([a-zA-Z]+)(\d+)/g, '$1 $2').replace(/(\d+)([a-zA-Z]+)/g, '$1 $2');
-    
-    // Normalize rounds text, ensuring Over Under bets are fully spelled out and do not abbreviate rounds
-    const normalizeRoundsText = (str) => {
-      if (!str) return str;
-      if (str.includes(' + ')) {
-        return str.split(' + ').map(s => normalizeRoundsText(s)).join(' + ');
-      }
-      let val = normalizeSpaces(str);
-      // Normalize Over/Under selections: "under 2.5 rnds" -> "under 2.5 rounds"
-      val = val.replace(/\b(over|under)\s+(\d+(?:\.\d+)?)\s*(rnds|rnd|roun|rounds?)\b/gi, '$1 $2 rounds');
-      // If it is just "under 2.5", append " rounds"
-      val = val.replace(/\b(over|under)\s+(\d+(?:\.\d+)?)$/gi, '$1 $2 rounds');
-      // For round props, normalize "rnd/rd 1" to "Round 1"
-      val = val.replace(/\b(rnd|rd)\s*([1-5])\b/gi, 'Round $2');
-      val = val.replace(/\s+/g, ' ').trim();
-      if (val.length > 0) {
-        val = val.charAt(0).toUpperCase() + val.slice(1);
-      }
-      return val;
-    };
 
     function findClosestHistoricalSelection(parsedSel) {
       if (!parsedSel) return parsedSel;
@@ -7877,46 +8148,9 @@
 
     function parseAndShowOCRResults(text) {
       console.log("OCR Result Text:\n", text);
+      updateOcrReviewPanel();
       const lowerText = text.toLowerCase();
       const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-
-      function cleanOcrOdds(oddsStr) {
-        if (!oddsStr) return "";
-        let cleaned = oddsStr.trim()
-          .replace(/\s+/g, '')
-          .replace(/[~Ã¢â‚¬â€Ã¢â‚¬â€œ]/g, '-');
-          
-        if (/[a-zA-Z]/.test(cleaned)) {
-          cleaned = cleaned
-            .replace(/[tlIiL|/]/g, '1')
-            .replace(/[oO]/g, '0')
-            .replace(/[sS]/g, '5')
-            .replace(/[bB]/g, '8')
-            .replace(/[gG]/g, '9')
-            .replace(/[zZ]/g, '2');
-        }
-        cleaned = cleaned.replace(/[^+-0-9]/g, '');
-        if (cleaned && !cleaned.startsWith('+') && !cleaned.startsWith('-')) {
-          cleaned = '+' + cleaned;
-        }
-        return cleaned;
-      }
-
-      function inferOddsFromWagerPayout(wagerVal, payoutVal) {
-        const w = parseFloat(wagerVal);
-        const p = parseFloat(payoutVal);
-        if (isNaN(w) || isNaN(p) || w <= 0 || p <= w) return "";
-        
-        const profit = p - w;
-        let oddsNum = 0;
-        if (profit >= w) {
-          oddsNum = Math.round((profit / w) * 100);
-          return '+' + oddsNum;
-        } else {
-          oddsNum = Math.round(-(w / profit) * 100);
-          return oddsNum.toString();
-        }
-      }
 
       // Helper function to identify excluded/disclaimer lines
       function isExcludedLine(line) {
@@ -7969,7 +8203,7 @@
           if (lines[i].toLowerCase().includes("parlay")) {
             // Search this line and the line below for 3-5 digit odds
             for (let j = i; j <= Math.min(lines.length - 1, i + 1); j++) {
-              const match = lines[j].match(/([+-~Ã¢â‚¬â€Ã¢â‚¬â€œ]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
+              const match = lines[j].match(/([+-~—–]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
               if (match) {
                 odds = cleanOcrOdds(match[0]);
                 break;
@@ -7984,7 +8218,7 @@
       if (!odds) {
         for (const line of lines) {
           if (isExcludedLine(line)) continue;
-          const match = line.match(/([+-~Ã¢â‚¬â€Ã¢â‚¬â€œ]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
+          const match = line.match(/([+-~—–]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
           if (match) {
             odds = cleanOcrOdds(match[0]);
             break;
@@ -8054,7 +8288,7 @@
           continue;
         }
         // Clean odds out and strip garbage/weird OCR symbols
-        let cleanedLine = line.replace(/[+-~Ã¢â‚¬â€Ã¢â‚¬â€œ]?\s*\d{2,5}\b/g, '')
+        let cleanedLine = line.replace(/[+-~—–]?\s*\d{2,5}\b/g, '')
                               .replace(/[^a-zA-Z0-9\s\-\.\'\(\)\:\,]/g, '')
                               .trim();
         if (cleanedLine) {
@@ -8239,7 +8473,7 @@
               const line = lines[i];
               if (isExcludedLine(line)) continue;
               
-              const oddsMatch = line.match(/([+-~Ã¢â‚¬â€Ã¢â‚¬â€œ]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
+              const oddsMatch = line.match(/([+-~—–]\s*[a-zA-Z0-9]{2,5}\b|\b[a-zA-Z]\d{2,4}\b|\b\d+[a-zA-Z]\b|\b\d{3,5}\b)/);
               if (oddsMatch) {
                 legOdds = cleanOcrOdds(oddsMatch[0]);
                 break;
@@ -8253,7 +8487,7 @@
               if (isExcludedLine(line)) continue;
               if (line.toLowerCase().includes(fight.fighterA.toLowerCase()) && line.toLowerCase().includes(fight.fighterB.toLowerCase())) continue;
               
-              let cleaned = line.replace(/[+-~Ã¢â‚¬â€Ã¢â‚¬â€œ]?\s*\d{2,5}\b/g, '')
+              let cleaned = line.replace(/[+-~—–]?\s*\d{2,5}\b/g, '')
                                 .replace(/[^a-zA-Z0-9\s\-\.\'\(\)\:\,]/g, '')
                                 .trim();
               if (cleaned.length < 2) continue;
@@ -8633,7 +8867,13 @@
           return;
         }
 
-        newBets.forEach(b => {
+        const confirmedBets = filterConfirmedNewBets(newBets);
+        if (confirmedBets.length === 0) {
+          alert("No OCR bets were imported.");
+          return;
+        }
+
+        confirmedBets.forEach(b => {
           bets.push(b);
         });
       } else if (betType === 'Parlay') {
@@ -8711,6 +8951,10 @@
           isLiveStream: false
         };
 
+        if (!confirmNoDuplicateBet(newBet)) {
+          return;
+        }
+
         bets.push(newBet);
       } else {
         // Single bet saving
@@ -8766,6 +9010,10 @@
           isParlay: false,
           isLiveStream: false
         };
+
+        if (!confirmNoDuplicateBet(newBet)) {
+          return;
+        }
 
         bets.push(newBet);
       }
@@ -8927,54 +9175,11 @@
       // Reset single bet form
       document.getElementById('bet-form').reset();
       document.getElementById('custom-matchup-row').style.display = 'none';
-      document.getElementById('payout-preview-val').textContent = '$0.00';
+      document.getElementById('payout-preview-val').textContent = formatAmountWithUnits(0, unitSize);
       selectBook('DK');
       document.getElementById('submit-text').textContent = 'Log Bet Slip';
       document.getElementById('submit-icon').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />';
       document.getElementById('btn-cancel-edit').style.display = 'none';
-    }
-
-    // American odds mathematical converters
-    function convertAmericanToDecimal(odds) {
-      odds = parseInt(odds);
-      if (isNaN(odds)) return 1.0;
-      if (odds > 0) {
-        return 1.0 + (odds / 100);
-      } else if (odds < 0) {
-        return 1.0 + (100 / Math.abs(odds));
-      } else {
-        return 1.0;
-      }
-    }
-
-    function convertDecimalToAmerican(decimal) {
-      decimal = parseFloat(decimal);
-      if (isNaN(decimal) || decimal <= 1.0) return 100;
-      if (decimal >= 2.0) {
-        return Math.round((decimal - 1.0) * 100);
-      } else {
-        return Math.round(-100 / (decimal - 1.0));
-      }
-    }
-
-    function calculateParlayOdds(legs) {
-      let combinedDecimal = 1.0;
-      let activeLegsCount = 0;
-      
-      legs.forEach(leg => {
-        if (leg.result === 'Void') {
-          combinedDecimal *= 1.0; // Voided leg behaves as odds multiplier of 1.0
-        } else {
-          const legOdds = parseInt(leg.odds);
-          if (!isNaN(legOdds)) {
-            combinedDecimal *= convertAmericanToDecimal(legOdds);
-            activeLegsCount++;
-          }
-        }
-      });
-      
-      if (activeLegsCount === 0) return 100;
-      return convertDecimalToAmerican(combinedDecimal);
     }
 
     function handleParlayFightChange() {
@@ -9074,6 +9279,15 @@
     function renderBetTypeAnalysis() {
       const panel = document.getElementById('bet-type-analysis-panel');
       if (!panel || panel.style.display === 'none') return;
+
+      const modeFilter = document.getElementById('analysis-mode-filter');
+      if (modeFilter && modeFilter.value === 'fighter') {
+        renderFighterPerformanceAnalysis();
+        return;
+      }
+
+      const primaryLabel = document.getElementById('analysis-primary-label');
+      if (primaryLabel) primaryLabel.textContent = 'Bet Type';
 
       const bookFilter = document.getElementById('analysis-book-filter').value;
       const statusFilter = document.getElementById('analysis-status-filter').value;
@@ -9207,7 +9421,7 @@
 
         // Format win rate
         const settledCount = s.wins + s.losses;
-        const winRateText = settledCount > 0 ? `${s.winRate.toFixed(1)}%` : 'Ã¢â‚¬â€';
+        const winRateText = settledCount > 0 ? `${s.winRate.toFixed(1)}%` : '—';
 
         // Format record text
         let recordText = `${s.wins}-${s.losses}-${s.voids}`;
@@ -9225,6 +9439,72 @@
           <td style="padding: 10px 4px; text-align: center;">${winRateText}</td>
           <td style="padding: 10px 4px; text-align: right; color: ${plColor}; font-weight: 600;">${formatPL(s.profit)}</td>
           <td style="padding: 10px 4px; text-align: right; color: ${roiColor};">${s.roi.toFixed(1)}%</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updateAnalysisSortIndicators();
+    }
+
+    function renderFighterPerformanceAnalysis() {
+      const primaryLabel = document.getElementById('analysis-primary-label');
+      if (primaryLabel) primaryLabel.textContent = 'Fighter';
+
+      const bookFilter = document.getElementById('analysis-book-filter').value;
+      const statusFilter = document.getElementById('analysis-status-filter').value;
+      const liveFilter = document.getElementById('analysis-live-filter').value;
+      const rows = calculateFighterPerformance(bets, {
+        eventId: activeEventId,
+        book: bookFilter,
+        status: statusFilter,
+        live: liveFilter,
+      });
+
+      rows.sort((a, b) => {
+        let valA = a[analysisSortKey];
+        let valB = b[analysisSortKey];
+
+        if (typeof valA === 'string') {
+          valA = valA.toLowerCase();
+          valB = valB.toLowerCase();
+          return analysisSortDesc ? valB.localeCompare(valA) : valA.localeCompare(valB);
+        }
+
+        return analysisSortDesc ? valB - valA : valA - valB;
+      });
+
+      const tbody = document.getElementById('analysis-table-body');
+      tbody.innerHTML = '';
+
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">No fighter-level wagers found.</td></tr>`;
+        updateAnalysisSortIndicators();
+        return;
+      }
+
+      rows.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.style.transition = 'background-color 0.2s';
+        tr.addEventListener('mouseenter', () => tr.style.backgroundColor = '#1a1a24');
+        tr.addEventListener('mouseleave', () => tr.style.backgroundColor = 'transparent');
+
+        const plColor = row.profit > 0 ? 'var(--win-color)' : (row.profit < 0 ? 'var(--loss-color)' : 'var(--text-muted)');
+        const roiColor = row.roi > 0 ? 'var(--win-color)' : (row.roi < 0 ? 'var(--loss-color)' : 'var(--text-muted)');
+        const settledCount = row.wins + row.losses;
+        const winRateText = settledCount > 0 ? `${row.winRate.toFixed(1)}%` : '—';
+        let recordText = `${row.wins}-${row.losses}-${row.voids}`;
+        if (row.pending > 0) recordText += ` (${row.pending} pending)`;
+
+        tr.innerHTML = `
+          <td style="padding: 10px 4px; display: flex; align-items: center; gap: 6px;">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--pending-color); display: inline-block;"></span>
+            ${escapeHtml(row.fighter)}
+          </td>
+          <td style="padding: 10px 4px; text-align: center;">${row.total}</td>
+          <td style="padding: 10px 4px; text-align: center; color: var(--text-muted); font-size: 11px;">${recordText}</td>
+          <td style="padding: 10px 4px; text-align: center;">${winRateText}</td>
+          <td style="padding: 10px 4px; text-align: right; color: ${plColor}; font-weight: 600;">${formatSignedMoney(row.profit)}</td>
+          <td style="padding: 10px 4px; text-align: right; color: ${roiColor};">${row.roi.toFixed(1)}%</td>
         `;
         tbody.appendChild(tr);
       });
@@ -9303,6 +9583,7 @@
     // Reset All Data
     function confirmReset() {
       if (confirm("Are you sure you want to delete all logged wagers? This cannot be undone.")) {
+        createBackupSnapshot('Before clearing wagers', 'reset');
         bets = [];
         saveToStorage();
         populateFilterDropdowns();
@@ -9403,10 +9684,119 @@
       filterBook = document.getElementById('filter-book-select').value;
       filterBetType = document.getElementById('filter-bet-type-select').value;
       filterLiveStreamOnly = document.getElementById('filter-live-stream-only').checked;
+      filterEventDayPendingOnly = !!document.getElementById('filter-event-day-pending')?.checked;
       selectedAnalysisCategory = filterBetType;
       renderBets();
       updateDashboard();
       renderBetTypeAnalysis();
+    }
+
+    function formatMoney(value) {
+      const amount = parseFloat(value) || 0;
+      return `$${amount.toFixed(2)}`;
+    }
+
+    function formatSignedMoney(value) {
+      const amount = parseFloat(value) || 0;
+      return amount >= 0 ? `+$${amount.toFixed(2)}` : `-$${Math.abs(amount).toFixed(2)}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value === undefined || value === null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderExposureRows(containerId, rows, emptyText) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      const visibleRows = rows.slice(0, 4);
+      if (visibleRows.length === 0) {
+        container.innerHTML = `<div style="font-size: 12px; color: var(--text-muted); padding: 8px 0;">${emptyText}</div>`;
+        return;
+      }
+
+      container.innerHTML = visibleRows.map(row => `
+        <div style="display: flex; justify-content: space-between; gap: 8px; align-items: center; background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: 8px; padding: 8px; min-width: 0;">
+          <div style="min-width: 0;">
+            <div style="font-size: 12px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;">${escapeHtml(row.key)}</div>
+            <div style="font-size: 10px; color: var(--text-muted);">${row.count} pending</div>
+          </div>
+          <div style="font-size: 12px; font-weight: 800; color: var(--pending-color); white-space: nowrap;">${formatMoney(row.cashStake)}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderPendingExposurePanel() {
+      const exposure = calculatePendingExposure(bets, { eventId: activeEventId, unitSize });
+      const panelEl = document.getElementById('pending-exposure-panel');
+      const emptyEl = document.getElementById('pending-exposure-empty');
+      const contentEl = document.getElementById('pending-exposure-content');
+      const countEl = document.getElementById('pending-exposure-count');
+
+      if (panelEl) panelEl.style.display = exposure.count === 0 ? 'none' : 'block';
+      if (countEl) countEl.textContent = `${exposure.count} pending • ${exposure.singles} singles / ${exposure.parlays} parlays`;
+      if (emptyEl) emptyEl.style.display = 'none';
+      if (contentEl) contentEl.style.display = exposure.count === 0 ? 'none' : 'grid';
+
+      const stakeEl = document.getElementById('pending-exposure-stake');
+      if (stakeEl) stakeEl.textContent = formatMoney(exposure.cashStake);
+
+      const unitsEl = document.getElementById('pending-exposure-units');
+      if (unitsEl) unitsEl.textContent = formatUnits(exposure.unitsAtRisk);
+
+      const returnEl = document.getElementById('pending-exposure-return');
+      if (returnEl) returnEl.textContent = formatMoney(exposure.possibleReturn);
+
+      const profitEl = document.getElementById('pending-exposure-profit');
+      if (profitEl) profitEl.textContent = formatSignedMoney(exposure.possibleProfit);
+
+      const biggestEl = document.getElementById('pending-exposure-biggest');
+      if (biggestEl) {
+        biggestEl.textContent = exposure.biggestSelection
+          ? `${exposure.biggestSelection.key} • ${formatMoney(exposure.biggestSelection.cashStake)} at risk`
+          : '—';
+      }
+
+      renderExposureRows('pending-exposure-books', exposure.byBook, 'No books exposed.');
+      renderExposureRows('pending-exposure-fights', exposure.byFight, 'No matchups exposed.');
+    }
+
+    function renderEventDayBanner() {
+      const banner = document.getElementById('event-day-banner');
+      if (!banner) return;
+
+      const toggle = document.getElementById('event-day-toggle');
+      if (toggle) toggle.value = eventDayModePreference;
+
+      const event = getActiveEvent();
+      const exposure = calculatePendingExposure(bets, { eventId: activeEventId, unitSize });
+      const summary = buildEventDaySummary(event, bets, { activeEventId, exposure });
+      if (!summary.visible || eventDayModePreference === 'off') {
+        banner.style.display = 'none';
+        return;
+      }
+
+      banner.style.display = 'flex';
+      const statusEl = document.getElementById('event-day-status');
+      if (statusEl) statusEl.textContent = summary.status;
+
+      const titleEl = document.getElementById('event-day-title');
+      if (titleEl) titleEl.textContent = `${summary.eventName}${summary.eventDate ? ` • ${summary.eventDate}` : ''}`;
+
+      const pendingEl = document.getElementById('event-day-pending-summary');
+      if (pendingEl) {
+        pendingEl.textContent = summary.pendingCount > 0
+          ? `${summary.pendingCount} pending across ${summary.fightCount} fight${summary.fightCount === 1 ? '' : 's'} • ${formatMoney(summary.cashStake)} at risk • ${formatSignedMoney(summary.possibleProfit)} max profit`
+          : 'No pending action for this event.';
+      }
+
+      const filterBtn = document.getElementById('event-day-pending-filter');
+      if (filterBtn) filterBtn.textContent = filterEventDayPendingOnly ? 'Showing Pending Only' : 'Show Pending Only';
     }
 
     // Update Dashboard Metrics
@@ -9469,6 +9859,8 @@
 
       // Populate DOM
       document.getElementById('val-total-wagered').textContent = `$${totalWagered.toFixed(2)}`;
+      const totalUnitsEl = document.getElementById('val-total-units');
+      if (totalUnitsEl) totalUnitsEl.textContent = formatUnits(amountToUnits(totalWagered, unitSize));
       document.getElementById('val-total-payout').textContent = `$${totalPayout.toFixed(2)}`;
       
       const profitVal = document.getElementById('val-net-profit');
@@ -9508,6 +9900,8 @@
       document.getElementById('exposure-dk-pl').style.color = dkPL >= 0 ? 'var(--win-color)' : 'var(--loss-color)';
       document.getElementById('exposure-fd-pl').textContent = formatPL(fdPL);
       document.getElementById('exposure-fd-pl').style.color = fdPL >= 0 ? 'var(--win-color)' : 'var(--loss-color)';
+      renderPendingExposurePanel();
+      renderEventDayBanner();
       renderBetTypeAnalysis();
       if (activeEventId === 'all') renderRollup();
     }
@@ -9542,6 +9936,10 @@
           return false;
         }
 
+        if (filterEventDayPendingOnly && bet.result !== 'Pending') {
+          return false;
+        }
+
         return true;
       });
 
@@ -9560,7 +9958,7 @@
 
       const summaryText = document.getElementById('filter-summary-text');
       if (summaryText) {
-        if (filterFight !== 'all' || filterBook !== 'all' || filterBetType !== 'all' || filterLiveStreamOnly) {
+        if (filterFight !== 'all' || filterBook !== 'all' || filterBetType !== 'all' || filterLiveStreamOnly || filterEventDayPendingOnly) {
           const formatPL = (val) => val >= 0 ? `+$${val.toFixed(2)}` : `-$${Math.abs(val).toFixed(2)}`;
           const plColor = filteredProfit >= 0 ? 'var(--win-color)' : 'var(--loss-color)';
           summaryText.innerHTML = `Showing ${filteredBets.length} of ${relevantBets.length} wagers | Wagered: <strong>$${filteredWager.toFixed(2)}</strong> | Net: <strong style="color: ${plColor};">${formatPL(filteredProfit)}</strong>`;
@@ -9571,7 +9969,7 @@
 
       const countLabel = document.getElementById('active-bets-count');
       if (countLabel) {
-        if (filterFight !== 'all' || filterBook !== 'all' || filterBetType !== 'all' || filterLiveStreamOnly) {
+        if (filterFight !== 'all' || filterBook !== 'all' || filterBetType !== 'all' || filterLiveStreamOnly || filterEventDayPendingOnly) {
           countLabel.textContent = `Showing ${filteredBets.length} of ${relevantBets.length} wagers`;
         } else {
           countLabel.textContent = `${relevantBets.length} wagers logged`;
@@ -9655,9 +10053,9 @@
           <td data-label="Matchup">${matchupContent}</td>
           <td data-label="Book"><span class="book-badge ${bet.book.toLowerCase()}">${bet.book}</span></td>
           <td data-label="Bet Type"><span style="font-size: 12px; font-weight: 500;">${bet.betType}</span></td>
-          <td data-label="Wager" style="font-weight: 600;">$${wagerVal.toFixed(2)}${bonusBadge}</td>
+          <td data-label="Wager" style="font-weight: 600;">${formatAmountWithUnits(wagerVal, unitSize)}${bonusBadge}</td>
           <td data-label="Odds" style="font-family: 'Outfit'; font-weight: 700;">${formattedOdds}</td>
-          <td data-label="Est. Payout" style="font-weight: 600; color: #eab308;">$${payoutVal.toFixed(2)}</td>
+          <td data-label="Est. Payout" style="font-weight: 600; color: #eab308;">${formatAmountWithUnits(payoutVal, unitSize)}</td>
           <td data-label="Result">
             <div class="result-actions">
               <button class="btn-result ${bet.result === 'Pending' ? 'active-pending' : ''}" onclick="settleBet('${bet.id}', 'Pending')">Pnd</button>
@@ -9682,6 +10080,116 @@
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    // Backup / Restore Center
+    function openBackupCenterModal() {
+      renderBackupCenter();
+      document.getElementById('backup-center-modal-overlay').classList.add('active');
+    }
+
+    function closeBackupCenterModal(e) {
+      if (!e || e.target.id === 'backup-center-modal-overlay') {
+        document.getElementById('backup-center-modal-overlay').classList.remove('active');
+      }
+    }
+
+    function renderBackupCenter() {
+      const snapshots = readTrackerSnapshots(safeLocalStorage);
+      const status = document.getElementById('backup-center-status');
+      const list = document.getElementById('backup-snapshot-list');
+      if (!status || !list) return;
+
+      status.textContent = `Schema v${CURRENT_SCHEMA_VERSION} • ${bets.length} bets • ${events.length} events • ${snapshots.length}/10 snapshots`;
+      list.innerHTML = '';
+
+      if (snapshots.length === 0) {
+        const empty = document.createElement('div');
+        empty.style.cssText = 'padding: 18px; text-align: center; color: var(--text-muted); border: 1px dashed var(--card-border); border-radius: 8px;';
+        empty.textContent = 'No snapshots yet. Create one manually or import/reset data to create an automatic snapshot.';
+        list.appendChild(empty);
+        return;
+      }
+
+      snapshots.forEach(snapshot => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; gap: 12px; background: #1a1a24; border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; flex-wrap: wrap;';
+
+        const meta = document.createElement('div');
+        meta.style.cssText = 'display: flex; flex-direction: column; gap: 4px; min-width: 220px;';
+        const title = document.createElement('div');
+        title.style.cssText = 'font-weight: 700; color: var(--text-main);';
+        title.textContent = snapshot.label || 'Backup snapshot';
+        const detail = document.createElement('div');
+        detail.style.cssText = 'font-size: 12px; color: var(--text-muted);';
+        const created = new Date(snapshot.createdAt);
+        const state = migrateTrackerState(snapshot.state || {});
+        detail.textContent = `${isNaN(created) ? 'Unknown date' : created.toLocaleString()} • ${state.bets.length} bets • ${state.events.length} events • ${snapshot.reason || 'manual'}`;
+        meta.appendChild(title);
+        meta.appendChild(detail);
+
+        const actions = document.createElement('div');
+        actions.style.cssText = 'display: flex; gap: 8px; flex-wrap: wrap;';
+        const restoreBtn = document.createElement('button');
+        restoreBtn.className = 'btn btn-primary';
+        restoreBtn.style.cssText = 'font-size: 12px; padding: 6px 10px;';
+        restoreBtn.textContent = 'Restore';
+        restoreBtn.onclick = () => restoreBackupSnapshot(snapshot.id);
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn';
+        deleteBtn.style.cssText = 'font-size: 12px; padding: 6px 10px;';
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.onclick = () => deleteBackupSnapshot(snapshot.id);
+        actions.appendChild(restoreBtn);
+        actions.appendChild(deleteBtn);
+
+        row.appendChild(meta);
+        row.appendChild(actions);
+        list.appendChild(row);
+      });
+    }
+
+    function createManualBackupSnapshot() {
+      createBackupSnapshot('Manual snapshot', 'manual');
+      renderBackupCenter();
+      updateSaveStatus(true);
+    }
+
+    function restoreBackupSnapshot(snapshotId) {
+      const snapshot = readTrackerSnapshots(safeLocalStorage).find(item => item.id === snapshotId);
+      if (!snapshot) return;
+      if (!confirm('Restore this snapshot? Your current state will be saved as a snapshot first.')) return;
+
+      createBackupSnapshot('Before snapshot restore', 'restore');
+      const restored = migrateTrackerState(snapshot.state || {});
+      events = restored.events;
+      cards = restored.cards;
+      bets = restored.bets;
+      activeEventId = restored.activeEventId || 'all';
+      unitSize = parseUnitSize(restored.unitSize, unitSize);
+      writeTrackerStorage(createCurrentTrackerState(), { storage: safeLocalStorage, lastUpdated: Date.now() });
+      alert('Snapshot restored. The page will reload.');
+      location.reload();
+    }
+
+    function deleteBackupSnapshot(snapshotId) {
+      if (!confirm('Delete this backup snapshot?')) return;
+      const snapshots = readTrackerSnapshots(safeLocalStorage).filter(item => item.id !== snapshotId);
+      writeTrackerSnapshots(snapshots, safeLocalStorage);
+      renderBackupCenter();
+    }
+
+    function exportBackupJson() {
+      const payload = { ...createCurrentTrackerState(), lastUpdated: Date.now(), snapshots: readTrackerSnapshots(safeLocalStorage) };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ufc-bet-tracker-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
 
     // Modal Operations
@@ -9858,6 +10366,30 @@
         }
       }
 
+      const templateType = document.getElementById('obsidian-template-select')?.value || 'event_day';
+      const templatedMd = renderMarkdownTemplate(templateType);
+      if (templatedMd) {
+        document.getElementById('markdown-code-box').textContent = templatedMd;
+        const fnCode = document.getElementById('obsidian-filename-suggestion');
+        if (fnCode) {
+          if (templateType === 'note') {
+            const title = document.getElementById('obsidian-note-title')?.value || 'UFC Notes';
+            fnCode.textContent = `05 Interests/UFC/Notes - ${title.replace(/[\\/:*?"<>|]/g, '').trim() || 'Untitled'}.md`;
+          } else if (templateType === 'ocr_summary') {
+            fnCode.textContent = `05 Interests/UFC/OCR Summary.md`;
+          } else if (activeEventId === 'all') {
+            fnCode.textContent = `05 Interests/UFC/All UFC Events.md`;
+          } else {
+            const evt = events.find(e => e.id === activeEventId);
+            if (evt) {
+              const sanitized = evt.name.replace(/[\\/:*?"<>|]/g, '').trim();
+              fnCode.textContent = `05 Interests/UFC/${evt.date} - ${sanitized}.md`;
+            }
+          }
+        }
+        return;
+      }
+
       let md = `## 📊 Betting Summary Dashboard - ${titleName}\n\n`;
       md += `| Metric | Value |\n`;
       md += `| :--- | :--- |\n`;
@@ -9873,7 +10405,7 @@
       md += `* **FanDuel:** \`$${fdSpent.toFixed(2)}\` wagered | Net Profit: \`${formatCurrency(fdPL)}\`\n\n`;
       
       md += `---\n\n`;
-      md += `## Ã°Å¸â€œÂ Active Wagers\n\n`;
+      md += `## 📝 Active Wagers\n\n`;
       md += `| Status | Selection | Fight Matchup | Book | Bet Type | Wager | Odds | Est. Payout | Result | Net P/L | Notes |\n`;
       md += `| :---: | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |\n`;
 
@@ -9882,7 +10414,7 @@
       } else {
         relevantBets.forEach(bet => {
           const status = bet.result === 'Pending' ? '[ ]' : '[x]';
-          const formatOdds = (bet.odds !== null && bet.odds !== undefined && bet.odds !== '') ? (bet.odds > 0 ? `+${bet.odds}` : bet.odds) : 'Ã¢â‚¬â€';
+          const formatOdds = (bet.odds !== null && bet.odds !== undefined && bet.odds !== '') ? (bet.odds > 0 ? `+${bet.odds}` : bet.odds) : '—';
           
           let wagerVal = parseFloat(bet.wager) || 0;
           let payoutVal = parseFloat(bet.payout) || 0;
@@ -11145,9 +11677,14 @@
       const noConflicts = document.getElementById('validation-no-conflicts');
       const tableBody = document.getElementById('validation-table-body');
       const applyBtn = document.getElementById('btn-apply-validation');
+      const summaryEl = document.getElementById('validation-preview-summary');
       
       tableBody.innerHTML = '';
       validationPendingUpdates = [];
+      if (summaryEl) {
+        summaryEl.style.display = 'none';
+        summaryEl.innerHTML = '';
+      }
       
       if (conflicts.length === 0) {
         container.style.display = 'none';
@@ -11160,6 +11697,20 @@
       noConflicts.style.display = 'none';
       applyBtn.style.display = 'inline-block';
       
+      if (summaryEl) {
+        const summary = buildValidationPreviewSummary(conflicts);
+        const resultParts = ['Win', 'Loss', 'Void']
+          .filter(result => summary.byProposedResult[result] > 0)
+          .map(result => `${summary.byProposedResult[result]} ${result}`)
+          .join(' / ');
+        summaryEl.style.display = 'block';
+        summaryEl.innerHTML = `
+          <div style="font-weight: 800; margin-bottom: 4px; color: var(--pending-color);">Preview only — no bets change until you click Apply Confirmed Updates.</div>
+          <div>${summary.total} proposed update${summary.total === 1 ? '' : 's'}: ${summary.singles} single bet${summary.singles === 1 ? '' : 's'}, ${summary.parlayLegs} parlay leg${summary.parlayLegs === 1 ? '' : 's'}${resultParts ? ` • ${resultParts}` : ''}.</div>
+          ${summary.hasSettledConflicts ? `<div style="margin-top: 4px; color: var(--loss-color);">${summary.settledConflicts} already-settled wager${summary.settledConflicts === 1 ? '' : 's'} need review before applying.</div>` : ''}
+        `;
+      }
+
       const toggleBtn = document.getElementById('btn-val-toggle-all');
       if (toggleBtn) toggleBtn.textContent = 'Deselect All';
       
@@ -11174,6 +11725,7 @@
           
         const currentBadge = `<span class="leg-status-badge ${c.currentResult.toLowerCase()}">${c.currentResult}</span>`;
         const proposedBadge = `<span class="leg-status-badge ${c.proposedResult.toLowerCase()}">${c.proposedResult}</span>`;
+        const previewImpact = formatValidationPreviewImpact(c);
         
         tr.innerHTML = `
           <td style="text-align: center; padding: 12px 8px; vertical-align: middle;">
@@ -11187,7 +11739,7 @@
               ${proposedBadge}
             </div>
           </td>
-          <td style="padding: 12px 8px; vertical-align: middle; color: var(--text-muted); font-size: 12px;">${c.details}</td>
+          <td style="padding: 12px 8px; vertical-align: middle; color: var(--text-muted); font-size: 12px;"><div style="font-weight: 700; color: var(--text-main); margin-bottom: 3px;">${escapeHtml(previewImpact)}</div>${escapeHtml(c.details)}</td>
         `;
         
         tableBody.appendChild(tr);
@@ -11220,10 +11772,15 @@
 
     function applyValidationUpdates() {
       let appliedCount = 0;
+      let snapshotCreated = false;
       
       validationPendingUpdates.forEach(u => {
         const chk = document.getElementById(u.checkboxId);
         if (chk && chk.checked) {
+          if (!snapshotCreated) {
+            createBackupSnapshot('Before ESPN validation updates', 'validation');
+            snapshotCreated = true;
+          }
           const bet = bets.find(b => b.id === u.betId);
           if (bet) {
             if (u.isParlay) {
