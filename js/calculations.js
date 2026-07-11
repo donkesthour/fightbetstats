@@ -4,6 +4,7 @@
   } else {
     const api = factory();
     root.calcPayout = api.calcPayout;
+    root.isValidAmericanOdds = api.isValidAmericanOdds;
     root.convertAmericanToDecimal = api.convertAmericanToDecimal;
     root.convertDecimalToAmerican = api.convertDecimalToAmerican;
     root.calculateParlayOdds = api.calculateParlayOdds;
@@ -12,7 +13,7 @@
   function calcPayout(wager, odds, isBonusBet = false) {
     wager = parseFloat(wager);
     odds = parseInt(odds);
-    if (isNaN(wager) || isNaN(odds) || wager <= 0) return 0;
+    if (isNaN(wager) || isNaN(odds) || wager <= 0 || odds === 0) return 0;
 
     let payout = wager;
     if (odds > 0) {
@@ -21,6 +22,11 @@
       payout = wager + (wager * (100 / Math.abs(odds)));
     }
     return isBonusBet ? (payout - wager) : payout;
+  }
+
+  function isValidAmericanOdds(odds) {
+    const parsed = parseInt(odds, 10);
+    return Number.isFinite(parsed) && parsed !== 0;
   }
 
   function convertAmericanToDecimal(odds) {
@@ -54,7 +60,7 @@
         combinedDecimal *= 1.0;
       } else {
         const legOdds = parseInt(leg.odds);
-        if (!isNaN(legOdds)) {
+        if (!isNaN(legOdds) && legOdds !== 0) {
           combinedDecimal *= convertAmericanToDecimal(legOdds);
           activeLegsCount++;
         }
@@ -67,6 +73,7 @@
 
   return {
     calcPayout,
+    isValidAmericanOdds,
     convertAmericanToDecimal,
     convertDecimalToAmerican,
     calculateParlayOdds,
